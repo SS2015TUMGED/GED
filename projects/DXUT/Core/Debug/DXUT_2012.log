@@ -1,0 +1,27 @@
+﻿Der Buildvorgang wurde am 03.05.2015 22:58:10 gestartet.
+     1>Projekt "D:\Dateien\Studium\SS_15\GED\maiermo\GEDGame\projects\DXUT\Core\DXUT_2012.vcxproj" auf Knoten "6", Build Ziel(e).
+     1>ClCompile:
+         D:\Programme\Andere\Visual Studio\VC\bin\CL.exe /c /ZI /nologo /W4 /WX- /Od /Oi /Oy- /D WIN32 /D _DEBUG /D DEBUG /D PROFILE /D _WINDOWS /D _LIB /D _WIN32_WINNT=0x0600 /D _UNICODE /D UNICODE /Gm- /EHsc /RTC1 /MDd /GS /arch:SSE2 /fp:fast /Zc:wchar_t /Zc:forScope /openmp- /Yc"DXUT.h" /Fp"Debug\DXUT.pch" /Fo"Debug\\" /Fd"Debug\DXUT.pdb" /Gd /TP /analyze- /errorReport:prompt  DXUT.cpp
+         DXUT.cpp
+         D:\Programme\Andere\Visual Studio\VC\bin\CL.exe /c /ZI /nologo /W4 /WX- /Od /Oi /Oy- /D WIN32 /D _DEBUG /D DEBUG /D PROFILE /D _WINDOWS /D _LIB /D _WIN32_WINNT=0x0600 /D _UNICODE /D UNICODE /Gm- /EHsc /RTC1 /MDd /GS /arch:SSE2 /fp:fast /Zc:wchar_t /Zc:forScope /openmp- /Yu"DXUT.h" /Fp"Debug\DXUT.pch" /Fo"Debug\\" /Fd"Debug\DXUT.pdb" /Gd /TP /analyze- /errorReport:prompt  DXUTDevice11.cpp DXUTmisc.cpp DXErr.cpp DDSTextureLoader.cpp Screengrab.cpp WICTextureLoader.cpp
+         DXUTDevice11.cpp
+         DXUTmisc.cpp
+         DXErr.cpp
+         DDSTextureLoader.cpp
+         Screengrab.cpp
+         WICTextureLoader.cpp
+         Code wird generiert...
+       Lib:
+         D:\Programme\Andere\Visual Studio\VC\bin\Lib.exe /OUT:"D:\Dateien\Studium\SS_15\GED\maiermo\GEDGame\lib\Win32\Debug\DXUT.lib" /NOLOGO Debug\DXUT.obj
+         Debug\DXUTDevice11.obj
+         Debug\DXUTmisc.obj
+         Debug\DXErr.obj
+         Debug\DDSTextureLoader.obj
+         Debug\Screengrab.obj
+         Debug\WICTextureLoader.obj
+         DXUT_2012.vcxproj -> D:\Dateien\Studium\SS_15\GED\maiermo\GEDGame\lib\Win32\Debug\DXUT.lib
+     1>Die Erstellung des Projekts "D:\Dateien\Studium\SS_15\GED\maiermo\GEDGame\projects\DXUT\Core\DXUT_2012.vcxproj" ist abgeschlossen, Build Ziel(e).
+
+Build erfolgreich.
+
+Verstrichene Zeit 00:00:06.24

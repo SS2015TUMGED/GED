@@ -1,0 +1,18 @@
+﻿Der Buildvorgang wurde am 03.05.2015 22:58:17 gestartet.
+     1>Projekt "D:\Dateien\Studium\SS_15\GED\maiermo\GEDGame\projects\DirectXTex\Texconv\Texconv_Desktop_2012.vcxproj" auf Knoten "3", Build Ziel(e).
+     1>ClCompile:
+         D:\Programme\Andere\Visual Studio\VC\bin\CL.exe /c /I..\DirectXTex /ZI /nologo /W4 /WX- /Od /Oi /Oy- /D WIN32 /D _DEBUG /D DEBUG /D PROFILE /D _CONSOLE /D D3DXFX_LARGEADDRESS_HANDLE /D _WIN32_WINNT=0x0600 /D _UNICODE /D UNICODE /Gm- /EHsc /RTC1 /MDd /GS /arch:SSE2 /fp:fast /Zc:wchar_t /Zc:forScope /openmp /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt  Texconv.cpp
+         Texconv.cpp
+       ResourceCompile:
+         C:\Program Files (x86)\Windows Kits\8.1\bin\x86\rc.exe /D _UNICODE /D UNICODE /l"0x0409" /nologo /fo"Debug\Texconv.res" Texconv.rc 
+       Link:
+         D:\Programme\Andere\Visual Studio\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"D:\Dateien\Studium\SS_15\GED\maiermo\GEDGame\Debug\texconv.exe" /INCREMENTAL /NOLOGO ole32.lib windowscodecs.lib uuid.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"D:\Dateien\Studium\SS_15\GED\maiermo\GEDGame\Debug\texconv.pdb" /SUBSYSTEM:CONSOLE /LARGEADDRESSAWARE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"D:\Dateien\Studium\SS_15\GED\maiermo\GEDGame\Debug\texconv.lib" /MACHINE:X86 /SAFESEH  Debug\Texconv.res
+         Debug\Texconv.obj
+         D:\Dateien\Studium\SS_15\GED\maiermo\GEDGame\lib\Win32\Debug\DirectXTex.lib
+     1>Texconv.obj : warning LNK4075: /EDITANDCONTINUE wird aufgrund der Angabe von /SAFESEH ignoriert.
+         Texconv_Desktop_2012.vcxproj -> D:\Dateien\Studium\SS_15\GED\maiermo\GEDGame\Debug\texconv.exe
+     1>Die Erstellung des Projekts "D:\Dateien\Studium\SS_15\GED\maiermo\GEDGame\projects\DirectXTex\Texconv\Texconv_Desktop_2012.vcxproj" ist abgeschlossen, Build Ziel(e).
+
+Build erfolgreich.
+
+Verstrichene Zeit 00:00:01.58

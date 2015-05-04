@@ -1,0 +1,51 @@
+﻿Der Buildvorgang wurde am 03.05.2015 22:58:10 gestartet.
+     1>Projekt "D:\Dateien\Studium\SS_15\GED\maiermo\GEDGame\projects\DirectXTex\DirectXTex\DirectXTex_Desktop_2012.vcxproj" auf Knoten "2", Build Ziel(e).
+     1>ClCompile:
+         D:\Programme\Andere\Visual Studio\VC\bin\CL.exe /c /ZI /nologo /W4 /WX- /Od /Oi /Oy- /D _UNICODE /D UNICODE /D WIN32 /D _DEBUG /D _LIB /D _WIN7_PLATFORM_UPDATE /D _WIN32_WINNT=0x0600 /D _UNICODE /D UNICODE /Gm- /EHsc /RTC1 /MDd /GS /arch:SSE2 /fp:fast /Zc:wchar_t /Zc:forScope /openmp /Yc"DirectXTexP.h" /Fp"Debug\DirectXTex.pch" /Fo"Debug\\" /Fd"Debug\DirectXTex.pdb" /Gd /TP /analyze- /errorReport:prompt  DirectXTexUtil.cpp
+         DirectXTexUtil.cpp
+         D:\Programme\Andere\Visual Studio\VC\bin\CL.exe /c /ZI /nologo /W4 /WX- /Od /Oi /Oy- /D _UNICODE /D UNICODE /D WIN32 /D _DEBUG /D _LIB /D _WIN7_PLATFORM_UPDATE /D _WIN32_WINNT=0x0600 /D _UNICODE /D UNICODE /Gm- /EHsc /RTC1 /MDd /GS /arch:SSE2 /fp:fast /Zc:wchar_t /Zc:forScope /openmp /Yu"DirectXTexP.h" /Fp"Debug\DirectXTex.pch" /Fo"Debug\\" /Fd"Debug\DirectXTex.pdb" /Gd /TP /analyze- /errorReport:prompt  BC.cpp BC4BC5.cpp BC6HBC7.cpp BCDirectCompute.cpp DirectXTexCompress.cpp DirectXTexCompressGPU.cpp DirectXTexConvert.cpp DirectXTexD3D11.cpp DirectXTexDDS.cpp DirectXTexFlipRotate.cpp DirectXTexImage.cpp DirectXTexMipMaps.cpp DirectXTexMisc.cpp DirectXTexNormalMaps.cpp DirectXTexPMAlpha.cpp DirectXTexResize.cpp DirectXTexTGA.cpp DirectXTexWIC.cpp
+         BC.cpp
+         BC4BC5.cpp
+         BC6HBC7.cpp
+         BCDirectCompute.cpp
+         DirectXTexCompress.cpp
+         DirectXTexCompressGPU.cpp
+         DirectXTexConvert.cpp
+         DirectXTexD3D11.cpp
+         DirectXTexDDS.cpp
+         DirectXTexFlipRotate.cpp
+         DirectXTexImage.cpp
+         DirectXTexMipMaps.cpp
+         DirectXTexMisc.cpp
+         DirectXTexNormalMaps.cpp
+         DirectXTexPMAlpha.cpp
+         DirectXTexResize.cpp
+         DirectXTexTGA.cpp
+         DirectXTexWIC.cpp
+         Code wird generiert...
+       Lib:
+         D:\Programme\Andere\Visual Studio\VC\bin\Lib.exe /OUT:"D:\Dateien\Studium\SS_15\GED\maiermo\GEDGame\lib\Win32\Debug\DirectXTex.lib" /NOLOGO Debug\BC.obj
+         Debug\BC4BC5.obj
+         Debug\BC6HBC7.obj
+         Debug\BCDirectCompute.obj
+         Debug\DirectXTexCompress.obj
+         Debug\DirectXTexCompressGPU.obj
+         Debug\DirectXTexConvert.obj
+         Debug\DirectXTexD3D11.obj
+         Debug\DirectXTexDDS.obj
+         Debug\DirectXTexFlipRotate.obj
+         Debug\DirectXTexImage.obj
+         Debug\DirectXTexMipMaps.obj
+         Debug\DirectXTexMisc.obj
+         Debug\DirectXTexNormalMaps.obj
+         Debug\DirectXTexPMAlpha.obj
+         Debug\DirectXTexResize.obj
+         Debug\DirectXTexTGA.obj
+         Debug\DirectXTexUtil.obj
+         Debug\DirectXTexWIC.obj
+         DirectXTex_Desktop_2012.vcxproj -> D:\Dateien\Studium\SS_15\GED\maiermo\GEDGame\lib\Win32\Debug\DirectXTex.lib
+     1>Die Erstellung des Projekts "D:\Dateien\Studium\SS_15\GED\maiermo\GEDGame\projects\DirectXTex\DirectXTex\DirectXTex_Desktop_2012.vcxproj" ist abgeschlossen, Build Ziel(e).
+
+Build erfolgreich.
+
+Verstrichene Zeit 00:00:07.01

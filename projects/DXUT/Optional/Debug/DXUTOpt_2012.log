@@ -1,0 +1,29 @@
+﻿Der Buildvorgang wurde am 03.05.2015 22:58:10 gestartet.
+     1>Projekt "D:\Dateien\Studium\SS_15\GED\maiermo\GEDGame\projects\DXUT\Optional\DXUTOpt_2012.vcxproj" auf Knoten "5", Build Ziel(e).
+     1>ClCompile:
+         D:\Programme\Andere\Visual Studio\VC\bin\CL.exe /c /I..\Core\ /ZI /nologo /W4 /WX- /Od /Oi /Oy- /D WIN32 /D _DEBUG /D DEBUG /D PROFILE /D _WINDOWS /D _LIB /D _WIN32_WINNT=0x0600 /D _UNICODE /D UNICODE /Gm- /EHsc /RTC1 /MDd /GS /arch:SSE2 /fp:fast /Zc:wchar_t /Zc:forScope /openmp- /Yc"DXUT.h" /Fp"Debug\DXUTOpt.pch" /Fo"Debug\\" /Fd"Debug\DXUTOpt.pdb" /Gd /TP /analyze- /errorReport:prompt  DXUTres.cpp
+         DXUTres.cpp
+         D:\Programme\Andere\Visual Studio\VC\bin\CL.exe /c /I..\Core\ /ZI /nologo /W4 /WX- /Od /Oi /Oy- /D WIN32 /D _DEBUG /D DEBUG /D PROFILE /D _WINDOWS /D _LIB /D _WIN32_WINNT=0x0600 /D _UNICODE /D UNICODE /Gm- /EHsc /RTC1 /MDd /GS /arch:SSE2 /fp:fast /Zc:wchar_t /Zc:forScope /openmp- /Yu"DXUT.h" /Fp"Debug\DXUTOpt.pch" /Fo"Debug\\" /Fd"Debug\DXUTOpt.pdb" /Gd /TP /analyze- /errorReport:prompt  DXUTcamera.cpp DXUTgui.cpp DXUTguiIME.cpp DXUTsettingsdlg.cpp ImeUi.cpp SDKmesh.cpp SDKmisc.cpp
+         DXUTcamera.cpp
+         DXUTgui.cpp
+         DXUTguiIME.cpp
+         DXUTsettingsdlg.cpp
+         ImeUi.cpp
+         SDKmesh.cpp
+         SDKmisc.cpp
+         Code wird generiert...
+       Lib:
+         D:\Programme\Andere\Visual Studio\VC\bin\Lib.exe /OUT:"D:\Dateien\Studium\SS_15\GED\maiermo\GEDGame\lib\Win32\Debug\DXUTOpt.lib" /NOLOGO Debug\DXUTcamera.obj
+         Debug\DXUTgui.obj
+         Debug\DXUTguiIME.obj
+         Debug\DXUTres.obj
+         Debug\DXUTsettingsdlg.obj
+         Debug\ImeUi.obj
+         Debug\SDKmesh.obj
+         Debug\SDKmisc.obj
+         DXUTOpt_2012.vcxproj -> D:\Dateien\Studium\SS_15\GED\maiermo\GEDGame\lib\Win32\Debug\DXUTOpt.lib
+     1>Die Erstellung des Projekts "D:\Dateien\Studium\SS_15\GED\maiermo\GEDGame\projects\DXUT\Optional\DXUTOpt_2012.vcxproj" ist abgeschlossen, Build Ziel(e).
+
+Build erfolgreich.
+
+Verstrichene Zeit 00:00:06.03
