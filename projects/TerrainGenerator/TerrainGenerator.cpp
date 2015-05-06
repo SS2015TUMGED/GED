@@ -297,11 +297,8 @@ int _tmain(int argc, _TCHAR* argv[])
 			//creating new array
 			vector<float> *vec = new vector<float>((width + 1) * (width + 1));
 			
+			cout << endl << "Jetzt der DiamondSquare" << endl;
 			DiamondSquare::diamondSquareAlgorithm(*vec, width + 1);
-			cout << endl << "Jetzt der DiamondSquare";
-			system("pause");
-			printArray2D(*vec, width+1, width+1);
-
 			system("pause");
 			/*
 			//Saving array to heightfield
@@ -328,6 +325,5 @@ int _tmain(int argc, _TCHAR* argv[])
 	catch (char* error){
 		cout << error << endl;
 	}
-	system("pause");
 	return 0;
 }
