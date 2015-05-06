@@ -24,5 +24,5 @@ public:
 	 * float min	:= the mininmal number (included)
 	 * float max	:= the maximal number (included)
 	 */
-	static float normalDisRandom(float min, float max);
+	static float normalDisRandom(float min, float max, unsigned seed);
 };

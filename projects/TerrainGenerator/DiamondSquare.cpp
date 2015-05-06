@@ -19,7 +19,7 @@ std::vector<float> DiamondSquare::diamondSquareAlgorithm(std::vector<float> vec)
 * float min	:= the mininmal number (included)
 * float max	:= the maximal number (included)
 */
-float DiamondSquare::normalDisRandom(float min, float max){
+float DiamondSquare::normalDisRandom(float min, float max, unsigned seed){
 	//start timer 
 	typedef std::chrono::high_resolution_clock myclock;
 	myclock::time_point beginning = myclock::now();
