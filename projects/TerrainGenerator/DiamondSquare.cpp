@@ -104,24 +104,27 @@ void DiamondSquare::squareStep(std::vector<float> &vec){
 	
 	unsigned int midpointOffset = ((resolution - 1)/ numberOfIterations) /2;
 
+	std::cout << "magic number = " << (pow(2, numberOfIterations - 1));
 	//iterating through the array
 
+	
 	//iterate through 'Lines of Squares' eg 1 in the first iteration
 	//two in the second iteration etc.
 	for (unsigned currentLine = 1; 
 		currentLine <= (pow(2,numberOfIterations - 1)); 
 		currentLine++)
 	{
+
+		unsigned currentMidpointPosition =
+			IDX(midpointOffset, midpointOffset * currentLine, resolution);
+
 		//iterate through the 'Columns of Squares' eg 1 in the first iteration etc
 		//but always according to the midpoint
 		for (unsigned currentColumn = 1; 
 			currentColumn <= (pow(2, numberOfIterations - 1));
 			currentColumn++)
 		{	
-			//setting the midpoint of the Square to the correct position
-			unsigned currentMidpointPosition =
-				IDX(midpointOffset * currentColumn, midpointOffset * currentLine, resolution);
-
+			
 			if (numberOfIterations == 1){
 
 				//left point
@@ -191,7 +194,7 @@ void DiamondSquare::squareStep(std::vector<float> &vec){
 							) / 4.0f;
 #pragma endregion
 					}
-					else if (currentLine = 2 ^ (numberOfIterations - 1)){ //bottom left corner
+					else if (currentLine = (pow(2, numberOfIterations - 1))){ //bottom left corner
 #pragma region Bottom Left Corner	
 						//left point
 						vec[currentMidpointPosition - midpointOffset] =
@@ -260,7 +263,7 @@ void DiamondSquare::squareStep(std::vector<float> &vec){
 					}
 #pragma endregion
 				}
-				else if (currentColumn = 2 ^ (numberOfIterations - 1)){
+				else if (currentColumn = (pow(2, numberOfIterations - 1))){
 #pragma region Last Column
 					if (currentLine = 1){
 #pragma region Top Right Corner
@@ -297,7 +300,7 @@ void DiamondSquare::squareStep(std::vector<float> &vec){
 
 #pragma endregion
 					}
-					else if (currentLine = 2 ^ (numberOfIterations - 1)){
+					else if (currentLine = (pow(2, numberOfIterations - 1))){
 #pragma region Bottom Right Corner
 
 						//left point
@@ -407,7 +410,7 @@ void DiamondSquare::squareStep(std::vector<float> &vec){
 							) / 4.0f;
 #pragma endregion
 					}
-					else if (currentLine = 2 ^ (numberOfIterations - 1)){
+					else if (currentLine = (pow(2, numberOfIterations - 1))){
 #pragma region Bottom Edge
 
 						//left point
@@ -483,6 +486,9 @@ void DiamondSquare::squareStep(std::vector<float> &vec){
 #pragma endregion
 				}
 			}
+
+			//setting the midpoint of the Square to the correct position
+			currentMidpointPosition = currentMidpointPosition + midpointOffset + midpointOffset;
 		}
 	}
 };
