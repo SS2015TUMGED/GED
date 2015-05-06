@@ -16,8 +16,9 @@ public:
 	/* Uses the Diamond Square Algorithm on the given vector<float>.
 	 * @param: 
 	 * vector<float> vec	:= the vector on which the algorithm is executed
+	 * const unsigned int res := resolution of the vector
 	 */
-	static std::vector<float> diamondSquareAlgorithm(std::vector<float> vec);
+	static void diamondSquareAlgorithm(std::vector<float> &vec, const unsigned int res);
 
 
 
@@ -35,7 +36,13 @@ public:
 
 private: 
 
-	//SquareStep of the algorithm through the whole array
+	//SquareStep of the algorithm 
 	static void squareStep(std::vector<float> &vec);
+
+	//DiamondStep of the algorithm
+	static void diamondStep(std::vector<float>& v);
+
+	//helper function
+	static void diamondStepSingle(std::vector<float>& v, int startx, int starty, unsigned int iteration);
 
 };

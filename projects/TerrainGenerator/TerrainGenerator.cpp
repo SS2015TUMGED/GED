@@ -18,7 +18,7 @@
 //declare the random number generator
 std::default_random_engine DiamondSquare::rng;
 
-void printArray2D(float* array2D_, int width_, int height_){
+void printArray2D(std::vector<float> &array2D_, int width_, int height_){
 	int ypos_;
 	int xpos_;
 
@@ -295,13 +295,13 @@ int _tmain(int argc, _TCHAR* argv[])
 			*/
 			
 			//creating new array
-			vector<float> *vec = new vector<float>(width * width);
+			vector<float> *vec = new vector<float>((width + 1) * (width + 1));
+			
+			DiamondSquare::diamondSquareAlgorithm(*vec, width + 1);
+			cout << endl << "Jetzt der DiamondSquare";
+			system("pause");
+			printArray2D(*vec, width+1, width+1);
 
-			for (int i = 0; i < 10; i++){
-				cout << DiamondSquare::normalDisRandom(-1, 1) << " ";
-				cout << DiamondSquare::normalDisRandom(0, 10) << " ";
-				cout << DiamondSquare::normalDisRandom(-2, 1) << endl;
-			}
 			system("pause");
 			/*
 			//Saving array to heightfield
