@@ -9,10 +9,14 @@
 #include <cstdlib>
 #include <SimpleImage.h>
 #include "DiamondSquare.h"
+#include <random>
 #include <chrono>
 
 // Access a 2D array of width w at position x / y 
 #define IDX(xpos, ypos, width) ((xpos) + (ypos) * (width))
+
+//declare the random number generator
+std::default_random_engine DiamondSquare::rng;
 
 void printArray2D(float* array2D_, int width_, int height_){
 	int ypos_;
@@ -153,7 +157,6 @@ void smoothArray2D_nTimes(float* array2D_, int width_, int height_, int n){
 	}
 }
 
-
 int _tmain(int argc, _TCHAR* argv[])
 {
 	using namespace std;
@@ -241,18 +244,20 @@ int _tmain(int argc, _TCHAR* argv[])
 
 			system("pause");
 #pragma endregion
+
 #pragma region Random Number Generation
 
-//start timer 
-typedef chrono::high_resolution_clock myclock;
-myclock::time_point beginning = myclock::now();
+	//start timer 
+	typedef chrono::high_resolution_clock myclock;
+	myclock::time_point beginning = myclock::now();
 				
-// obtain a seed from the timer
-myclock::duration d = myclock::now() - beginning;
-unsigned int seed = d.count();
+	// obtain a seed from the timer
+	myclock::duration d = myclock::now() - beginning;
+	unsigned int seed = d.count();
 
-DiamondSquare::rng.seed(seed); //seed the rng
-
+	
+	//seed the rng
+	DiamondSquare::rng.seed(seed);
 #pragma endregion
 
 

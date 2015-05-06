@@ -26,9 +26,11 @@ public:
 	 * float min	:= the mininmal number (included)
 	 * float max	:= the maximal number (included)
 	 */
-	static float normalDisRandom(float min, float max, unsigned seed);
+	static float normalDisRandom(float min, float max);
 
 	//Normally Distributed Random Number Generator
 	static std::default_random_engine rng; //create new rng
 
 };
+
+//std::default_random_engine DiamondSquare::rng;

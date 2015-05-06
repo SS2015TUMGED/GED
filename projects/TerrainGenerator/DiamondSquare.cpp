@@ -1,7 +1,6 @@
 #include "DiamondSquare.h"
-#include <random>
 #include <iostream>
-#include <chrono>;
+#include <chrono>
 
 // Access a 2D array of width w at position x / y 
 #define IDX(xpos, ypos, width) ((xpos) + (ypos) * (width))
@@ -14,27 +13,12 @@ std::vector<float> DiamondSquare::diamondSquareAlgorithm(std::vector<float> vec)
 	return vec;
 };
 
-/* Method to create a seed for an random number generator
-* @return: unsigned int  the seed from random value
-*/
-unsigned int getSeed(){
-	//start timer 
-	typedef std::chrono::high_resolution_clock myclock;
-	myclock::time_point beginning = myclock::now();
-
-	// obtain a seed from the timer
-	myclock::duration d = myclock::now() - beginning;
-	unsigned int seed = d.count();
-
-	return seed;
-}
-
 /* Returns normally distributed random values between min and max.
 * @param:
 * float min	:= the mininmal number (included)
 * float max	:= the maximal number (included)
 */
-float DiamondSquare::normalDisRandom(float min, float max, unsigned seed){
+float DiamondSquare::normalDisRandom(float min, float max){
 
 	float currentValue; //the currently generated Value
 	float midpoint;
