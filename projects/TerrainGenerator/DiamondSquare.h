@@ -31,6 +31,11 @@ public:
 	//Normally Distributed Random Number Generator
 	static std::default_random_engine rng; //create new rng
 
-};
+	static unsigned int resolution;
 
-//std::default_random_engine DiamondSquare::rng;
+private: 
+
+	//SquareStep of the algorithm through the whole array
+	static void squareStep(std::vector<float> &vec);
+
+};
