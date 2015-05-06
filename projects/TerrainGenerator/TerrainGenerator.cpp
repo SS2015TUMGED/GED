@@ -9,6 +9,7 @@
 #include <cstdlib>
 #include <SimpleImage.h>
 #include "DiamondSquare.h"
+#include <chrono>
 
 // Access a 2D array of width w at position x / y 
 #define IDX(xpos, ypos, width) ((xpos) + (ypos) * (width))
@@ -239,6 +240,19 @@ int _tmain(int argc, _TCHAR* argv[])
 				<< "8: " << param8_s << endl;
 
 			system("pause");
+#pragma endregion
+#pragma region Random Number Generation
+
+//start timer 
+typedef chrono::high_resolution_clock myclock;
+myclock::time_point beginning = myclock::now();
+				
+// obtain a seed from the timer
+myclock::duration d = myclock::now() - beginning;
+unsigned int seed = d.count();
+
+DiamondSquare::rng.seed(seed); //seed the rng
+
 #pragma endregion
 
 

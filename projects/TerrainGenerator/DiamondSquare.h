@@ -6,6 +6,8 @@
 #pragma once
 
 #include <vector>
+#include <random>
+
 class DiamondSquare{
 public:
 	DiamondSquare();
@@ -25,4 +27,8 @@ public:
 	 * float max	:= the maximal number (included)
 	 */
 	static float normalDisRandom(float min, float max, unsigned seed);
+
+	//Normally Distributed Random Number Generator
+	static std::default_random_engine rng; //create new rng
+
 };
