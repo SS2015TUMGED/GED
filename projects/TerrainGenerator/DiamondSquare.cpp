@@ -64,7 +64,7 @@ void DiamondSquare::diamondStep(std::vector<float>& v)
 
 void DiamondSquare::diamondStepSingle(std::vector<float>& v, int startx, int starty, unsigned int iteration)
 {
-	static bool b = true;
+	static unsigned b = 0;
 	//Accessing the boarders and writing the average value in the middle
 	v[IDX(startx + (resolution - 1) / iteration / 2,
 			starty + (resolution - 1) / iteration / 2,
@@ -76,12 +76,18 @@ void DiamondSquare::diamondStepSingle(std::vector<float>& v, int startx, int sta
 				starty + (resolution - 1) / iteration,
 				resolution)]) / 4.0f)  * roughness()) + roughness2();
 
-	if (iteration == 2 && b){
+	if (iteration == 2 && b == 0){
 		
 		v[IDX(startx + (resolution - 1) / iteration / 2,
 			starty + (resolution - 1) / iteration / 2,
 			resolution)] = 0.8f;
-		b = false;
+		b += 1;
+	}
+	else if (iteration == 3 && b == 1){
+		v[IDX(startx + (resolution - 1) / iteration / 2,
+			starty + (resolution - 1) / iteration / 2,
+			resolution)] = 0.8f;
+		b += 1;
 	}
 
 };
@@ -532,7 +538,8 @@ std::vector<float>* DiamondSquare::CutBoundarys(std::vector<float> &vec){
 
 			float currentValue = vec[IDX(xpos, ypos, resolution)];
 
-			currentValue = currentValue * 1.75f;
+			currentValue = currentValue * 1.8f;
+			currentValue = currentValue * normalDisRandom(0.98f, 1.02f);
 			currentValue = currentValue - 0.25f;
 
 			if (currentValue > 1.0f){ currentValue = 1.0f; }

@@ -17,6 +17,22 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
 
+# Eigene Ignores
+*.exe
+*.png
+*.obj
+*.jpg
+*.pdb
+*.log
+*.tlog
+*.lastbuildstate
+*.sdf
+*.lnk
+*.ilk
+*.suo
+*.idb
+
+
 # =========================
 # Operating System Files
 # =========================
