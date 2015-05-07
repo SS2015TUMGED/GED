@@ -296,12 +296,14 @@ int _tmain(int argc, _TCHAR* argv[])
 			cout << endl << "Jetzt der DiamondSquare" << endl;
 			DiamondSquare::diamondSquareAlgorithm(*vec, width + 1);
 
+			cout << "Smoothing..." << endl;
+
+			smoothArray2D_nTimes(*vec, width + 1, height + 1, 750);
+
 			//cutting the boundrys
 			vec = DiamondSquare::CutBoundarys(*vec);
 		
-			cout << "Smoothing..." << endl;
-
-			smoothArray2D_nTimes(*vec, width, height, 10);
+			
 			
 
 

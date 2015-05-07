@@ -1,18 +1,20 @@
-﻿Der Buildvorgang wurde am 04.05.2015 01:22:06 gestartet.
+﻿Der Buildvorgang wurde am 07.05.2015 15:20:41 gestartet.
      1>Projekt "D:\Dateien\Studium\SS_15\GED\maiermo\GEDGame\projects\TerrainGenerator\TerrainGenerator.vcxproj" auf Knoten "2", Build Ziel(e).
      1>ClCompile:
-         D:\Programme\Andere\Visual Studio\VC\bin\CL.exe /c /I..\..\..\..\external\Tools\include\ /Zi /nologo /W3 /WX- /sdl /O2 /Oi /Oy- /GL /D WIN32 /D NDEBUG /D _CONSOLE /D _LIB /D _UNICODE /D UNICODE /Gm- /EHsc /MD /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Release\\" /Fd"Release\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt DiamondSquare.cpp TerrainGenerator.cpp
+         D:\Programme\Andere\Visual Studio\VC\bin\CL.exe /c /I..\..\..\..\external\Tools\include\ /Zi /nologo /W3 /WX- /sdl /O2 /Oi /Oy- /GL /D WIN32 /D NDEBUG /D _CONSOLE /D _LIB /D _UNICODE /D UNICODE /Gm- /EHsc /MD /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Release\\" /Fd"Release\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt DiamondSquare.cpp
          DiamondSquare.cpp
-         TerrainGenerator.cpp
+     1>DiamondSquare.cpp(48): warning C4244: 'Initialisierung': Konvertierung von 'double' in 'int', möglicher Datenverlust
+     1>DiamondSquare.cpp(123): warning C4244: 'Initialisierung': Konvertierung von 'double' in 'unsigned int', möglicher Datenverlust
        Link:
          D:\Programme\Andere\Visual Studio\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"D:\Dateien\Studium\SS_15\GED\maiermo\GEDGame\Release\TerrainGenerator.exe" /INCREMENTAL:NO /NOLOGO /LIBPATH:..\..\..\..\external\Tools\lib\VS2013\Win32\ kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib GEDUtils.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"D:\Dateien\Studium\SS_15\GED\maiermo\GEDGame\Release\TerrainGenerator.pdb" /SUBSYSTEM:CONSOLE /OPT:REF /OPT:ICF /LTCG /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"D:\Dateien\Studium\SS_15\GED\maiermo\GEDGame\Release\TerrainGenerator.lib" /MACHINE:X86 /SAFESEH Release\DiamondSquare.obj
          Release\stdafx.obj
          Release\TerrainGenerator.obj
          Code wird generiert.
          Codegenerierung ist abgeschlossen.
+     1>GEDUtils.lib(SimpleImage.obj) : warning LNK4099: PDB "vc120.pdb" wurde nicht mit "GEDUtils.lib(SimpleImage.obj)" oder an "D:\Dateien\Studium\SS_15\GED\maiermo\GEDGame\Release\vc120.pdb" gefunden; Objekt wird verknüpft, als ob keine Debuginformationen vorhanden wären.
          TerrainGenerator.vcxproj -> D:\Dateien\Studium\SS_15\GED\maiermo\GEDGame\Release\TerrainGenerator.exe
      1>Die Erstellung des Projekts "D:\Dateien\Studium\SS_15\GED\maiermo\GEDGame\projects\TerrainGenerator\TerrainGenerator.vcxproj" ist abgeschlossen, Build Ziel(e).
 
 Build erfolgreich.
 
-Verstrichene Zeit 00:00:02.59
+Verstrichene Zeit 00:00:03.28

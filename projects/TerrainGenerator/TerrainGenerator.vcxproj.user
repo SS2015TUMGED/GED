@@ -5,7 +5,7 @@
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <LocalDebuggerCommandArguments>-r 2048 -o_height height.png -o_color color.png -o_normal normal.png</LocalDebuggerCommandArguments>
+    <LocalDebuggerCommandArguments>-r 1024 -o_height height.png -o_color color.png -o_normal normal.png</LocalDebuggerCommandArguments>
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
   </PropertyGroup>
 </Project>

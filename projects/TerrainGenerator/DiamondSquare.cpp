@@ -16,14 +16,16 @@ void DiamondSquare::diamondSquareAlgorithm(std::vector<float> &vec, const unsign
 {
 	resolution = res;
 
-	float min = 0.0f;
-	float max = 1.0f;
+	float min = 0.3f;
+	float max = 0.7f;
 
 	//assign random values to the 4 corners  
 	vec[0] = normalDisRandom(min, max);
 	vec[(resolution * resolution ) - 1] = normalDisRandom(min,max);
 	vec[resolution - 1] = normalDisRandom(min, max);
 	vec[IDX(0, resolution - 1, resolution)] = normalDisRandom(min, max);
+
+
 
 	for (int i = 0; i < (int) log2(resolution - 1); i++)
 	{
@@ -56,11 +58,13 @@ void DiamondSquare::diamondStep(std::vector<float>& v)
 				SingleStepCount);
 		}
 	}
+
 	numberOfIterations++;
 };
 
 void DiamondSquare::diamondStepSingle(std::vector<float>& v, int startx, int starty, unsigned int iteration)
 {
+	static bool b = true;
 	//Accessing the boarders and writing the average value in the middle
 	v[IDX(startx + (resolution - 1) / iteration / 2,
 			starty + (resolution - 1) / iteration / 2,
@@ -71,6 +75,15 @@ void DiamondSquare::diamondStepSingle(std::vector<float>& v, int startx, int sta
 		v[IDX(startx + (resolution - 1) / iteration,
 				starty + (resolution - 1) / iteration,
 				resolution)]) / 4.0f)  * roughness()) + roughness2();
+
+	if (iteration == 2 && b){
+		
+		v[IDX(startx + (resolution - 1) / iteration / 2,
+			starty + (resolution - 1) / iteration / 2,
+			resolution)] = 0.8f;
+		b = false;
+	}
+
 };
 
 /* Returns normally distributed random values between min and max.
@@ -502,11 +515,11 @@ void DiamondSquare::squareStep(std::vector<float> &vec){
 };
 
 float DiamondSquare::roughness(){
-	return normalDisRandom(0.85f, 1.5f) ;
+	return normalDisRandom(0.99f, 1.01f) ;
 };
 
 float DiamondSquare::roughness2(){
-	return normalDisRandom(-0.1f, 0.135f);
+	return normalDisRandom(-0.05f, 0.05f);
 };
 
 std::vector<float>* DiamondSquare::CutBoundarys(std::vector<float> &vec){
@@ -519,10 +532,13 @@ std::vector<float>* DiamondSquare::CutBoundarys(std::vector<float> &vec){
 
 			float currentValue = vec[IDX(xpos, ypos, resolution)];
 
+			currentValue = currentValue * 1.75f;
+			currentValue = currentValue - 0.25f;
+
 			if (currentValue > 1.0f){ currentValue = 1.0f; }
 			else if (currentValue < 0.0f){ currentValue = 0.0f; }
 
-			(* newArray)[IDX(xpos, ypos, resolution - 1)] = currentValue;
+			(* newArray)[IDX(xpos, ypos, resolution - 1)] = currentValue ;
 		}
 	}
 	delete &vec;
