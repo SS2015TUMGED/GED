@@ -80,15 +80,17 @@ void DiamondSquare::diamondStepSingle(std::vector<float>& v, int startx, int sta
 		
 		v[IDX(startx + (resolution - 1) / iteration / 2,
 			starty + (resolution - 1) / iteration / 2,
-			resolution)] = 0.8f;
+			resolution)] = 0.9f;
 		b += 1;
 	}
-	else if (iteration == 3 && b == 1){
-		v[IDX(startx + (resolution - 1) / iteration / 2,
+	else if (iteration == 2 && b == 1){
+		b += 1;
+
+		v[IDX(((startx + (resolution - 1) / iteration / 2)) ,
 			starty + (resolution - 1) / iteration / 2,
-			resolution)] = 0.8f;
-		b += 1;
+			resolution)] = 0.7f;
 	}
+	
 
 };
 
