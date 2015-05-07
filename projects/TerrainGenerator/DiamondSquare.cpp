@@ -29,12 +29,7 @@ void DiamondSquare::diamondSquareAlgorithm(std::vector<float> &vec, const unsign
 
 	for (int i = 0; i < (int) log2(resolution - 1); i++)
 	{
-
-		//std::cout << std::endl << "Jetzt Diamond" << std::endl;
-		//system("pause");
 		diamondStep(vec);
-		//std::cout << std::endl << "Jetzt Square" << std::endl;
-		//system("pause");
 		squareStep(vec);
 	}
 
@@ -522,34 +517,44 @@ void DiamondSquare::squareStep(std::vector<float> &vec){
 	}
 };
 
+//multiplied roughness factor
 float DiamondSquare::roughness(){
 	return normalDisRandom(0.99f, 1.01f) ;
 };
 
+//added roughness factor
 float DiamondSquare::roughness2(){
 	return normalDisRandom(-0.05f, 0.05f);
 };
 
+//Cutting the vector back to the correct size and
+//adding ´some more roughness
 std::vector<float>* DiamondSquare::CutBoundarys(std::vector<float> &vec){
 	using namespace std;
+	//creating second, smaller vector
 	vector<float> *newArray = new vector<float>((resolution - 1) * (resolution - 1));
 
+	//iterating through the old vector
 	for (unsigned ypos = 0; ypos < resolution - 1; ypos++){
 
 		for (unsigned xpos = 0; xpos < resolution - 1; xpos++){
-
+			//reading value from the old vector
 			float currentValue = vec[IDX(xpos, ypos, resolution)];
 
+			//adding some more roughness factors
 			currentValue = currentValue * 1.8f;
 			currentValue = currentValue * normalDisRandom(0.98f, 1.02f);
 			currentValue = currentValue - 0.25f;
 
+			//cutting values that are too big or small
 			if (currentValue > 1.0f){ currentValue = 1.0f; }
 			else if (currentValue < 0.0f){ currentValue = 0.0f; }
 
+			//writing the value in the new vector
 			(* newArray)[IDX(xpos, ypos, resolution - 1)] = currentValue ;
 		}
 	}
+	//delete old vector
 	delete &vec;
 	return newArray;
 }

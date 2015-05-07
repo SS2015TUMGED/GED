@@ -13,6 +13,7 @@
 #include <time.h>
 #include <TextureGenerator.h>
 
+
 // Access a 2D array of width w at position x / y 
 #define IDX(xpos, ypos, width) ((xpos) + (ypos) * (width))
 
@@ -257,39 +258,11 @@ int _tmain(int argc, _TCHAR* argv[])
 #pragma endregion
 
 
-#pragma region Array Creation and Smoothing
+#pragma region Vector creation and DiamondSquare
 			//Defining variable for the Array
 			static int width = param2;
 			static int height = param2;
 
-			/*
-			//creating new array
-			float* array2D = new float[width * height]();
-
-			//initialising random number generator
-			srand(time(NULL)); //seed the rng
-
-			//filling the array with random floats between 0.0f and 1.0f
-			int ypos;
-			int xpos;
-			for (ypos = 0; ypos < height; ypos++){
-				for (xpos = 0; xpos < width; xpos++){
-					array2D[IDX(xpos, ypos, width)] =
-						(rand() % 100 + 1) / 100.0f;
-				}
-			}
-			
-			//print array to console
-			printArray2D(array2D, width, height);
-			//smoothing array
-			smoothArray2D_nTimes(array2D, width, height, 10);
-			//printing (again)
-			std::cout << std::endl << std::endl;
-			printArray2D(array2D, width, height);
-
-			system("pause");
-			*/
-			
 			//creating new array
 			vector<float> *vec = new vector<float>((width + 1) * (width + 1));
 			
@@ -303,6 +276,7 @@ int _tmain(int argc, _TCHAR* argv[])
 			//cutting the boundrys
 			vec = DiamondSquare::CutBoundarys(*vec);
 		
+			//smoothing the vector
 			smoothArray2D_nTimes(*vec, width , height , 1);
 			
 
@@ -317,13 +291,7 @@ int _tmain(int argc, _TCHAR* argv[])
 			}
 
 			image.save(param4_s.c_str());
-			/*
-			wstring path = wstring("");
-
 			
-			GEDUtils::TextureGenerator texGen();
-			texGen::generateAndStoreImages(&vec, width, param5_s, param7_s);
-			*/
 
 #pragma endregion
 
