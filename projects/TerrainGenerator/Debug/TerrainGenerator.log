@@ -1,12 +1,9 @@
-﻿Der Buildvorgang wurde am 06.05.2015 18:42:57 gestartet.
+﻿Der Buildvorgang wurde am 07.05.2015 14:06:38 gestartet.
      1>Projekt "D:\Dateien\Studium\SS_15\GED\maiermo\GEDGame\projects\TerrainGenerator\TerrainGenerator.vcxproj" auf Knoten "2", Build Ziel(e).
-     1>ClCompile:
-         D:\Programme\Andere\Visual Studio\VC\bin\CL.exe /c /I..\..\..\..\external\Tools\include\ /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _LIB /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt DiamondSquare.cpp
-         DiamondSquare.cpp
-     1>d:\dateien\studium\ss_15\ged\maiermo\gedgame\projects\terraingenerator\diamondsquare.cpp : fatal error C1041: Programmdatenbank 'd:\dateien\studium\ss_15\ged\maiermo\gedgame\projects\terraingenerator\debug\vc120.idb' kann nicht geöffnet werden; verwenden Sie /FS, wenn mehrere CL.EXE in dieselbe .PDB-Datei schreiben
-     1>cl : Befehlszeile warning D9028: Fehler beim minimalen Neukompilieren, normale Erstellung wird durchgeführt.
-     1>Die Erstellung des Projekts "D:\Dateien\Studium\SS_15\GED\maiermo\GEDGame\projects\TerrainGenerator\TerrainGenerator.vcxproj" ist abgeschlossen, Build Ziel(e) -- FEHLER.
+     1>Link:
+         TerrainGenerator.vcxproj -> D:\Dateien\Studium\SS_15\GED\maiermo\GEDGame\Debug\TerrainGenerator.exe
+     1>Die Erstellung des Projekts "D:\Dateien\Studium\SS_15\GED\maiermo\GEDGame\projects\TerrainGenerator\TerrainGenerator.vcxproj" ist abgeschlossen, Build Ziel(e).
 
-Fehler beim Buildvorgang.
+Build erfolgreich.
 
-Verstrichene Zeit 00:00:00.18
+Verstrichene Zeit 00:00:00.37

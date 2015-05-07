@@ -16,20 +16,23 @@ void DiamondSquare::diamondSquareAlgorithm(std::vector<float> &vec, const unsign
 {
 	resolution = res;
 
-	//assign random values to the 4 corners
-	vec[0] = normalDisRandom(0.0f, 1.0f);
-	vec[(resolution * resolution ) - 1] = normalDisRandom(0.0f, 1.0f);
-	vec[resolution - 1] = normalDisRandom(0.0f, 1.0f);
-	vec[IDX(0, resolution - 1, resolution)] = normalDisRandom(0.0f, 1.0f);
+	float min = 0.0f;
+	float max = 1.0f;
+
+	//assign random values to the 4 corners  
+	vec[0] = normalDisRandom(min, max);
+	vec[(resolution * resolution ) - 1] = normalDisRandom(min,max);
+	vec[resolution - 1] = normalDisRandom(min, max);
+	vec[IDX(0, resolution - 1, resolution)] = normalDisRandom(min, max);
 
 	for (int i = 0; i < (int) log2(resolution - 1); i++)
 	{
 
-		std::cout << std::endl << "Jetzt Diamond" << std::endl;
-		system("pause");
+		//std::cout << std::endl << "Jetzt Diamond" << std::endl;
+		//system("pause");
 		diamondStep(vec);
-		std::cout << std::endl << "Jetzt Square" << std::endl;
-		system("pause");
+		//std::cout << std::endl << "Jetzt Square" << std::endl;
+		//system("pause");
 		squareStep(vec);
 	}
 
@@ -62,12 +65,12 @@ void DiamondSquare::diamondStepSingle(std::vector<float>& v, int startx, int sta
 	v[IDX(startx + (resolution - 1) / iteration / 2,
 			starty + (resolution - 1) / iteration / 2,
 			resolution)] =
-		(v[IDX(startx, starty, resolution)] + 
+		(((v[IDX(startx, starty, resolution)] + 
 		v[IDX(startx + (resolution - 1) / iteration, starty, resolution)] +
 		v[IDX(startx, starty + (resolution - 1) / iteration, resolution)] + 
 		v[IDX(startx + (resolution - 1) / iteration,
 				starty + (resolution - 1) / iteration,
-				resolution)]) / 4.0f;
+				resolution)]) / 4.0f)  * roughness()) + roughness2();
 };
 
 /* Returns normally distributed random values between min and max.
@@ -82,7 +85,7 @@ float DiamondSquare::normalDisRandom(float min, float max){
 	float offset;
 
 	//offset between midpoint and max (or min)
-	offset = (max - min) / 2.0f;
+	offset = (max - min) / 4.0f;
 
 	//middle between min and max
 	midpoint = min + offset; 
@@ -104,7 +107,8 @@ void DiamondSquare::squareStep(std::vector<float> &vec){
 	static unsigned int numberOfIterations = 0;
 	numberOfIterations ++;
 	
-	unsigned int midpointOffset = ((resolution - 1)/ numberOfIterations) /2;
+	unsigned int midpointOffset = ((resolution - 1) / pow(2, numberOfIterations - 1)) / 2;
+	std::cout << midpointOffset << std::endl;
 
 	unsigned currentMidpointPosition =
 		IDX(midpointOffset, midpointOffset, resolution);
@@ -131,31 +135,31 @@ void DiamondSquare::squareStep(std::vector<float> &vec){
 #pragma region first iteration
 				//left point
 				vec[currentMidpointPosition - midpointOffset] =
-					(vec[currentMidpointPosition] + //midpoint 
-					vec[currentMidpointPosition - midpointOffset - resolution] + //top
-					vec[currentMidpointPosition - midpointOffset + resolution] //bottom
-					) / 3.0f;
+					((vec[currentMidpointPosition] + //midpoint 
+					vec[currentMidpointPosition - midpointOffset - (resolution * midpointOffset)] + //top
+					vec[currentMidpointPosition - midpointOffset + (resolution * midpointOffset)] //bottom
+					) / 3.0f) * roughness() + roughness2();
 
 				//right point
 				vec[currentMidpointPosition + midpointOffset] =
 					(vec[currentMidpointPosition] + //midpoint
-					vec[currentMidpointPosition + midpointOffset - resolution] + //top
-					vec[currentMidpointPosition + midpointOffset + resolution] //bottom
-					) / 3.0f;
+					vec[currentMidpointPosition + midpointOffset - (resolution * midpointOffset)] + //top
+					vec[currentMidpointPosition + midpointOffset + (resolution * midpointOffset)] //bottom
+					) / 3.0f * roughness() + roughness2();
 
 				//top point
 				vec[currentMidpointPosition - (resolution * midpointOffset)] =
 					(vec[currentMidpointPosition] + //midpoint
 					vec[currentMidpointPosition - (resolution * midpointOffset) - midpointOffset] + //left
 					vec[currentMidpointPosition - (resolution * midpointOffset) + midpointOffset] //right
-					) / 3.0f;
+					) / 3.0f * roughness() + roughness2();
 
 				//bottom point
 				vec[currentMidpointPosition + (resolution * midpointOffset)] =
 					(vec[currentMidpointPosition] + //midpoint
 					vec[currentMidpointPosition + (resolution * midpointOffset) - midpointOffset] + //left
 					vec[currentMidpointPosition + (resolution * midpointOffset) + midpointOffset] //right
-					) / 3.0f;
+					) / 3.0f * roughness() + roughness2();
 
 #pragma endregion
 			}
@@ -169,32 +173,32 @@ void DiamondSquare::squareStep(std::vector<float> &vec){
 						//left point
 						vec[currentMidpointPosition - midpointOffset] =
 							(vec[currentMidpointPosition] + //midpoint
-							vec[currentMidpointPosition - midpointOffset - resolution] + //top
-							vec[currentMidpointPosition - midpointOffset + resolution] //bottom
-							) / 3.0f;
+							vec[currentMidpointPosition - midpointOffset - (resolution * midpointOffset)] + //top
+							vec[currentMidpointPosition - midpointOffset + (resolution * midpointOffset)] //bottom
+							) / 3.0f * roughness() + roughness2();
 
 						//right point
 						vec[currentMidpointPosition + midpointOffset] =
 							(vec[currentMidpointPosition] + //midpoint
 							vec[currentMidpointPosition + midpointOffset + midpointOffset] + //right
-							vec[currentMidpointPosition + midpointOffset - resolution] + //top
-							vec[currentMidpointPosition + midpointOffset + resolution] //bottom
-							) / 4.0f;
+							vec[currentMidpointPosition + midpointOffset - (resolution * midpointOffset)] + //top
+							vec[currentMidpointPosition + midpointOffset + (resolution * midpointOffset)] //bottom
+							) / 4.0f * roughness() + roughness2();
 
 						//top point
 						vec[currentMidpointPosition - (resolution * midpointOffset)] =
 							(vec[currentMidpointPosition] + //midpoint
 							vec[currentMidpointPosition - (resolution * midpointOffset) - midpointOffset] + //left
 							vec[currentMidpointPosition - (resolution * midpointOffset) + midpointOffset] //right
-							) / 3.0f;
+							) / 3.0f * roughness() + roughness2();
 
 						//bottom point
 						vec[currentMidpointPosition + (resolution * midpointOffset)] =
 							(vec[currentMidpointPosition] + //midpoint
 							vec[currentMidpointPosition + (resolution * midpointOffset) - midpointOffset] + //left
 							vec[currentMidpointPosition + (resolution * midpointOffset) + midpointOffset] + //right
-							vec[currentMidpointPosition + (resolution * midpointOffset) + resolution] //bottom
-							) / 4.0f;
+							vec[currentMidpointPosition + (resolution * midpointOffset) + (resolution * midpointOffset)] //bottom
+							) / 4.0f * roughness() + roughness2();
 #pragma endregion
 					}
 					else if (currentLine == (pow(2, numberOfIterations - 1))-1){ //bottom left corner
@@ -202,32 +206,32 @@ void DiamondSquare::squareStep(std::vector<float> &vec){
 						//left point
 						vec[currentMidpointPosition - midpointOffset] =
 							(vec[currentMidpointPosition] + //midpoint
-							vec[currentMidpointPosition - midpointOffset - resolution] + //top
-							vec[currentMidpointPosition - midpointOffset + resolution] //bottom
-							) / 3.0f;
+							vec[currentMidpointPosition - midpointOffset - (resolution * midpointOffset)] + //top
+							vec[currentMidpointPosition - midpointOffset + (resolution * midpointOffset)] //bottom
+							) / 3.0f * roughness() + roughness2();
 
 						//right point
 						vec[currentMidpointPosition + midpointOffset] =
 							(vec[currentMidpointPosition] + //midpoint
 							vec[currentMidpointPosition + midpointOffset + midpointOffset] + //right
-							vec[currentMidpointPosition + midpointOffset - resolution] + //top
-							vec[currentMidpointPosition + midpointOffset + resolution] //bottom
-							) / 4.0f;
+							vec[currentMidpointPosition + midpointOffset - (resolution * midpointOffset)] + //top
+							vec[currentMidpointPosition + midpointOffset + (resolution * midpointOffset)] //bottom
+							) / 4.0f * roughness() + roughness2();
 
 						//top point
 						vec[currentMidpointPosition - (resolution * midpointOffset)] =
 							(vec[currentMidpointPosition] + //midpoint
 							vec[currentMidpointPosition - (resolution * midpointOffset) - midpointOffset] + //left
 							vec[currentMidpointPosition - (resolution * midpointOffset) + midpointOffset] + //right
-							vec[currentMidpointPosition - (resolution * midpointOffset) - resolution]  //top
-							) / 4.0f;
+							vec[currentMidpointPosition - (resolution * midpointOffset) - (resolution * midpointOffset)]  //top
+							) / 4.0f * roughness() + roughness2();
 
 						//bottom point
 						vec[currentMidpointPosition + (resolution * midpointOffset)] =
 							(vec[currentMidpointPosition] + //midpoint
 							vec[currentMidpointPosition + (resolution * midpointOffset) - midpointOffset] + //left
 							vec[currentMidpointPosition + (resolution * midpointOffset) + midpointOffset] //right
-							) / 3.0f;
+							) / 3.0f * roughness() + roughness2();
 #pragma endregion
 					}
 					else{
@@ -235,33 +239,33 @@ void DiamondSquare::squareStep(std::vector<float> &vec){
 						//left point
 						vec[currentMidpointPosition - midpointOffset] =
 							(vec[currentMidpointPosition] + //midpoint
-							vec[currentMidpointPosition - midpointOffset - resolution] + //top
-							vec[currentMidpointPosition - midpointOffset + resolution] //bottom
-							) / 3.0f;
+							vec[currentMidpointPosition - midpointOffset - (resolution * midpointOffset)] + //top
+							vec[currentMidpointPosition - midpointOffset + (resolution * midpointOffset)] //bottom
+							) / 3.0f * roughness() + roughness2();
 
 						//right point
 						vec[currentMidpointPosition + midpointOffset] =
 							(vec[currentMidpointPosition] + //midpoint
 							vec[currentMidpointPosition + midpointOffset + midpointOffset] + //right
-							vec[currentMidpointPosition + midpointOffset - resolution] + //top
-							vec[currentMidpointPosition + midpointOffset + resolution] //bottom
-							) / 4.0f;
+							vec[currentMidpointPosition + midpointOffset - (resolution * midpointOffset)] + //top
+							vec[currentMidpointPosition + midpointOffset + (resolution * midpointOffset)] //bottom
+							) / 4.0f * roughness() + roughness2();
 
 						//top point
 						vec[currentMidpointPosition - (resolution * midpointOffset)] =
 							(vec[currentMidpointPosition] + //midpoint
 							vec[currentMidpointPosition - (resolution * midpointOffset) - midpointOffset] + //left
 							vec[currentMidpointPosition - (resolution * midpointOffset) + midpointOffset] + //right
-							vec[currentMidpointPosition - (resolution * midpointOffset) - resolution]  //top
-							) / 4.0f;
+							vec[currentMidpointPosition - (resolution * midpointOffset) - (resolution * midpointOffset)]  //top
+							) / 4.0f * roughness() + roughness2();
 
 						//bottom point
 						vec[currentMidpointPosition + (resolution * midpointOffset)] =
 							(vec[currentMidpointPosition] + //midpoint
 							vec[currentMidpointPosition + (resolution * midpointOffset) - midpointOffset] + //left
 							vec[currentMidpointPosition + (resolution * midpointOffset) + midpointOffset] + //right
-							vec[currentMidpointPosition + (resolution * midpointOffset) + resolution] //bottom
-							) / 4.0f;
+							vec[currentMidpointPosition + (resolution * midpointOffset) + (resolution * midpointOffset)] //bottom
+							) / 4.0f * roughness() + roughness2();
 #pragma endregion
 					}
 #pragma endregion
@@ -275,31 +279,31 @@ void DiamondSquare::squareStep(std::vector<float> &vec){
 						vec[currentMidpointPosition - midpointOffset] =
 							(vec[currentMidpointPosition] + //midpoint 
 							vec[currentMidpointPosition - midpointOffset - midpointOffset] + //left
-							vec[currentMidpointPosition - midpointOffset - resolution] + //top
-							vec[currentMidpointPosition - midpointOffset + resolution] //bottom
-							) / 4.0f;
+							vec[currentMidpointPosition - midpointOffset - (resolution * midpointOffset)] + //top
+							vec[currentMidpointPosition - midpointOffset + (resolution * midpointOffset)] //bottom
+							) / 4.0f * roughness() + roughness2();
 
 						//right point
 						vec[currentMidpointPosition + midpointOffset] =
 							(vec[currentMidpointPosition] + //midpoint
-							vec[currentMidpointPosition + midpointOffset - resolution] + //top
-							vec[currentMidpointPosition + midpointOffset + resolution] //bottom
-							) / 3.0f;
+							vec[currentMidpointPosition + midpointOffset - (resolution * midpointOffset)] + //top
+							vec[currentMidpointPosition + midpointOffset + (resolution * midpointOffset)] //bottom
+							) / 3.0f * roughness() + roughness2();
 
 						//top point
 						vec[currentMidpointPosition - (resolution * midpointOffset)] =
 							(vec[currentMidpointPosition] + //midpoint
 							vec[currentMidpointPosition - (resolution * midpointOffset) - midpointOffset] + //left
 							vec[currentMidpointPosition - (resolution * midpointOffset) + midpointOffset] //right
-							) / 3.0f;
+							) / 3.0f * roughness() + roughness2();
 
 						//bottom point
 						vec[currentMidpointPosition + (resolution * midpointOffset)] =
 							(vec[currentMidpointPosition] + //midpoint
 							vec[currentMidpointPosition + (resolution * midpointOffset) - midpointOffset] + //left
 							vec[currentMidpointPosition + (resolution * midpointOffset) + midpointOffset] + //right
-							vec[currentMidpointPosition + (resolution * midpointOffset) + resolution] //bottom
-							) / 4.0f;
+							vec[currentMidpointPosition + (resolution * midpointOffset) + (resolution * midpointOffset)] //bottom
+							) / 4.0f * roughness() + roughness2();
 
 #pragma endregion
 					}
@@ -310,31 +314,31 @@ void DiamondSquare::squareStep(std::vector<float> &vec){
 						vec[currentMidpointPosition - midpointOffset] =
 							(vec[currentMidpointPosition] + //midpoint 
 							vec[currentMidpointPosition - midpointOffset - midpointOffset] + //left
-							vec[currentMidpointPosition - midpointOffset - resolution] + //top
-							vec[currentMidpointPosition - midpointOffset + resolution] //bottom
-							) / 4.0f;
+							vec[currentMidpointPosition - midpointOffset - (resolution * midpointOffset)] + //top
+							vec[currentMidpointPosition - midpointOffset + (resolution * midpointOffset)] //bottom
+							) / 4.0f * roughness() + roughness2();
 
 						//right point
 						vec[currentMidpointPosition + midpointOffset] =
 							(vec[currentMidpointPosition] + //midpoint
-							vec[currentMidpointPosition + midpointOffset - resolution] + //top
-							vec[currentMidpointPosition + midpointOffset + resolution] //bottom
-							) / 3.0f;
+							vec[currentMidpointPosition + midpointOffset - (resolution * midpointOffset)] + //top
+							vec[currentMidpointPosition + midpointOffset + (resolution * midpointOffset)] //bottom
+							) / 3.0f * roughness() + roughness2();
 
 						//top point
 						vec[currentMidpointPosition - (resolution * midpointOffset)] =
 							(vec[currentMidpointPosition] + //midpoint
 							vec[currentMidpointPosition - (resolution * midpointOffset) - midpointOffset] + //left
 							vec[currentMidpointPosition - (resolution * midpointOffset) + midpointOffset] + //right
-							vec[currentMidpointPosition - (resolution * midpointOffset) - resolution]  //top
-							) / 4.0f;
+							vec[currentMidpointPosition - (resolution * midpointOffset) - (resolution * midpointOffset)]  //top
+							) / 4.0f * roughness() + roughness2();
 
 						//bottom point
 						vec[currentMidpointPosition + (resolution * midpointOffset)] =
 							(vec[currentMidpointPosition] + //midpoint
 							vec[currentMidpointPosition + (resolution * midpointOffset) - midpointOffset] + //left
 							vec[currentMidpointPosition + (resolution * midpointOffset) + midpointOffset] //right
-							) / 3.0f;
+							) / 3.0f * roughness() + roughness2();
 
 #pragma endregion
 					}
@@ -345,32 +349,32 @@ void DiamondSquare::squareStep(std::vector<float> &vec){
 						vec[currentMidpointPosition - midpointOffset] =
 							(vec[currentMidpointPosition] + //midpoint 
 							vec[currentMidpointPosition - midpointOffset - midpointOffset] + //left
-							vec[currentMidpointPosition - midpointOffset - resolution] + //top
-							vec[currentMidpointPosition - midpointOffset + resolution] //bottom
-							) / 4.0f;
+							vec[currentMidpointPosition - midpointOffset - (resolution * midpointOffset)] + //top
+							vec[currentMidpointPosition - midpointOffset + (resolution * midpointOffset)] //bottom
+							) / 4.0f * roughness() + roughness2();
 
 						//right point
 						vec[currentMidpointPosition + midpointOffset] =
 							(vec[currentMidpointPosition] + //midpoint
-							vec[currentMidpointPosition + midpointOffset - resolution] + //top
-							vec[currentMidpointPosition + midpointOffset + resolution] //bottom
-							) / 3.0f;
+							vec[currentMidpointPosition + midpointOffset - (resolution * midpointOffset)] + //top
+							vec[currentMidpointPosition + midpointOffset + (resolution * midpointOffset)] //bottom
+							) / 3.0f * roughness() + roughness2();
 
 						//top point
 						vec[currentMidpointPosition - (resolution * midpointOffset)] =
 							(vec[currentMidpointPosition] + //midpoint
 							vec[currentMidpointPosition - (resolution * midpointOffset) - midpointOffset] + //left
 							vec[currentMidpointPosition - (resolution * midpointOffset) + midpointOffset] + //right
-							vec[currentMidpointPosition - (resolution * midpointOffset) - resolution]  //top
-							) / 4.0f;
+							vec[currentMidpointPosition - (resolution * midpointOffset) - (resolution * midpointOffset)]  //top
+							) / 4.0f * roughness() + roughness2();
 
 						//bottom point
 						vec[currentMidpointPosition + (resolution * midpointOffset)] =
 							(vec[currentMidpointPosition] + //midpoint
 							vec[currentMidpointPosition + (resolution * midpointOffset) - midpointOffset] + //left
 							vec[currentMidpointPosition + (resolution * midpointOffset) + midpointOffset] + //right
-							vec[currentMidpointPosition + (resolution * midpointOffset) + resolution] //bottom
-							) / 4.0f;
+							vec[currentMidpointPosition + (resolution * midpointOffset) + (resolution * midpointOffset)] //bottom
+							) / 4.0f * roughness() + roughness2();
 
 #pragma endregion
 					}
@@ -385,32 +389,32 @@ void DiamondSquare::squareStep(std::vector<float> &vec){
 						vec[currentMidpointPosition - midpointOffset] =
 							(vec[currentMidpointPosition] + //midpoint 
 							vec[currentMidpointPosition - midpointOffset - midpointOffset] + //left
-							vec[currentMidpointPosition - midpointOffset - resolution] + //top
-							vec[currentMidpointPosition - midpointOffset + resolution] //bottom
-							) / 4.0f;
+							vec[currentMidpointPosition - midpointOffset - (resolution * midpointOffset)] + //top
+							vec[currentMidpointPosition - midpointOffset + (resolution * midpointOffset)] //bottom
+							) / 4.0f * roughness() + roughness2();
 
 						//right point
 						vec[currentMidpointPosition + midpointOffset] =
 							(vec[currentMidpointPosition] + //midpoint
 							vec[currentMidpointPosition + midpointOffset + midpointOffset] + //right
-							vec[currentMidpointPosition + midpointOffset - resolution] + //top
-							vec[currentMidpointPosition + midpointOffset + resolution] //bottom
-							) / 4.0f;
+							vec[currentMidpointPosition + midpointOffset - (resolution * midpointOffset)] + //top
+							vec[currentMidpointPosition + midpointOffset + (resolution * midpointOffset)] //bottom
+							) / 4.0f * roughness() + roughness2();
 
 						//top point
 						vec[currentMidpointPosition - (resolution * midpointOffset)] =
 							(vec[currentMidpointPosition] + //midpoint
 							vec[currentMidpointPosition - (resolution * midpointOffset) - midpointOffset] + //left
 							vec[currentMidpointPosition - (resolution * midpointOffset) + midpointOffset] //right
-							) / 3.0f;
+							) / 3.0f * roughness() + roughness2();
 
 						//bottom point
 						vec[currentMidpointPosition + (resolution * midpointOffset)] =
 							(vec[currentMidpointPosition] + //midpoint
 							vec[currentMidpointPosition + (resolution * midpointOffset) - midpointOffset] + //left
 							vec[currentMidpointPosition + (resolution * midpointOffset) + midpointOffset] + //right
-							vec[currentMidpointPosition + (resolution * midpointOffset) + resolution] //bottom
-							) / 4.0f;
+							vec[currentMidpointPosition + (resolution * midpointOffset) + (resolution * midpointOffset)] //bottom
+							) / 4.0f * roughness() + roughness2();
 #pragma endregion
 					}
 					else if (currentLine == (pow(2, numberOfIterations - 1))-1){
@@ -420,32 +424,32 @@ void DiamondSquare::squareStep(std::vector<float> &vec){
 						vec[currentMidpointPosition - midpointOffset] =
 							(vec[currentMidpointPosition] + //midpoint 
 							vec[currentMidpointPosition - midpointOffset - midpointOffset] + //left
-							vec[currentMidpointPosition - midpointOffset - resolution] + //top
-							vec[currentMidpointPosition - midpointOffset + resolution] //bottom
-							) / 4.0f;
+							vec[currentMidpointPosition - midpointOffset - (resolution * midpointOffset)] + //top
+							vec[currentMidpointPosition - midpointOffset + (resolution * midpointOffset)] //bottom
+							) / 4.0f * roughness() + roughness2();
 
 						//right point
 						vec[currentMidpointPosition + midpointOffset] =
 							(vec[currentMidpointPosition] + //midpoint
 							vec[currentMidpointPosition + midpointOffset + midpointOffset] + //right
-							vec[currentMidpointPosition + midpointOffset - resolution] + //top
-							vec[currentMidpointPosition + midpointOffset + resolution] //bottom
-							) / 4.0f;
+							vec[currentMidpointPosition + midpointOffset - (resolution * midpointOffset)] + //top
+							vec[currentMidpointPosition + midpointOffset + (resolution * midpointOffset)] //bottom
+							) / 4.0f * roughness() + roughness2();
 
 						//top point
 						vec[currentMidpointPosition - (resolution * midpointOffset)] =
 							(vec[currentMidpointPosition] + //midpoint
 							vec[currentMidpointPosition - (resolution * midpointOffset) - midpointOffset] + //left
 							vec[currentMidpointPosition - (resolution * midpointOffset) + midpointOffset] + //right
-							vec[currentMidpointPosition - (resolution * midpointOffset) - resolution]  //top
-							) / 4.0f;
+							vec[currentMidpointPosition - (resolution * midpointOffset) - (resolution * midpointOffset)]  //top
+							) / 4.0f * roughness() + roughness2();
 
 						//bottom point
 						vec[currentMidpointPosition + (resolution * midpointOffset)] =
 							(vec[currentMidpointPosition] + //midpoint
 							vec[currentMidpointPosition + (resolution * midpointOffset) - midpointOffset] + //left
 							vec[currentMidpointPosition + (resolution * midpointOffset) + midpointOffset] //right
-							) / 3.0f;
+							) / 3.0f * roughness() + roughness2();
 
 #pragma endregion
 					}
@@ -456,33 +460,33 @@ void DiamondSquare::squareStep(std::vector<float> &vec){
 						vec[currentMidpointPosition - midpointOffset] =
 							(vec[currentMidpointPosition] + //midpoint 
 							vec[currentMidpointPosition - midpointOffset - midpointOffset] + //left
-							vec[currentMidpointPosition - midpointOffset - resolution] + //top
-							vec[currentMidpointPosition - midpointOffset + resolution] //bottom
-							) / 4.0f;
+							vec[currentMidpointPosition - midpointOffset - (resolution * midpointOffset)] + //top
+							vec[currentMidpointPosition - midpointOffset + (resolution * midpointOffset)] //bottom
+							) / 4.0f * roughness() + roughness2();
 
 						//right point
 						vec[currentMidpointPosition + midpointOffset] =
 							(vec[currentMidpointPosition] + //midpoint
 							vec[currentMidpointPosition + midpointOffset + midpointOffset] + //right
-							vec[currentMidpointPosition + midpointOffset - resolution] + //top
-							vec[currentMidpointPosition + midpointOffset + resolution] //bottom
-							) / 4.0f;
+							vec[currentMidpointPosition + midpointOffset - (resolution * midpointOffset)] + //top
+							vec[currentMidpointPosition + midpointOffset + (resolution * midpointOffset)] //bottom
+							) / 4.0f * roughness() + roughness2();
 
 						//top point
 						vec[currentMidpointPosition - (resolution * midpointOffset)] =
 							(vec[currentMidpointPosition] + //midpoint
 							vec[currentMidpointPosition - (resolution * midpointOffset) - midpointOffset] + //left
 							vec[currentMidpointPosition - (resolution * midpointOffset) + midpointOffset] + //right
-							vec[currentMidpointPosition - (resolution * midpointOffset) - resolution]  //top
-							) / 4.0f;
+							vec[currentMidpointPosition - (resolution * midpointOffset) - (resolution * midpointOffset)]  //top
+							) / 4.0f * roughness() + roughness2();
 
 						//bottom point
 						vec[currentMidpointPosition + (resolution * midpointOffset)] =
 							(vec[currentMidpointPosition] + //midpoint
 							vec[currentMidpointPosition + (resolution * midpointOffset) - midpointOffset] + //left
 							vec[currentMidpointPosition + (resolution * midpointOffset) + midpointOffset] + //right
-							vec[currentMidpointPosition + (resolution * midpointOffset) + resolution] //bottom
-							) / 4.0f;
+							vec[currentMidpointPosition + (resolution * midpointOffset) + (resolution * midpointOffset)] //bottom
+							) / 4.0f * roughness() + roughness2() ;
 #pragma endregion
 					}
 
@@ -497,6 +501,30 @@ void DiamondSquare::squareStep(std::vector<float> &vec){
 	}
 };
 
+float DiamondSquare::roughness(){
+	return normalDisRandom(0.85f, 1.5f) ;
+};
 
+float DiamondSquare::roughness2(){
+	return normalDisRandom(-0.1f, 0.135f);
+};
 
+std::vector<float>* DiamondSquare::CutBoundarys(std::vector<float> &vec){
+	using namespace std;
+	vector<float> *newArray = new vector<float>((resolution - 1) * (resolution - 1));
 
+	for (unsigned ypos = 0; ypos < resolution - 1; ypos++){
+
+		for (unsigned xpos = 0; xpos < resolution - 1; xpos++){
+
+			float currentValue = vec[IDX(xpos, ypos, resolution)];
+
+			if (currentValue > 1.0f){ currentValue = 1.0f; }
+			else if (currentValue < 0.0f){ currentValue = 0.0f; }
+
+			(* newArray)[IDX(xpos, ypos, resolution - 1)] = currentValue;
+		}
+	}
+	delete &vec;
+	return newArray;
+}

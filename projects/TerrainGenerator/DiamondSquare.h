@@ -34,6 +34,9 @@ public:
 
 	static unsigned int resolution;
 
+	//cutting the vector in the right size
+	static std::vector<float>* CutBoundarys(std::vector<float> &vec);
+
 private: 
 
 	//SquareStep of the algorithm 
@@ -45,4 +48,9 @@ private:
 	//helper function
 	static void diamondStepSingle(std::vector<float>& v, int startx, int starty, unsigned int iteration);
 
+	//Calculates a random procentual roughness
+	static float roughness();
+
+	//Calculates a random procentual roughness
+	static float roughness2();
 };

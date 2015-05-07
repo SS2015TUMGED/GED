@@ -10,7 +10,8 @@
 #include <SimpleImage.h>
 #include "DiamondSquare.h"
 #include <random>
-#include <chrono>
+#include <time.h>
+#include <TextureGenerator.h>
 
 // Access a 2D array of width w at position x / y 
 #define IDX(xpos, ypos, width) ((xpos) + (ypos) * (width))
@@ -38,9 +39,9 @@ void printArray2D(std::vector<float> &array2D_, int width_, int height_){
 	}
 }
 
-void smoothArray2D(float* array2D_, int width_, int height_){
+void smoothArray2D(std::vector<float> &array2D_, int width_, int height_){
 	//create new, temporal array
-	float* array2D = new float[width_ * height_];
+	std::vector<float> array2D = std::vector<float>(width_ * height_);
 
 	//get the 4 corners right
 #pragma region corners
@@ -146,13 +147,15 @@ void smoothArray2D(float* array2D_, int width_, int height_){
 				array2D[IDX(xpos, ypos, width_)];
 		}
 	}
-	//free memory
-	delete[] array2D;
+	
 }
 
-void smoothArray2D_nTimes(float* array2D_, int width_, int height_, int n){
+void smoothArray2D_nTimes(std::vector<float> &array2D_, int width_, int height_, int n){
+	using namespace std;
 	int g;
 	for (g = 0; g < n; g++){
+		cout << endl;
+		cout << "Smoothing " << g << "/" << n;
 		smoothArray2D(array2D_, width_, height_);
 	}
 }
@@ -242,19 +245,12 @@ int _tmain(int argc, _TCHAR* argv[])
 				<< "7: " << param7_s << endl
 				<< "8: " << param8_s << endl;
 
-			system("pause");
+			
 #pragma endregion
 
 #pragma region Random Number Generation
-
-	//start timer 
-	typedef chrono::high_resolution_clock myclock;
-	myclock::time_point beginning = myclock::now();
-				
-	// obtain a seed from the timer
-	myclock::duration d = myclock::now() - beginning;
-	unsigned int seed = d.count();
-
+			unsigned int seed = time(NULL);
+	cout << "seed: " << seed << endl << endl;
 	
 	//seed the rng
 	DiamondSquare::rng.seed(seed);
@@ -299,8 +295,16 @@ int _tmain(int argc, _TCHAR* argv[])
 			
 			cout << endl << "Jetzt der DiamondSquare" << endl;
 			DiamondSquare::diamondSquareAlgorithm(*vec, width + 1);
-			system("pause");
-			/*
+
+			//cutting the boundrys
+			vec = DiamondSquare::CutBoundarys(*vec);
+		
+			cout << "Smoothing..." << endl;
+
+			smoothArray2D_nTimes(*vec, width, height, 10);
+			
+
+
 			//Saving array to heightfield
 			GEDUtils::SimpleImage image(width, height);
 			
@@ -309,14 +313,21 @@ int _tmain(int argc, _TCHAR* argv[])
 					image.setPixel(xpos, ypos, (const float) (*vec)[IDX(xpos, ypos, width)]);
 				}
 			}
-			
+
 			image.save(param4_s.c_str());
+			/*
+			wstring path = wstring("");
+
+			
+			GEDUtils::TextureGenerator texGen();
+			texGen::generateAndStoreImages(&vec, width, param5_s, param7_s);
 			*/
+
 #pragma endregion
 
 			//free memory
 			delete vec;
-			//delete[] array2D;
+			
 		}
 		else{
 			throw "ERROR: Illegal number of Arguments!";
