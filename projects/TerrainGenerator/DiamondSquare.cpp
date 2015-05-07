@@ -1,9 +1,9 @@
 #include "DiamondSquare.h"
 #include <iostream>
 #include <chrono>
-#include <math.h>
+#include <math.h> 
 
-// Access a 2D array of width w at position x / y 
+// Access a 2D array of width w at position x / y  
 #define IDX(xpos, ypos, width) ((xpos) + (ypos) * (width))
 
 unsigned int DiamondSquare::resolution;
