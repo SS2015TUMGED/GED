@@ -88,7 +88,7 @@ float caluclateVectorLength(float x1, float x2){
 }
 
 
-void safeNormalsToImage(const std::vector<bestGroup::Vec3f>& normalsOut, int resolution, const char* filename){
+void saveNormalsToImage(const std::vector<bestGroup::Vec3f>& normalsOut, int resolution, const char* filename){
 	
 	
 	GEDUtils::SimpleImage image(resolution, resolution);
@@ -97,7 +97,7 @@ void safeNormalsToImage(const std::vector<bestGroup::Vec3f>& normalsOut, int res
 	{
 		for (size_t x = 0; x < resolution; x++)
 		{
-			// get the colors
+			// get the floats and change the range from [-1;1] to [0;1] 
 
 			float r  = normalsOut[IDX(x, y, resolution)].x;
 			r = (r + 1) / 2;
@@ -108,11 +108,13 @@ void safeNormalsToImage(const std::vector<bestGroup::Vec3f>& normalsOut, int res
 			float b = normalsOut[IDX(x, y, resolution)].z;
 			b = (b + 1) / 2;
 
+			// save floats as rgb color to the image
 			image.setPixel(x, y,  r,  g,  b);
 
 		}
 	}
 
+	// export the image
 	image.save(filename);
 
 }
