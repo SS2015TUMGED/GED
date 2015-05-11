@@ -32,7 +32,7 @@ void MyTextureGenerator::generateNormals(const std::vector<float>& heightfield, 
 	//  iterate through the rows
 	for (size_t y = 0; y < resolution; y++)
 	{
-		//iterate throw the cols
+		//iterate through the cols
 		for (size_t x = 0; x < resolution; x++)
 		{
 			//normal mapping
@@ -41,7 +41,7 @@ void MyTextureGenerator::generateNormals(const std::vector<float>& heightfield, 
 			float x1 = 0.0f;	// normal x1 direction
 			float x2 = 0.0f;	// normal x2 direction
 			float x3 = 1.0f;	// normal x3 direction
-			float length = 0.0f;// normal length bevor normalizing
+			float length = 0.0f;// normal length before normalizing
 			// height of the position in the map
 			float height = heightfield[IDX(x, y, resolution)];
 
