@@ -88,7 +88,7 @@ float caluclateVectorLength(float x1, float x2){
 }
 
 
-void saveNormalsToImage(const std::vector<bestGroup::Vec3f>& normalsOut, int resolution, const char* filename){
+void MyTextureGenerator::saveNormalsToImage(const std::vector<bestGroup::Vec3f>& normalsOut, int resolution, const char* filename){
 
 	
 	
@@ -110,7 +110,7 @@ void saveNormalsToImage(const std::vector<bestGroup::Vec3f>& normalsOut, int res
 			b = (b + 1) / 2;
 
 			// save floats as rgb color to the image
-			image.setPixel(x, y,  r,  g,  b);
+			image.setPixel(x, y, r, g, b);
 
 		}
 	}

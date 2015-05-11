@@ -308,6 +308,7 @@ int _tmain(int argc, _TCHAR* argv[])
 
 			//free memory
 			delete vec;
+			delete normalsOut;
 			
 		}
 		else{
