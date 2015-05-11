@@ -2,8 +2,6 @@
 #include <math.h> 
 
 
-
-
 // Access a 2D array of width w at position x / y 
 #define IDX(xpos, ypos, width) ((xpos) + (ypos) * (width))
 
@@ -11,11 +9,9 @@ MyTextureGenerator::MyTextureGenerator()
 {
 }
 
-
 MyTextureGenerator::~MyTextureGenerator()
 {
 }
-
 
 // takes the x1, x2 coordinates of a flatvector and returns the length of the vector
 float caluclateVectorLength(float x1, float x2);
@@ -64,6 +60,9 @@ void MyTextureGenerator::generateNormals(const std::vector<float> &heightfield, 
 
 				// get the length of the flatvector just created
 				length = caluclateVectorLength(x1, x2);
+
+				x1 *= -1;
+				x2 *= -1;
 
 				// normalize vector
 				x1 = x1 / length;
