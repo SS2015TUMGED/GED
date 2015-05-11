@@ -88,11 +88,13 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DiamondSquare.h" />
+    <ClInclude Include="MyTextureGenerator.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DiamondSquare.cpp" />
+    <ClCompile Include="MyTextureGenerator.cpp" />
     <ClCompile Include="stdafx.cpp" />
     <ClCompile Include="TerrainGenerator.cpp" />
   </ItemGroup>
