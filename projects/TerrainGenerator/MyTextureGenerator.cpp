@@ -27,10 +27,10 @@ void MyTextureGenerator::generateNormals(const std::vector<float> &heightfield, 
 
 
 	//  iterate through the rows
-	for (size_t y = 0; y < resolution; y++)
+	for (int y = 0; y < resolution; y++)
 	{
 		//iterate through the cols
-		for (size_t x = 0; x < resolution; x++)
+		for (int x = 0; x < resolution; x++)
 		{
 			//normal mapping
 
@@ -88,15 +88,15 @@ float caluclateVectorLength(float x1, float x2){
 }
 
 
-void safeNormalsToImage(const std::vector<bestGroup::Vec3f>& normalsOut, int resolution, const char* filename){
+void saveNormalsToImage(const std::vector<bestGroup::Vec3f>& normalsOut, int resolution, const char* filename){
 
 	
 	
 	GEDUtils::SimpleImage image(resolution, resolution);
 
-	for (size_t y = 0; y < resolution; y++)
+	for (int y = 0; y < resolution; y++)
 	{
-		for (size_t x = 0; x < resolution; x++)
+		for (int x = 0; x < resolution; x++)
 		{
 			// get the floats and change the range from [-1;1] to [0;1] 
 

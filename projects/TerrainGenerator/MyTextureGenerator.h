@@ -27,6 +27,6 @@ public:
 	static void generateNormals(const std::vector<float>& heightfield, int resolution,
 		std::vector<bestGroup::Vec3f> &normalsOut);
 
-	static void safeNormalsToImage(const std::vector<bestGroup::Vec3f>& normalsOut, int resolution, const char* filename);
+	static void saveNormalsToImage(const std::vector<bestGroup::Vec3f>& normalsOut, int resolution, const char* filename);
 };
 

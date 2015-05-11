@@ -12,6 +12,7 @@
 #include <random>
 #include <time.h>
 #include <TextureGenerator.h>
+#include "MyTextureGenerator.h"
 
 
 // Access a 2D array of width w at position x / y 
@@ -292,6 +293,16 @@ int _tmain(int argc, _TCHAR* argv[])
 
 			image.save(param4_s.c_str());
 			
+			// create the normals vector
+			std::vector<bestGroup::Vec3f> *normalsOut = new vector<bestGroup::Vec3f>(width * width);
+
+			//run MyTextureGenerator
+			MyTextureGenerator::generateNormals(*vec, width, *normalsOut);
+
+			// create and save the image
+			MyTextureGenerator::saveNormalsToImage(*normalsOut, width, param8_s.c_str());
+
+
 
 #pragma endregion
 
