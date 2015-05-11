@@ -22,8 +22,8 @@ float caluclateVectorLength(float x1, float x2);
 
 
 
-void MyTextureGenerator::generateNormals(const std::vector<float>& heightfield, int resolution,
-	std::vector<float>& normalsOut){
+void MyTextureGenerator::generateNormals(const std::vector<float> &heightfield, int resolution,
+	std::vector<bestGroup::Vec3f> &normalsOut){
 
 	// documentation 
 	// http://acko.net/blog/making-worlds-3-thats-no-moon/
@@ -75,12 +75,10 @@ void MyTextureGenerator::generateNormals(const std::vector<float>& heightfield, 
 				x2 *= height;
 				x3 *= height;
 
-
-
+				// Add the normal Vector to normalsOut
+				normalsOut.push_back(bestGroup::Vec3f(x1, x2, x3));
 		}
 	}
-
-
 }
 
 
