@@ -1,6 +1,7 @@
 #include "MyTextureGenerator.h"
 #include <math.h> 
 #include <SimpleImage.h>
+#include <iostream>
 
 
 // Access a 2D array of width w at position x / y 
@@ -59,8 +60,11 @@ void MyTextureGenerator::generateNormals(const std::vector<float> &heightfield, 
 				else if (y == resolution -1) 
 					 x2 = (heightfield[IDX(x, y - 2, resolution)] - heightfield[IDX(x, y - 1, resolution)]) / 2;
 
+
+				
+
 				// get the length of the flatvector just created
-				length = caluclateVectorLength(x1, x2);
+				length = sqrtf(x1*x1 + x2*x2 + 1);
 
 				x1 *= -1;
 				x2 *= -1;
@@ -71,21 +75,22 @@ void MyTextureGenerator::generateNormals(const std::vector<float> &heightfield, 
 				x3 = 1 / length;
 
 				// multiply with the height
-				//x1 *= height;
-				//x2 *= height;
-				//x3 *= height;
+				x1 *= height;
+				x2 *= height;
+				x3 *= height;
+				
 
 				// Add the normal Vector to normalsOut
-				normalsOut.push_back(bestGroup::Vec3f(x1, x2, x3));
+				normalsOut[IDX(x, y, resolution)].x = x1;
+				normalsOut[IDX(x, y, resolution)].y = x2;
+				normalsOut[IDX(x, y, resolution)].z = x3;
 		}
 	}
 }
 
 
 
-float caluclateVectorLength(float x1, float x2){
-	return sqrtf(x1*x1 + x2*x2 + 1);
-}
+
 
 
 void MyTextureGenerator::saveNormalsToImage(const std::vector<bestGroup::Vec3f>& normalsOut, int resolution, const char* filename){
@@ -108,6 +113,8 @@ void MyTextureGenerator::saveNormalsToImage(const std::vector<bestGroup::Vec3f>&
 
 			float b = normalsOut[IDX(x, y, resolution)].z;
 			b = (b + 1) / 2;
+
+			
 
 			// save floats as rgb color to the image
 			image.setPixel(x, y, r, g, b);
