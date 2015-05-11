@@ -19,10 +19,18 @@ void DiamondSquare::diamondSquareAlgorithm(std::vector<float> &vec, const unsign
 	float min = 0.3f;
 	float max = 0.7f;
 
-	//assign random values to the 4 corners  
+	//assign random values to the 4 corners
+
+	//top left
 	vec[0] = normalDisRandom(min, max);
+
+	// button right
 	vec[(resolution * resolution ) - 1] = normalDisRandom(min,max);
+
+	//top right
 	vec[resolution - 1] = normalDisRandom(min, max);
+
+	//button left
 	vec[IDX(0, resolution - 1, resolution)] = normalDisRandom(min, max);
 
 
@@ -59,7 +67,9 @@ void DiamondSquare::diamondStep(std::vector<float>& v)
 
 void DiamondSquare::diamondStepSingle(std::vector<float>& v, int startx, int starty, unsigned int iteration)
 {
+	// for the hills
 	static unsigned b = 0;
+
 	//Accessing the boarders and writing the average value in the middle
 	v[IDX(startx + (resolution - 1) / iteration / 2,
 			starty + (resolution - 1) / iteration / 2,
@@ -70,7 +80,8 @@ void DiamondSquare::diamondStepSingle(std::vector<float>& v, int startx, int sta
 		v[IDX(startx + (resolution - 1) / iteration,
 				starty + (resolution - 1) / iteration,
 				resolution)]) / 4.0f)  * roughness()) + roughness2();
-
+	
+	// just for the hills
 	if (iteration == 2 && b == 0){
 		
 		v[IDX(startx + (resolution - 1) / iteration / 2,
