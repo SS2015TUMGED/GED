@@ -26,5 +26,7 @@ public:
 
 	void generateNormals(const std::vector<float>& heightfield, int resolution,
 		std::vector<bestGroup::Vec3f> &normalsOut);
+
+	void safeNormalsToImage(const std::vector<bestGroup::Vec3f>& normalsOut, int resolution, const char* filename);
 };
 

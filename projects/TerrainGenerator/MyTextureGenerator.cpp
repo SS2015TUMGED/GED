@@ -1,5 +1,6 @@
 #include "MyTextureGenerator.h"
 #include <math.h> 
+#include <SimpleImage.h>
 
 
 // Access a 2D array of width w at position x / y 
@@ -70,9 +71,9 @@ void MyTextureGenerator::generateNormals(const std::vector<float> &heightfield, 
 				x3 = 1 / length;
 
 				// multiply with the height
-				x1 *= height;
-				x2 *= height;
-				x3 *= height;
+				//x1 *= height;
+				//x2 *= height;
+				//x3 *= height;
 
 				// Add the normal Vector to normalsOut
 				normalsOut.push_back(bestGroup::Vec3f(x1, x2, x3));
@@ -85,5 +86,36 @@ void MyTextureGenerator::generateNormals(const std::vector<float> &heightfield, 
 float caluclateVectorLength(float x1, float x2){
 	return sqrtf(x1*x1 + x2*x2 + 1);
 }
+
+
+void safeNormalsToImage(const std::vector<bestGroup::Vec3f>& normalsOut, int resolution, const char* filename){
+	
+	
+	GEDUtils::SimpleImage image(resolution, resolution);
+
+	for (size_t y = 0; y < resolution; y++)
+	{
+		for (size_t x = 0; x < resolution; x++)
+		{
+			// get the colors
+
+			float r  = normalsOut[IDX(x, y, resolution)].x;
+			r = (r + 1) / 2;
+
+			float g = normalsOut[IDX(x, y, resolution)].y;
+			g = (g + 1) / 2;
+
+			float b = normalsOut[IDX(x, y, resolution)].z;
+			b = (b + 1) / 2;
+
+			image.setPixel(x, y,  r,  g,  b);
+
+		}
+	}
+
+	image.save(filename);
+
+}
+
 
 
