@@ -89,7 +89,7 @@ float caluclateVectorLength(float x1, float x2){
 
 
 void safeNormalsToImage(const std::vector<bestGroup::Vec3f>& normalsOut, int resolution, const char* filename){
-void saveNormalsToImage(const std::vector<bestGroup::Vec3f>& normalsOut, int resolution, const char* filename){
+
 	
 	
 	GEDUtils::SimpleImage image(resolution, resolution);
