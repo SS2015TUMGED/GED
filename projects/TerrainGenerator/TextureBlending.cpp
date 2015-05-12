@@ -7,29 +7,23 @@
 // Access a 2D array of width w at position x / y 
 #define IDX(xpos, ypos, width) ((xpos) + (ypos) * (width))
 
-
 TextureBlending::TextureBlending()
 {
 }
 
-
 TextureBlending::~TextureBlending()
 {
 }
+
 // load the textures into the ram
 GEDUtils::SimpleImage lowSteep("..\\..\\..\\..\\external\\textures\\ground02.jpg");
 GEDUtils::SimpleImage highSteep("..\\..\\..\\..\\external\\textures\\rock4.jpg");
-GEDUtils::SimpleImage highFlat("..\\..\\..\\..\\external\\textures\\Snow.jpg");
+GEDUtils::SimpleImage highFlat("..\\..\\..\\..\\external\\textures\\rock3.jpg");
 GEDUtils::SimpleImage lowFlat("..\\..\\..\\..\\external\\textures\\gras15.jpg");
 
 // Array for the images
 std::vector<float> TextureBlending::alphas = { 0.0f, 0.0f, 0.0f, 0.0f };
-
 std::vector<GEDUtils::SimpleImage> TextureBlending::textures = {lowSteep,highSteep, highFlat,lowFlat};
-
-
-
-
 
 // given in slide03
 void TextureBlending::calcAlphas(float height, float slope){
@@ -37,10 +31,7 @@ void TextureBlending::calcAlphas(float height, float slope){
 	TextureBlending::alphas[1] = (1 - height) * slope;
 	TextureBlending::alphas[2] = height;
 	TextureBlending::alphas[3] = height * slope;
-
-
 }
-
 
 void TextureBlending::getColorTiled(GEDUtils::SimpleImage image, int x, int y, float& r, float& g, float& b)
 {
