@@ -23,14 +23,21 @@ GEDUtils::SimpleImage lowFlat("..\\..\\..\\..\\external\\textures\\gras15.jpg");
 
 // Array for the images
 std::vector<float> TextureBlending::alphas = { 0.0f, 0.0f, 0.0f, 0.0f };
-std::vector<GEDUtils::SimpleImage> TextureBlending::textures = {lowSteep,highSteep, highFlat,lowFlat};
+std::vector<GEDUtils::SimpleImage> TextureBlending::textures = { lowFlat, lowSteep, highFlat, highSteep };
 
 // given in slide03
 void TextureBlending::calcAlphas(float height, float slope){
+	slope *= slope;
 	TextureBlending::alphas[0] = 1.0f;
 	TextureBlending::alphas[1] = (1 - height) * slope;
-	TextureBlending::alphas[2] = height;
-	TextureBlending::alphas[3] = height * slope;
+	if (height > 0.5f){
+		TextureBlending::alphas[2] = height;
+		TextureBlending::alphas[3] = height* slope;
+	}
+	else{
+		alphas[2] = 0.0f;
+		alphas[3] = 0.0f;
+	}
 }
 
 void TextureBlending::getColorTiled(GEDUtils::SimpleImage image, int x, int y, float& r, float& g, float& b)
@@ -61,6 +68,8 @@ void TextureBlending::blend(int x, int y, int index, float& r, float& g, float& 
 		TextureBlending::getColorTiled(TextureBlending::textures[index], x, y, tmp_r, tmp_g, tmp_b);
 
 		r = alpha * tmp_r + (1 - alpha) * r;
+		g = alpha * tmp_g + (1 - alpha) * g;
+		b = alpha * tmp_b + (1 - alpha) * b;
 		
 	}
 
