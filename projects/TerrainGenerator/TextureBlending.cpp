@@ -16,8 +16,16 @@ TextureBlending::TextureBlending()
 TextureBlending::~TextureBlending()
 {
 }
+// load the textures into the ram
+GEDUtils::SimpleImage lowSteep("..\\..\\..\\..\\external\\textures\\ground02.jpg");
+GEDUtils::SimpleImage highSteep("..\\..\\..\\..\\external\\textures\\rock4.jpg");
+GEDUtils::SimpleImage highFlat("..\\..\\..\\..\\external\\textures\\Snow.jpg");
+GEDUtils::SimpleImage lowFlat("..\\..\\..\\..\\external\\textures\\gras15.jpg");
 
+// Array for the images
+std::vector<float> TextureBlending::alphas = { 0.0f, 0.0f, 0.0f, 0.0f };
 
+std::vector<GEDUtils::SimpleImage> TextureBlending::textures = {lowSteep,highSteep, highFlat,lowFlat};
 
 
 
@@ -75,14 +83,7 @@ void TextureBlending::blend(int x, int y, int index, float& r, float& g, float& 
 // load images
 void TextureBlending::createImage(std::vector<float>& heightmap, std::vector<bestGroup::Vec3f>& normalsOut, int resolution, const char* filename){
 
-	// load the textures into the ram
-	GEDUtils::SimpleImage lowSteep("..\..\..\..\external\textures\ground02.jpg");
-	GEDUtils::SimpleImage highSteep("..\..\..\..\external\textures\rock4.jpg");
-	GEDUtils::SimpleImage highFlat("..\..\..\..\external\textures\Snow.jpg");
-	GEDUtils::SimpleImage lowFlat("..\..\..\..\external\textures\gras15.jpg");
 
-	// Array for the images
-	TextureBlending::textures = { lowFlat, highFlat, highSteep, lowSteep };
 
 
 	// necessary alpha variables
