@@ -17,34 +17,22 @@ TextureBlending::~TextureBlending()
 {
 }
 
-//returns true, if the slope is steep at this x,y coordinate
-bool TextureBlending::isPointSteep(std::vector<bestGroup::Vec3f>& normalsOut, int resolution, int x, int y){
-	return (normalsOut[IDX(x, y, resolution)].z < 0.8f);
-}
 
 
-//returns true, if the point at x,y in the highmap is high 
-bool TextureBlending::isPointHight(std::vector<float>& highmap, int resolution, int x, int y){
-	return (highmap[IDX(x, y, resolution)] < 0.5f);
-}
+
+
 
 
 // given in slide03
-void TextureBlending::calcAlphas(float height, float slope, float& alpha1, float& alpha2, float& alpha3){
-	alpha1 = (1 - height) * slope;
-	alpha2 = height;
-	alpha3 = height * slope;
-}
+void TextureBlending::calcAlphas(float height, float slope){
+	TextureBlending::alphas[0] = 1.0f;
+	TextureBlending::alphas[1] = (1 - height) * slope;
+	TextureBlending::alphas[2] = height;
+	TextureBlending::alphas[3] = height * slope;
 
 
-float TextureBlending::getAlpha(int x, int y, int index){
-	float alpha1;
-	float alpha2;
-	float alpha3;
-	
-	if (index == 1)
-		return 
 }
+
 
 void TextureBlending::getColorTiled(GEDUtils::SimpleImage image, int x, int y, float& r, float& g, float& b)
 {
@@ -59,24 +47,33 @@ void TextureBlending::getColorTiled(GEDUtils::SimpleImage image, int x, int y, f
 
 }
 
-void TextureBlending::blend(std::vector<GEDUtils::SimpleImage> arr, int x, int y, int index, float& r, float& g, float& b){
-	if (index >= arr.size){
+void TextureBlending::blend(int x, int y, int index, float& r, float& g, float& b){
+	if (index >= TextureBlending::textures.size()){
 		return;
 	}
 
 	if (index == 0){
-		TextureBlending::getColorTiled(arr[0], x, y, r, g, b);
+		TextureBlending::getColorTiled(TextureBlending::textures[0], x, y, r, g, b);
 	}
 	else if (index > 0){
-		float alpha = 
+		float alpha = TextureBlending::alphas[index];
+
+		float tmp_r, tmp_g, tmp_b;
+		TextureBlending::getColorTiled(TextureBlending::textures[index], x, y, tmp_r, tmp_g, tmp_b);
+
+		r = alpha * tmp_r + (1 - alpha) * r;
+		
 	}
+
+	index++;
+	TextureBlending::blend(x, y, index, r, g, b);
 
 }
 
 
 
 // load images
-void TextureBlending::createImage(std::vector<float>& heightmap, std::vector<bestGroup::Vec3f>& normalsOut, int resolution){
+void TextureBlending::createImage(std::vector<float>& heightmap, std::vector<bestGroup::Vec3f>& normalsOut, int resolution, const char* filename){
 
 	// load the textures into the ram
 	GEDUtils::SimpleImage lowSteep("..\..\..\..\external\textures\ground02.jpg");
@@ -106,10 +103,12 @@ void TextureBlending::createImage(std::vector<float>& heightmap, std::vector<bes
 		{
 			height	= heightmap[IDX(x, y, resolution)];
 			slope = normalsOut[IDX(x, y, resolution)].z;
-			calcAlphas(height, slope, alpha1, alpha2, alpha3);
+			
+			
+			TextureBlending::calcAlphas(height, slope);
 
 			// call getColorTiled 4-times per pixel to get the rgb's from the textures
-			TextureBlending::getColorTiled
+			TextureBlending::blend(x, y, 0, r, g, b);
 
 
 			// write rgb in the file
@@ -117,11 +116,10 @@ void TextureBlending::createImage(std::vector<float>& heightmap, std::vector<bes
 
 		}
 	}
+	image.save(filename);
 
 
 
-
-	lowSteep.getPixel()
 
 
 	// fuer jedes bild die farbe an den punkt x,y holen

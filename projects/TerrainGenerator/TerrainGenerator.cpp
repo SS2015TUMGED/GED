@@ -13,6 +13,7 @@
 #include <time.h>
 #include <TextureGenerator.h>
 #include "MyTextureGenerator.h"
+#include "TextureBlending.h"
 
 
 // Access a 2D array of width w at position x / y 
@@ -303,7 +304,7 @@ int _tmain(int argc, _TCHAR* argv[])
 			// create and save the image
 			MyTextureGenerator::saveNormalsToImage(*normalsOut, width, param8_s.c_str());
 
-
+			TextureBlending::createImage(*vec, *normalsOut, width, param6_s.c_str());
 
 #pragma endregion
 
