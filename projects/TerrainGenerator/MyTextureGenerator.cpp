@@ -38,47 +38,43 @@ void MyTextureGenerator::generateNormals(const std::vector<float> &heightfield, 
 			//necessary variables
 			float x1 = 0.0f;	// normal x1 direction
 			float x2 = 0.0f;	// normal x2 direction
-			float x3 = 1.0f;	// normal x3 direction
+			float x3 = 1.0f / 512.0f;	// normal x3 direction
 			float length = 0.0f;// normal length before normalizing
-			// height of the position in the map
-			float height = heightfield[IDX(x, y, resolution)];
+
 
 
 			// check if col exists and handle the borders/corners
 				if ( x > 0 && x < resolution - 1)
-					 x1 = (heightfield[IDX(x + 1, y, resolution)] - heightfield[IDX(x - 1, y, resolution)]) / 2;
+					 x1 = (heightfield[IDX(x + 1, y, resolution)] - heightfield[IDX(x - 1, y, resolution)]) / 2.0f;
 				else if (x == 0)
-					 x1 = (heightfield[IDX(x + 2, y, resolution)] - heightfield[IDX(x + 1, y, resolution)]) / 2;
+					 x1 = (heightfield[IDX(x + 1, y, resolution)] - heightfield[IDX(x  , y, resolution)]) ;
 				else if (x == resolution - 1)
-					 x1 = (heightfield[IDX(x - 2, y, resolution)] - heightfield[IDX(x - 1, y, resolution)]) / 2;
+					 x1 = (heightfield[IDX(x - 1, y, resolution)] - heightfield[IDX(x , y, resolution)]) ;
 			
 				// check if rows exists & handle the corners/borders
 				if (y > 0 && y < resolution - 1)
-					 x2 = (heightfield[IDX(x, y + 1, resolution)] - heightfield[IDX(x, y - 1, resolution)]) / 2;
+					 x2 = (heightfield[IDX(x, y + 1, resolution)] - heightfield[IDX(x, y - 1, resolution)]) / 2.0f;
 				else if (y == 0)
-					 x2 = (heightfield[IDX(x, y + 2, resolution)] - heightfield[IDX(x, y + 1, resolution)]) / 2;
+					 x2 = (heightfield[IDX(x, y + 1, resolution)] - heightfield[IDX(x, y, resolution)]);
 				else if (y == resolution -1) 
-					 x2 = (heightfield[IDX(x, y - 2, resolution)] - heightfield[IDX(x, y - 1, resolution)]) / 2;
+					 x2 = (heightfield[IDX(x, y - 1, resolution)] - heightfield[IDX(x, y , resolution)]) ;
 
 
 				
 
-				// get the length of the flatvector just created
-				length = sqrtf(x1*x1 + x2*x2 + 1);
+				
 
 				x1 *= -1;
 				x2 *= -1;
 
+				
+				// normalize
+				length = sqrtf(x1*x1 + x2*x2 + x3*x3);
+
 				// normalize vector
 				x1 = x1 / length;
 				x2 = x2 / length;
-				x3 = 1 / length;
-
-				// multiply with the height
-				x1 *= height;
-				x2 *= height;
-				x3 *= height;
-				
+				x3 = x3 / length;
 
 				// Add the normal Vector to normalsOut
 				normalsOut[IDX(x, y, resolution)].x = x1;
@@ -115,6 +111,7 @@ void MyTextureGenerator::saveNormalsToImage(const std::vector<bestGroup::Vec3f>&
 			b = (b + 1) / 2;
 
 			
+
 
 			// save floats as rgb color to the image
 			image.setPixel(x, y, r, g, b);

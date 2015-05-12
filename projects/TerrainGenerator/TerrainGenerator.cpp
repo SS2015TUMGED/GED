@@ -156,10 +156,11 @@ void smoothArray2D_nTimes(std::vector<float> &array2D_, int width_, int height_,
 	using namespace std;
 	int g;
 	for (g = 0; g < n; g++){
-		cout << endl;
-		cout << "Smoothing " << g << "/" << n;
+		//cout << endl;
+		//cout << "Smoothing " << g << "/" << n;
 		smoothArray2D(array2D_, width_, height_);
 	}
+	cout << "smoothing complete" << endl;
 }
 
 int _tmain(int argc, _TCHAR* argv[])
