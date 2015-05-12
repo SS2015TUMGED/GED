@@ -38,7 +38,7 @@ void MyTextureGenerator::generateNormals(const std::vector<float> &heightfield, 
 			//necessary variables
 			float x1 = 0.0f;	// normal x1 direction
 			float x2 = 0.0f;	// normal x2 direction
-			float x3 = 1.0f / 512.0f;	// normal x3 direction
+			float x3 = 1.0f / (resolution / 2.0f);	// normal x3 direction
 			float length = 0.0f;// normal length before normalizing
 
 
@@ -63,7 +63,7 @@ void MyTextureGenerator::generateNormals(const std::vector<float> &heightfield, 
 				
 
 				
-
+				
 				x1 *= -1;
 				x2 *= -1;
 
