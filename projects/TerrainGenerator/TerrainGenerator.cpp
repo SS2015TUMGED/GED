@@ -275,7 +275,7 @@ int _tmain(int argc, _TCHAR* argv[])
 
 			cout << "Smoothing..." << endl;
 
-			smoothArray2D_nTimes(*vec, width + 1, height + 1, 400);
+			smoothArray2D_nTimes(*vec, width + 1, height + 1, 1000);
 
 			//cutting the boundrys
 			vec = DiamondSquare::CutBoundarys(*vec);

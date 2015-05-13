@@ -16,21 +16,21 @@ TextureBlending::~TextureBlending()
 }
 
 // load the textures into the ram
-GEDUtils::SimpleImage lowFlat("..\\..\\..\\..\\external\\textures\\gras15.jpg");
 GEDUtils::SimpleImage lowSteep("..\\..\\..\\..\\external\\textures\\ground02.jpg");
-GEDUtils::SimpleImage highFlat("..\\..\\..\\..\\external\\textures\\pebble01.jpg");
 GEDUtils::SimpleImage highSteep("..\\..\\..\\..\\external\\textures\\rock4.jpg");
-GEDUtils::SimpleImage snowLand("..\\..\\..\\..\\external\\textures\\Snow.jpg");
+GEDUtils::SimpleImage highFlat("..\\..\\..\\..\\external\\textures\\rock3.jpg");
+GEDUtils::SimpleImage lowFlat("..\\..\\..\\..\\external\\textures\\gras15.jpg");
+GEDUtils::SimpleImage snow("..\\TerrainGenerator\\Snow.jpg");
 
 // Array for the images
 std::vector<float> TextureBlending::alphas = { 0.0f, 0.0f, 0.0f, 0.0f, 0.0f };
-std::vector<GEDUtils::SimpleImage> TextureBlending::textures = { lowFlat, lowSteep, highFlat, highSteep, snowLand };
+std::vector<GEDUtils::SimpleImage> TextureBlending::textures = { lowSteep,lowFlat, highFlat, highSteep, snow };
 
 // given in slide03
 void TextureBlending::calcAlphas(float height, float slope){
 	slope *= slope;
 	TextureBlending::alphas[0] = 1.0f;
-	TextureBlending::alphas[1] = (1 - height) * slope;
+	TextureBlending::alphas[1] = (1 - height) * slope + 0.1f;
 	//alphas[4] = 0.0f;
 	if (height > 0.5f){
 		alphas[1] = 0.8f - height*slope;
@@ -41,21 +41,9 @@ void TextureBlending::calcAlphas(float height, float slope){
 		alphas[2] = height*0.99f;
 		alphas[3] = height*0.99f*slope;
 	}
-
-	alphas[4] = height*slope*height*2.0f;
-	if (height > 0.2f && height < 0.3){
-		alphas[1] =1 -  height * 10 / 3;
-
-	}
-
-
-	if (height < 0.2f){
-		for (int i = 1; i < 5; i++)
-		{
-			alphas[i] = 0.0f;
-		}
-	}
-
+	
+		alphas[4] = height*slope*height*1.8f;
+	
 }
 
 void TextureBlending::getColorTiled(GEDUtils::SimpleImage image, int x, int y, float& r, float& g, float& b)
@@ -125,10 +113,10 @@ void TextureBlending::createImage(std::vector<float>& heightmap, std::vector<bes
 	{
 		for (int x = 0; x < resolution; x++)
 		{
-			height	= heightmap[IDX(x, y, resolution)];
+			height = heightmap[IDX(x, y, resolution)];
 			slope = normalsOut[IDX(x, y, resolution)].z;
-			
-			
+
+
 			TextureBlending::calcAlphas(height, slope);
 
 			// call getColorTiled 4-times per pixel to get the rgb's from the textures
@@ -141,6 +129,8 @@ void TextureBlending::createImage(std::vector<float>& heightmap, std::vector<bes
 		}
 	}
 	image.save(filename);
+
+
 }
 
 
