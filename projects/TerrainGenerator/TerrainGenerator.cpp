@@ -285,7 +285,7 @@ int _tmain(int argc, _TCHAR* argv[])
 			
 
 
-			/*
+			/* not anymore necessary
 			//Saving array to heightfield
 			GEDUtils::SimpleImage image(width, height);
 			
@@ -327,7 +327,7 @@ int _tmain(int argc, _TCHAR* argv[])
 
 
 			//Saving downsized heightfield to file
-				GEDUtils::SimpleImage image(width, height);
+				GEDUtils::SimpleImage image(scaleWidth, scaleWidth);
 
 				for (int ypos = 0; ypos < scaleWidth; ypos++){
 					for (int xpos = 0; xpos < scaleWidth; xpos++){
