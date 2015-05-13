@@ -2,7 +2,7 @@
 
 #include "SimpleImage.h"
 #include <vector>
-#include "MyTextureGenerator.h"
+#include "2DAControl.h"
 
 
 class TextureBlending
@@ -26,7 +26,7 @@ public:
 
 	void static getColorTiled(GEDUtils::SimpleImage image, int x, int y, float& r, float& g, float& b);
 
-	void static blend(int x, int y, int index, float& r, float& g, float& b);
+	void static blend(int x, int y, unsigned index, float& r, float& g, float& b);
 
 
 private:

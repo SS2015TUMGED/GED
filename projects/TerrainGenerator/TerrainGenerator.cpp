@@ -15,10 +15,8 @@
 #include "MyTextureGenerator.h"
 #include "TextureBlending.h"
 #include "HeightfieldDownsizing.h"
-
-
-// Access a 2D array of width w at position x / y 
-#define IDX(xpos, ypos, width) ((xpos) + (ypos) * (width))
+#include "Smoothing.h"
+#include "2DAControl.h"
 
 //declare the random number generator
 std::default_random_engine DiamondSquare::rng;
@@ -41,128 +39,6 @@ void printArray2D(std::vector<float> &array2D_, int width_, int height_){
 		}
 		std::cout << std::endl; //add linebreak after each "line"
 	}
-}
-
-void smoothArray2D(std::vector<float> &array2D_, int width_, int height_){
-	//create new, temporal array
-	std::vector<float> array2D = std::vector<float>(width_ * height_);
-
-	//get the 4 corners right
-#pragma region corners
-	//top left
-	array2D[0] = (
-		array2D_[0] + //corner piece
-		array2D_[1] + //right of the corner
-		array2D_[width_] + //below the corner
-		array2D_[width_ + 1] //bottom right
-		) / 4.0f;
-
-	//top right
-	array2D[width_ - 1] = (
-		array2D_[width_ - 1] + //corner piece
-		array2D_[width_ - 2] + //left of the corner
-		array2D_[width_ + width_ - 1] + //below the corner
-		array2D_[width_ + width_ - 2] //bottom left
-		) / 4.0f;
-
-	//bottom left
-	array2D[IDX(0, height_ - 1, width_)] = (
-		array2D_[IDX(0, height_ - 1, width_)] + //corner piece
-		array2D_[IDX(0, height_ - 2, width_)] + //top of the corner
-		array2D_[IDX(1, height_ - 1, width_)] + //right of the corner
-		array2D_[IDX(1, height_ - 2, width_)] //top right
-		) / 4.0f;
-
-	//bottom right
-	array2D[IDX(width_ - 1, height_ - 1, width_)] = (
-		array2D_[IDX(width_ - 1, height_ - 1, width_)] + //corner piece
-		array2D_[IDX(width_ - 1, height_ - 2, width_)] + //top of the corner
-		array2D_[IDX(width_ - 2, height_ - 1, width_)] + //left of the corner
-		array2D_[IDX(width_ - 2, height_ - 2, width_)] //top left
-		) / 4.0f;
-
-	//get the edges right
-#pragma endregion
-#pragma region edges
-	int i;
-	for (i = 1; i < width_ - 1; i++){
-		//top edge
-		array2D[i] = (
-			array2D_[i] + //piece
-			array2D_[i - 1] + //left of piece
-			array2D_[i + 1] + //right of piece
-			array2D_[i + width_] + //below piece
-			array2D_[i + width_ - 1] + //bottom left
-			array2D_[i + width_ + 1] //bottom right
-			) / 6.0f;
-		//bottom edge
-		array2D[IDX(i, height_ - 1, width_)] = (
-			array2D_[IDX(i, height_ - 1, width_)] + //piece
-			array2D_[IDX(i - 1, height_ - 1, width_)] + //left of piece
-			array2D_[IDX(i + 1, height_ - 1, width_)] + //right of piece
-			array2D_[IDX(i, height_ - 2, width_)] + //top of piece
-			array2D_[IDX(i - 1, height_ - 2, width_)] + //top left
-			array2D_[IDX(i + 1, height_ - 2, width_)] //top right
-			) / 6.0f;
-		//left edge
-		array2D[IDX(0, i, width_)] = (
-			array2D_[IDX(0, i, width_)] + //piece
-			array2D_[IDX(0, i - 1, width_)] + //top of piece
-			array2D_[IDX(0, i + 1, width_)] + //below piece
-			array2D_[IDX(1, i, width_)] + //right of piece
-			array2D_[IDX(1, i - 1, width_)] + //Top right
-			array2D_[IDX(1, i + 1, width_)] //Bottom right
-			) / 6.0f;
-		//right edge
-		array2D[IDX(width_ - 1, i, width_)] = (
-			array2D_[IDX(width_ - 1, i, width_)] + //piece
-			array2D_[IDX(width_ - 1, i - 1, width_)] + //top of piece
-			array2D_[IDX(width_ - 1, i + 1, width_)] + //below of piece
-			array2D_[IDX(width_ - 2, i, width_)] + //left of piece
-			array2D_[IDX(width_ - 2, i - 1, width_)] + //Top left
-			array2D_[IDX(width_ - 2, i + 1, width_)] //Bottom left
-			) / 6.0f;
-	}
-#pragma endregion
-
-	//get the rectangle in the middle
-	int xpos, ypos;
-	for (ypos = 1; ypos < height_ - 1; ypos++){ //"lines"
-		int startOfLinePos = IDX(0, ypos, width_); //position of the first  piece of the "line"
-		for (xpos = 1; xpos < width_ - 1; xpos++){ //"columns"
-			array2D[startOfLinePos + xpos] = (
-				array2D_[startOfLinePos + xpos] + //piece
-				array2D_[startOfLinePos + xpos - width_] + //top of piece
-				array2D_[startOfLinePos + xpos + width_] + //below piece
-				array2D_[startOfLinePos + xpos - 1] + //left of piece
-				array2D_[startOfLinePos + xpos + 1] + //right of piece
-				array2D_[startOfLinePos + xpos - width_ - 1] + //top right 
-				array2D_[startOfLinePos + xpos + width_ - 1] + //bottom right
-				array2D_[startOfLinePos + xpos - width_ + 1] + //top left
-				array2D_[startOfLinePos + xpos + width_ + 1]  //bottom left
-				) / 9.0f;
-		}
-	}
-
-	//copy array2D to array2D_
-	for (ypos = 0; ypos < height_; ypos++){
-		for (xpos = 0; xpos < width_; xpos++){
-			array2D_[IDX(xpos, ypos, width_)] =
-				array2D[IDX(xpos, ypos, width_)];
-		}
-	}
-	
-}
-
-void smoothArray2D_nTimes(std::vector<float> &array2D_, int width_, int height_, int n){
-	using namespace std;
-	int g;
-	for (g = 0; g < n; g++){
-		//cout << endl;
-		//cout << "Smoothing " << g << "/" << n;
-		smoothArray2D(array2D_, width_, height_);
-	}
-	cout << "smoothing complete" << endl;
 }
 
 int _tmain(int argc, _TCHAR* argv[])
@@ -254,7 +130,7 @@ int _tmain(int argc, _TCHAR* argv[])
 #pragma endregion
 
 #pragma region Random Number Generation
-			unsigned int seed = time(NULL);
+			int seed = time(NULL);
 	cout << "seed: " << seed << endl << endl;
 	
 	//seed the rng
@@ -273,30 +149,16 @@ int _tmain(int argc, _TCHAR* argv[])
 			cout << endl << "Jetzt der DiamondSquare" << endl;
 			DiamondSquare::diamondSquareAlgorithm(*vec, width + 1);
 
-			cout << "Smoothing..." << endl;
-
-			smoothArray2D_nTimes(*vec, width + 1, height + 1, 1000);
-
 			//cutting the boundrys
 			vec = DiamondSquare::CutBoundarys(*vec);
-		
+			
 			//smoothing the vector
-			smoothArray2D_nTimes(*vec, width , height , 1);
+
+			//Slower, more realistic
+			//Smoothing::circularSmoothing_nTimes(*vec, width, height, 1, 20);
 			
-
-
-			/* not anymore necessary
-			//Saving array to heightfield
-			GEDUtils::SimpleImage image(width, height);
-			
-			for (float ypos = 0; ypos < height; ypos++){
-				for (float xpos = 0; xpos < width; xpos++){
-					image.setPixel(xpos, ypos, (const float) (*vec)[IDX(xpos, ypos, width)]);
-				}
-			}
-
-			image.save(param4_s.c_str());
-			*/
+			//faster
+			Smoothing::squareSmoothing_nTimes(*vec, width, height, 1000);
 			
 			// create the normals vector
 			std::vector<bestGroup::Vec3f> *normalsOut = new vector<bestGroup::Vec3f>(width * width);
@@ -308,9 +170,10 @@ int _tmain(int argc, _TCHAR* argv[])
 			MyTextureGenerator::saveNormalsToImage(*normalsOut, width, param8_s.c_str());
 			TextureBlending::createImage(*vec, *normalsOut, width, param6_s.c_str());
 
-
+#pragma endregion
+#pragma region Downsizing the heightmap
 			// ********************* Downsize the heightmap ************************
-			
+
 			// new heightmap will be downscaled by scale * scale -> e.g.: 4096 * 4096 -> 1024 * 1024
 			int scale = 4;
 
@@ -327,17 +190,17 @@ int _tmain(int argc, _TCHAR* argv[])
 
 
 			//Saving downsized heightfield to file
-				GEDUtils::SimpleImage image(scaleWidth, scaleWidth);
+			GEDUtils::SimpleImage image(scaleWidth, scaleWidth);
 
-				for (int ypos = 0; ypos < scaleWidth; ypos++){
-					for (int xpos = 0; xpos < scaleWidth; xpos++){
-						image.setPixel(xpos, ypos, (const float)(*newHeightfield)[IDX(xpos, ypos, scaleWidth)]);
-					}
+			for (int ypos = 0; ypos < scaleWidth; ypos++){
+				for (int xpos = 0; xpos < scaleWidth; xpos++){
+					image.setPixel(xpos, ypos, (const float)(*newHeightfield)[IDX(xpos, ypos, scaleWidth)]);
 				}
-				image.save(param4_s.c_str());
-				std::cout << "downsized image saved..." << std::endl;
+			}
+			image.save(param4_s.c_str());
+			std::cout << "downsized image saved..." << std::endl;
 
-
+#pragma endregion
 #pragma endregion
 
 			//free memory

@@ -2,18 +2,7 @@
 #include <vector>
 #include "MyTextureGenerator.h"
 #include "SimpleImage.h"
-
-
-// Access a 2D array of width w at position x / y 
-#define IDX(xpos, ypos, width) ((xpos) + (ypos) * (width))
-
-TextureBlending::TextureBlending()
-{
-}
-
-TextureBlending::~TextureBlending()
-{
-}
+#include "2DAControl.h"
 
 // load the textures into the ram
 GEDUtils::SimpleImage lowSteep("..\\..\\..\\..\\external\\textures\\ground02.jpg");
@@ -59,7 +48,7 @@ void TextureBlending::getColorTiled(GEDUtils::SimpleImage image, int x, int y, f
 
 }
 
-void TextureBlending::blend(int x, int y, int index, float& r, float& g, float& b){
+void TextureBlending::blend(int x, int y, unsigned index, float& r, float& g, float& b){
 	
 	// end recursion
 	if (index >= TextureBlending::textures.size()){

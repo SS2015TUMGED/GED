@@ -3,18 +3,6 @@
 #include <SimpleImage.h>
 #include <iostream>
 
-
-// Access a 2D array of width w at position x / y 
-#define IDX(xpos, ypos, width) ((xpos) + (ypos) * (width))
-
-MyTextureGenerator::MyTextureGenerator()
-{
-}
-
-MyTextureGenerator::~MyTextureGenerator()
-{
-}
-
 // takes the x1, x2 coordinates of a flatvector and returns the length of the vector
 float caluclateVectorLength(float x1, float x2);
 

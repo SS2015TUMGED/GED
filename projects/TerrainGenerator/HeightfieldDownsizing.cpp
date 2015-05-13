@@ -1,19 +1,7 @@
 #include "HeightfieldDownsizing.h"
 #include <vector>
 #include <iostream>
-
-// Access a 2D array of width w at position x / y 
-#define IDX(xpos, ypos, width) ((xpos) + (ypos) * (width))
-
-HeightfieldDownsizing::HeightfieldDownsizing()
-{
-}
-
-HeightfieldDownsizing::~HeightfieldDownsizing()
-{
-}
-
-
+#include "2DAControl.h"
 
 /* getMedian
 heightfieldOld has to be an 1D Vector
