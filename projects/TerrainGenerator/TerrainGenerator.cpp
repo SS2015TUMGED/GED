@@ -14,6 +14,7 @@
 #include <TextureGenerator.h>
 #include "MyTextureGenerator.h"
 #include "TextureBlending.h"
+#include "HeightfieldDownsizing.h"
 
 
 // Access a 2D array of width w at position x / y 
@@ -284,6 +285,7 @@ int _tmain(int argc, _TCHAR* argv[])
 			
 
 
+			/*
 			//Saving array to heightfield
 			GEDUtils::SimpleImage image(width, height);
 			
@@ -294,6 +296,7 @@ int _tmain(int argc, _TCHAR* argv[])
 			}
 
 			image.save(param4_s.c_str());
+			*/
 			
 			// create the normals vector
 			std::vector<bestGroup::Vec3f> *normalsOut = new vector<bestGroup::Vec3f>(width * width);
@@ -303,12 +306,42 @@ int _tmain(int argc, _TCHAR* argv[])
 
 			// create and save the image
 			MyTextureGenerator::saveNormalsToImage(*normalsOut, width, param8_s.c_str());
-
 			TextureBlending::createImage(*vec, *normalsOut, width, param6_s.c_str());
+
+
+			// ********************* Downsize the heightmap ************************
+			
+			// new heightmap will be downscaled by scale * scale -> e.g.: 4096 * 4096 -> 1024 * 1024
+			int scale = 4;
+
+			int scaleWidth = width / scale;
+			// 1. create new heightmap vector
+			std::vector<float> *newHeightfield = new vector<float>(scaleWidth * scaleWidth);
+
+			// 2. Downsize
+			HeightfieldDownsizing::downsize(*vec, width, scale, *newHeightfield);
+
+			// 3. Print controll grids (for debugging only)
+			//HeightfieldDownsizing::printGrid(*vec, width, 8, 8, scale, *newHeightfield);
+			//system("pause");
+
+
+			//Saving downsized heightfield to file
+				GEDUtils::SimpleImage image(width, height);
+
+				for (int ypos = 0; ypos < scaleWidth; ypos++){
+					for (int xpos = 0; xpos < scaleWidth; xpos++){
+						image.setPixel(xpos, ypos, (const float)(*newHeightfield)[IDX(xpos, ypos, scaleWidth)]);
+					}
+				}
+				image.save(param4_s.c_str());
+				std::cout << "downsized image saved..." << std::endl;
+
 
 #pragma endregion
 
 			//free memory
+			delete newHeightfield;
 			delete vec;
 			delete normalsOut;
 			

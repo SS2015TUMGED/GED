@@ -30,7 +30,7 @@ public:
 
 
 private:
-	static std::vector<float> alphas;
-	static std::vector<GEDUtils::SimpleImage> textures;
+	 static std::vector<float> alphas;
+	 static std::vector<GEDUtils::SimpleImage> textures;
 };
 
