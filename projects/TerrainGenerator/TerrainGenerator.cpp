@@ -154,11 +154,14 @@ int _tmain(int argc, _TCHAR* argv[])
 			
 			//smoothing the vector
 
-			//Slower, more realistic
-			//Smoothing::circularSmoothing_nTimes(*vec, width, height, 1, 20);
-			
 			//faster
-			Smoothing::squareSmoothing_nTimes(*vec, width, height, 1000);
+			Smoothing::anotherSimpleSmoothing(*vec, width, 40,12);
+			Smoothing::squareSmoothing_nTimes(*vec, width, width, 50);
+			
+			//Slower, more realistic
+			//Smoothing::circularSmoothing_nTimes(*vec, width, height, 5, 1);
+			
+			
 			
 			// create the normals vector
 			std::vector<bestGroup::Vec3f> *normalsOut = new vector<bestGroup::Vec3f>(width * width);

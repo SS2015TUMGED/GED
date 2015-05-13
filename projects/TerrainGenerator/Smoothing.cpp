@@ -275,3 +275,60 @@ void Smoothing::circularSmoothing_nTimes(std::vector<float> &array2D_, int width
 	}
 	cout << "smoothing complete" << endl;
 }
+
+void Smoothing::anotherSimpleSmoothing(std::vector<float> &array2d_, int width ,int n, int range){
+	std::vector<float> tempvec(width*width);
+int count;
+	float temp;
+	for (int i = 0; i < n; i++){
+		std::cout << std::endl;
+		std::cout << "Smoothing " << i << "/" << n << std::endl;
+		for (int y = 0; y < width; y++){
+			for (int x = 0; x < width; x++){
+				
+				temp = 0.0f;
+				count = 0;
+				if (isValidCoord(x - range, y - range, width, width)){
+					temp += array2d_[IDX(x - range, y - range, width)];
+					count++;
+				}
+				if (isValidCoord(x, y - range, width, width)){
+					temp += array2d_[IDX(x, y - range, width)];
+					count++;
+				}
+				if (isValidCoord(x + range, y - range, width, width)){
+					temp += array2d_[IDX(x + range, y - range, width)];
+					count++;
+				}
+				if (isValidCoord(x - range, y, width, width)){
+					temp += array2d_[IDX(x - range, y, width)];
+					count++;
+				}
+				if (isValidCoord(x + range, y, width, width)){
+					temp += array2d_[IDX(x + range, y, width)];
+					count++;
+				}
+
+				if (isValidCoord(x - range, y + range, width, width)){
+					temp += array2d_[IDX(x - range, y + range, width)];
+					count++;
+				}
+				
+				if (isValidCoord(x, y + range, width, width)){
+					temp += array2d_[IDX(x, y + range, width)];
+					count++;
+				}
+				if (isValidCoord(x + range, y + range, width, width)){
+					temp += array2d_[IDX(x + range, y + range, width)];
+					count++;
+				}
+				tempvec[IDX(x, y, width)] = temp / count;
+
+			}
+		}
+		array2d_ = tempvec;
+	}
+
+	
+
+}

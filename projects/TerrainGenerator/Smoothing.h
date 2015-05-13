@@ -16,6 +16,7 @@ public:
 	static void circularSmoothing(std::vector<float> &array2D_, int width_, int height_, int  range);
 	static void squareSmoothing_nTimes(std::vector<float> &array2D_, int width_, int height_, int n);
 	static void circularSmoothing_nTimes(std::vector<float> &array2D_, int width_, int height_, int n, int range);
+	static void anotherSimpleSmoothing(std::vector<float> &array2d_, int width, int n, int range);
 
 };
 
