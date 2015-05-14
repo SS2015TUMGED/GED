@@ -44,7 +44,7 @@ void printArray2D(std::vector<float> &array2D_, int width_, int height_){
 int _tmain(int argc, _TCHAR* argv[])
 {
 	using namespace std;
-	
+
 #pragma region commandLineArguments
 	//commandline Argument handling
 	try{
@@ -126,15 +126,15 @@ int _tmain(int argc, _TCHAR* argv[])
 				<< "7: " << param7_s << endl
 				<< "8: " << param8_s << endl;
 
-			
+
 #pragma endregion
 
 #pragma region Random Number Generation
 			int seed = time(NULL);
-	cout << "seed: " << seed << endl << endl;
-	
-	//seed the rng
-	DiamondSquare::rng.seed(seed);
+			cout << "seed: " << seed << endl << endl;
+
+			//seed the rng
+			DiamondSquare::rng.seed(seed);
 #pragma endregion
 
 
@@ -145,24 +145,22 @@ int _tmain(int argc, _TCHAR* argv[])
 
 			//creating new array
 			vector<float> *vec = new vector<float>((width + 1) * (width + 1));
-			
+
 			cout << endl << "Jetzt der DiamondSquare" << endl;
 			DiamondSquare::diamondSquareAlgorithm(*vec, width + 1);
 
 			//cutting the boundrys
 			vec = DiamondSquare::CutBoundarys(*vec);
-			
+
 			//smoothing the vector
 
 			//faster
-			Smoothing::anotherSimpleSmoothing(*vec, width, 40,12);
+			Smoothing::anotherSimpleSmoothing(*vec, width, 40, 12);
 			Smoothing::squareSmoothing_nTimes(*vec, width, width, 50);
-			
+
 			//Slower, more realistic
 			//Smoothing::circularSmoothing_nTimes(*vec, width, height, 5, 1);
-			
-			
-			
+
 			// create the normals vector
 			std::vector<bestGroup::Vec3f> *normalsOut = new vector<bestGroup::Vec3f>(width * width);
 
@@ -191,7 +189,6 @@ int _tmain(int argc, _TCHAR* argv[])
 			//HeightfieldDownsizing::printGrid(*vec, width, 8, 8, scale, *newHeightfield);
 			//system("pause");
 
-
 			//Saving downsized heightfield to file
 			GEDUtils::SimpleImage image(scaleWidth, scaleWidth);
 
@@ -210,7 +207,6 @@ int _tmain(int argc, _TCHAR* argv[])
 			delete newHeightfield;
 			delete vec;
 			delete normalsOut;
-			
 		}
 		else{
 			throw "ERROR: Illegal number of Arguments!";

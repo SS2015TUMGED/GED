@@ -93,10 +93,10 @@ std::vector<bestGroup::Vec2f> Smoothing::getSmoothingCoords(int x0,
 
 
 void Smoothing::squareSmoothing(std::vector<float> &array2D_, int width_, int height_){
-	
+
 	//create new, temporal array
 	std::vector<float> array2D = std::vector<float>(width_ * height_);
-	
+
 	//get the 4 corners right
 #pragma region corners
 	//top left
@@ -276,16 +276,17 @@ void Smoothing::circularSmoothing_nTimes(std::vector<float> &array2D_, int width
 	cout << "smoothing complete" << endl;
 }
 
-void Smoothing::anotherSimpleSmoothing(std::vector<float> &array2d_, int width ,int n, int range){
+void Smoothing::anotherSimpleSmoothing(std::vector<float> &array2d_, int width, int n, int range){
+	using namespace std;
 	std::vector<float> tempvec(width*width);
-int count;
+	int count;
 	float temp;
 	for (int i = 0; i < n; i++){
-		std::cout << std::endl;
-		std::cout << "Smoothing " << i << "/" << n << std::endl;
+		cout << endl;
+		cout << "Smoothing " << i << "/" << n << endl;
 		for (int y = 0; y < width; y++){
 			for (int x = 0; x < width; x++){
-				
+
 				temp = 0.0f;
 				count = 0;
 				if (isValidCoord(x - range, y - range, width, width)){
@@ -313,7 +314,7 @@ int count;
 					temp += array2d_[IDX(x - range, y + range, width)];
 					count++;
 				}
-				
+
 				if (isValidCoord(x, y + range, width, width)){
 					temp += array2d_[IDX(x, y + range, width)];
 					count++;
@@ -328,7 +329,4 @@ int count;
 		}
 		array2d_ = tempvec;
 	}
-
-	
-
 }
