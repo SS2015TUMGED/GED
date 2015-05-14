@@ -19,6 +19,7 @@ void TextureBlending::calcAlphas(float height, float slope){
 	slope *= slope;
 	alphas[0] = 1.0f;
 	alphas[1] = (1 - height) * slope + 0.1f;
+	if (alphas[1] > 1.0f){ alphas[1] = 1.0f; }
 	//alphas[4] = 0.0f;
 	if (height > 0.5f){
 		alphas[1] = 0.8f - height*slope;
@@ -31,6 +32,7 @@ void TextureBlending::calcAlphas(float height, float slope){
 	}
 
 	alphas[4] = height*slope*height*1.8f;
+	if (alphas[4] > 1.0f){ alphas[4] = 1.0f; }
 }
 
 void TextureBlending::getColorTiled(GEDUtils::SimpleImage image, int x, int y, float& r, float& g, float& b)
