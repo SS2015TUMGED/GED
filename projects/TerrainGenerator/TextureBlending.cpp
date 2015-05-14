@@ -11,7 +11,7 @@ GEDUtils::SimpleImage highFlat("..\\..\\..\\..\\external\\textures\\rock3.jpg");
 GEDUtils::SimpleImage lowFlat("..\\..\\..\\..\\external\\textures\\gras15.jpg");
 GEDUtils::SimpleImage snow("..\\TerrainGenerator\\Snow.jpg");
 
-// Array for the images
+// Array for the images 
 std::vector<float> TextureBlending::alphas = { 0.0f, 0.0f, 0.0f, 0.0f, 0.0f };
 std::vector<GEDUtils::SimpleImage> TextureBlending::textures = { lowSteep, lowFlat, highFlat, highSteep, snow };
 
