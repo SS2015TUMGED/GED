@@ -43,7 +43,7 @@ void printArray2D(std::vector<float> &array2D_, int width_, int height_){
 
 int _tmain(int argc, _TCHAR* argv[])
 {
-	using namespace std;
+	using namespace std; 
 
 #pragma region commandLineArguments
 	//commandline Argument handling
@@ -144,7 +144,7 @@ int _tmain(int argc, _TCHAR* argv[])
 			static int height = param2;
 
 			//creating new array
-			vector<float> *vec = new vector<float>((width + 1) * (width + 1));
+			vector<float> *vec = new vector<float>((width + 1) * (height + 1));
 
 			cout << endl << "Jetzt der DiamondSquare" << endl;
 			DiamondSquare::diamondSquareAlgorithm(*vec, width + 1);
@@ -156,13 +156,13 @@ int _tmain(int argc, _TCHAR* argv[])
 
 			//faster
 			Smoothing::anotherSimpleSmoothing(*vec, width, 40, 12);
-			Smoothing::squareSmoothing_nTimes(*vec, width, width, 50);
+			Smoothing::squareSmoothing_nTimes(*vec, width, height, 50);
 
 			//Slower, more realistic
 			//Smoothing::circularSmoothing_nTimes(*vec, width, height, 5, 1);
 
 			// create the normals vector
-			std::vector<bestGroup::Vec3f> *normalsOut = new vector<bestGroup::Vec3f>(width * width);
+			std::vector<bestGroup::Vec3f> *normalsOut = new vector<bestGroup::Vec3f>(width * height);
 
 			//run MyTextureGenerator
 			MyTextureGenerator::generateNormals(*vec, width, *normalsOut);
