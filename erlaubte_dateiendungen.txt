@@ -1,0 +1,1 @@
+.h, .inl, .cpp, .cfg, .res, .dds, .fx, .fxo, .hlsl, .inc, .md, .sln, .props, .rc, .rtf, .ico, .txt, .vcxproj, .filters, .user, .cmd 
