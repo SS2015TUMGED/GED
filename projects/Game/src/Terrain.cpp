@@ -24,6 +24,8 @@ Terrain::~Terrain(void)
 
 HRESULT Terrain::create(ID3D11Device* device)
 {
+	using namespace std;
+
 	HRESULT hr;
 
 	// In our example, we load a debug texture
@@ -60,7 +62,30 @@ HRESULT Terrain::create(ID3D11Device* device)
 
 
 	// 1 Load heightfield
-	CustomData::parser.getTerrainPath
+	string path = CustomData::parser.getTerrainPath();
+	// here load image with simpleimage
+	// insert in index buffer
+
+	string colorTexture = "texture";
+
+	// Create and fill description
+	D3D11_SUBRESOURCE_DATA id;
+	id.pSysMem = &triangle[0];
+	id.SysMemPitch = 10 * sizeof(float); // Stride
+	id.SysMemSlicePitch = 0;
+	// Define initial data
+	D3D11_BUFFER_DESC bd;
+	bd.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+	bd.ByteWidth = triangle.size() * sizeof(float);
+	bd.CPUAccessFlags = 0;
+	bd.MiscFlags = 0;
+	bd.Usage = D3D11_USAGE_DEFAULT;
+	// Create buffer
+	V(device->CreateBuffer(&bd, &id, &indexBuffer));
+
+
+	DirectX::CreateDDSTextureFromFile(device, L"resources\\" + colorTexture.c_str(), nullptr, &diffuseTextureSRV);
+
 
 
 
