@@ -22,6 +22,9 @@ void ConfigParser::load(std::string str){
 	// stream to read file
 	std::ifstream ifs(str);
 
+
+	std::string tmp_terrainPath;
+
 	// check if file is open
 	if (ifs.is_open()){
 		std::cout << "file is open" << std::endl;
@@ -37,7 +40,7 @@ void ConfigParser::load(std::string str){
 
 		// loop line by line
 		while (getline(ifs, line)){
-			std::cout << line << std::endl;
+			//std::cout << line << std::endl;
 
 
 			//get the components in the line
@@ -59,8 +62,7 @@ void ConfigParser::load(std::string str){
 				//std::cout << color.r << " " << color.g << " " << color.b << std::endl;
 			}
 			else if (word.compare("TerrainPath") == 0){
-				iss >> terrainPath;
-				//std::cout << terrainPath << std::endl;
+				iss >> ConfigParser::standart.height >> ConfigParser::standart.color >> ConfigParser::standart.normal;
 			}
 			else if (word.compare("TerrainDepth") == 0){
 				iss >> terrainDepth;
@@ -88,6 +90,8 @@ void ConfigParser::load(std::string str){
 	else
 		std::cout << "Error: file not closed!" << std::endl;
 }
+
+
 float ConfigParser::getSpinning(){
 	return spinning;
 }
@@ -106,6 +110,4 @@ float ConfigParser::getTerrainHeight(){
 ConfigParser::Color ConfigParser::getBackgroundColor(){
 	return backgroundColor;
 }
-std::string ConfigParser::getTerrainPath(){
-	return terrainPath;
-}
+

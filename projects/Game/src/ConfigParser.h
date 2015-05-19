@@ -8,6 +8,14 @@ public:
 	struct Color {
 		float r,g,b;
 	};
+
+	struct terrainPath {
+		std::string height;
+		std::string color;
+		std::string normal;
+	} standart;
+
+
 	
 	// getters
 	float getSpinning();
@@ -16,7 +24,6 @@ public:
 	float getTerrainDepth();
 	float getTerrainHeight();
 	Color getBackgroundColor();
-	std::string getTerrainPath();
 
 	void load(std::string str);
 
@@ -25,12 +32,15 @@ public:
 
 
 private:
+
+	void getPathes(std::string path);
+
 	float spinning, spinSpeed,
 			terrainWidth, terrainDepth, terrainHeight;
 
 	Color backgroundColor;
 
-	std::string terrainPath;
+	
 
 };
 

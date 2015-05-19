@@ -59,14 +59,12 @@ HRESULT Terrain::create(ID3D11Device* device)
 	// normal and texture coordinates according to your height field and
 	// the dimensions of the terrain specified by the ConfigParser
 
-
-
+	
 	// 1 Load heightfield
-	string path = CustomData::parser.getTerrainPath();
+	string heightpath = CustomData::parser.standart.height;
 	// here load image with simpleimage
+	GEDUtils::SimpleImage Heightfield(heightpath.c_str());
 	// insert in index buffer
-
-	string colorTexture = "texture";
 
 	// Create and fill description
 	D3D11_SUBRESOURCE_DATA id;
@@ -87,7 +85,7 @@ HRESULT Terrain::create(ID3D11Device* device)
 	DirectX::CreateDDSTextureFromFile(device, L"resources\\" + colorTexture.c_str(), nullptr, &diffuseTextureSRV);
 
 
-
+	
 
 
 
