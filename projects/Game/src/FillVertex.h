@@ -17,7 +17,7 @@ public:
 	static void insertHeightfield(std::string path, std::vector<CustomData::SimpleVertex> &vertex);
 
 	// fills the vertex with the normals
-	// at the moment is the path not necessary => normals are calculated
-	static void insertNormalmap(std::string path, std::vector<CustomData::SimpleVertex> &vertex);
+	// normals are calculated
+	static void insertNormalmap(std::vector<CustomData::SimpleVertex> &vertex);
 };
 

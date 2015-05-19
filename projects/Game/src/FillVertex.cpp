@@ -53,7 +53,7 @@ static void FillVertexinsertHeightfield(std::string path, std::vector<CustomData
 }
 
 
-static void insertNormalmap(std::string path, std::vector<CustomData::SimpleVertex> &vertex){
+static void insertNormalmap(std::vector<CustomData::SimpleVertex> &vertex){
 	
 	// tmp vector to use the MyTextureGenerator::generateNormals method
 	std::vector<float> tmp_height (vertex.size);

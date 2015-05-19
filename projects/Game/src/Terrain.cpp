@@ -77,7 +77,9 @@ HRESULT Terrain::create(ID3D11Device* device)
 	FillVertex::insertHeightfield(heightPath, *vertex);
 	
 	// fill the vertex with Normals
+	FillVertex::insertNormalmap(*vertex);
 
+	// §§
 	
 
 
