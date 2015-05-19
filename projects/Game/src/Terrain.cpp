@@ -1,5 +1,5 @@
 #include "Terrain.h"
-
+#include "..//CustomData.h"
 #include "GameEffect.h"
 #include "SimpleImage.h"
 #include <DDSTextureLoader.h>
@@ -60,7 +60,7 @@ HRESULT Terrain::create(ID3D11Device* device)
 
 
 	// 1 Load heightfield
-
+	CustomData::parser.getTerrainPath
 
 
 

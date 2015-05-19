@@ -25,7 +25,7 @@
 #include "Terrain.h"
 #include "GameEffect.h"
 #include "ConfigParser.h"
-
+#include "..//CustomData.h"
 
 #include "debug.h"
 
@@ -70,6 +70,13 @@ XMVECTOR                                g_lightDir;
 Terrain									g_terrain;
 
 GameEffect								g_gameEffect; // CPU part of Shader
+
+//-------------------------------------------------------------------------------------
+// Our Killer Variables
+// ------------------------------------------------------------------------------------
+
+
+
 
 //--------------------------------------------------------------------------------------
 // UI control IDs
@@ -181,8 +188,9 @@ void InitApp()
 	size_t size;
 	wcstombs_s(&size, pathA, path, MAX_PATH);
 
-	ConfigParser parser;
-	parser.load(pathA);
+
+	// load the config file
+	CustomData::parser.load(pathA);
 
 
     // Intialize the user interface
