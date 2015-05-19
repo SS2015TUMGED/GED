@@ -176,12 +176,14 @@ void InitApp()
 
     // Parse the config file
 
-    V(DXUTFindDXSDKMediaFileCch(path, MAX_PATH, L"game.cfg"));
+    V(DXUTFindDXSDKMediaFileCch(path, MAX_PATH, L"..\\..\\game.cfg"));
 	char pathA[MAX_PATH];
 	size_t size;
 	wcstombs_s(&size, pathA, path, MAX_PATH);
 
-	// TODO: Parse your config file specified by "pathA" here
+	ConfigParser parser;
+	parser.load(pathA);
+
 
     // Intialize the user interface
 

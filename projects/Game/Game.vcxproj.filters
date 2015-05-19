@@ -12,21 +12,29 @@
     <Filter Include="Shader">
       <UniqueIdentifier>{f49ffabc-594a-4d16-8a37-724a8a2cd7c1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header">
+      <UniqueIdentifier>{2a5cefd2-eb11-4847-bf0b-926e3fc6c94b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\debug.h">
-      <Filter>Source</Filter>
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ConfigParser.h">
+      <Filter>Header</Filter>
     </ClInclude>
     <ClInclude Include="src\GameEffect.h">
-      <Filter>Source</Filter>
+      <Filter>Header</Filter>
     </ClInclude>
     <ClInclude Include="src\Terrain.h">
-      <Filter>Source</Filter>
+      <Filter>Header</Filter>
     </ClInclude>
-    <ClInclude Include="src\ConfigParser.h" />
+    <ClInclude Include="CustomData.h">
+      <Filter>Header</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Game.cpp">

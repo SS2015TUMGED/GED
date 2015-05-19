@@ -1,7 +1,7 @@
 #include "Terrain.h"
 
 #include "GameEffect.h"
-//#include "SimpleImage/SimpleImage.h"
+#include "SimpleImage.h"
 #include <DDSTextureLoader.h>
 #include "DirectXTex.h"
 
@@ -33,7 +33,7 @@ HRESULT Terrain::create(ID3D11Device* device)
         MessageBoxA (NULL, "Could not load texture \"resources\\debug_green.dds\"", "Invalid texture", MB_ICONERROR | MB_OK);
 		return hr;
 	}
-
+	///*
 	// This buffer contains positions, normals and texture coordinates for one triangle
     float triangle[] = {
         // Vertex 0
@@ -51,11 +51,21 @@ HRESULT Terrain::create(ID3D11Device* device)
            0.0f,    1.0f,    0.0f,  0.0f, // Normal
            1.0f,    0.0f,                 // Texcoords
     };
-
+	//*/
 	// TODO: Replace this vertex array (triangle) with an array (or vector)
 	// which contains the vertices of your terrain. Calculate position,
 	// normal and texture coordinates according to your height field and
 	// the dimensions of the terrain specified by the ConfigParser
+
+
+
+	// 1 Load heightfield
+
+
+
+
+
+
 
 	// Note 1: The normal map that you created last week will not be used
 	// in this assignment (Assignment 4). It will be of use in later assignments
