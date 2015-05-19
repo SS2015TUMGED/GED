@@ -24,6 +24,8 @@
 
 #include "Terrain.h"
 #include "GameEffect.h"
+#include "ConfigParser.h"
+
 
 #include "debug.h"
 
