@@ -15,6 +15,7 @@ ConfigParser::~ConfigParser()
 
 
 }
+
 void ConfigParser::load(std::string str){
 	// to read the values  
 	int skip = 0;

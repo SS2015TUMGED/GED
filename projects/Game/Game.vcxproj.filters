@@ -32,7 +32,10 @@
     <ClInclude Include="src\Terrain.h">
       <Filter>Header</Filter>
     </ClInclude>
-    <ClInclude Include="CustomData.h">
+    <ClInclude Include="src\FillVertex.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="src\CustomData.h">
       <Filter>Header</Filter>
     </ClInclude>
   </ItemGroup>
@@ -44,6 +47,9 @@
       <Filter>Source</Filter>
     </ClCompile>
     <ClCompile Include="src\ConfigParser.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="src\FillVertex.cpp">
       <Filter>Source</Filter>
     </ClCompile>
   </ItemGroup>

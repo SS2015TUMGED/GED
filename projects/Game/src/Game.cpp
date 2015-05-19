@@ -25,7 +25,7 @@
 #include "Terrain.h"
 #include "GameEffect.h"
 #include "ConfigParser.h"
-#include "..//CustomData.h"
+#include "CustomData.h"
 
 #include "debug.h"
 

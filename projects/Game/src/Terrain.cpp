@@ -1,9 +1,10 @@
 #include "Terrain.h"
-#include "..//CustomData.h"
+#include "CustomData.h"
 #include "GameEffect.h"
 #include "SimpleImage.h"
 #include <DDSTextureLoader.h>
 #include "DirectXTex.h"
+#include "FillVertex.h"
 
 // You can use this macro to access your height field
 #define IDX(X,Y,WIDTH) ((X) + (Y) * (WIDTH))
@@ -60,11 +61,33 @@ HRESULT Terrain::create(ID3D11Device* device)
 	// the dimensions of the terrain specified by the ConfigParser
 
 	
-	// 1 Load heightfield
-	string heightpath = CustomData::parser.standart.height;
-	// here load image with simpleimage
-	GEDUtils::SimpleImage Heightfield(heightpath.c_str());
+	// 1 Load heightfield, Normal and Color
+	string heightPath = CustomData::parser.standart.height;
+	string colorPath = CustomData::parser.standart.color;
+	string normalPath = CustomData::parser.standart.normal;
+
+
+	// load the heightmap to get the resolution
+	int resolution = FillVertex::returnResolution(heightPath);
+
+	// Create a new Vertex
+	std::vector<CustomData::SimpleVertex> *vertex = new std::vector<CustomData::SimpleVertex>(resolution * resolution);
+
+	// fill the vertex with the data from the heightmap
+	FillVertex::insertHeightfield(heightPath, *vertex);
+	
+	// fill the vertex with Normals
+
+	
+
+
+
+
 	// insert in index buffer
+
+
+
+
 
 	// Create and fill description
 	D3D11_SUBRESOURCE_DATA id;
@@ -81,8 +104,8 @@ HRESULT Terrain::create(ID3D11Device* device)
 	// Create buffer
 	V(device->CreateBuffer(&bd, &id, &indexBuffer));
 
-
-	DirectX::CreateDDSTextureFromFile(device, L"resources\\" + colorTexture.c_str(), nullptr, &diffuseTextureSRV);
+	
+	DirectX::CreateDDSTextureFromFile(device, L"resources\\" + colorPath.c_str, nullptr, &diffuseTextureSRV);
 
 
 	
@@ -122,6 +145,10 @@ HRESULT Terrain::create(ID3D11Device* device)
 	// TODO: Insert your code to load the color texture and create
 	// the texture "diffuseTexture" as well as the shader resource view
 	// "diffuseTextureSRV"
+
+
+	// DELETE ALL CREATED VARS
+	delete vertex;
 
 	return hr;
 }
