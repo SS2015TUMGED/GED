@@ -48,7 +48,7 @@ void DiamondSquare::diamondStep(std::vector<float>& v)
 	//counting the iteration steps
 	static unsigned int numberOfIterations = 1;
 	//How many SingleSteps need to be done by line
-	int SingleStepCount = pow(2, numberOfIterations - 1);
+	int SingleStepCount = (int) pow(2, numberOfIterations - 1);
 
 	for (int i = 0; i < SingleStepCount; i++) //column
 	{
@@ -134,7 +134,7 @@ void DiamondSquare::squareStep(std::vector<float> &vec){
 	static unsigned int numberOfIterations = 0;
 	numberOfIterations ++;
 	
-	unsigned int midpointOffset = ((resolution - 1) / pow(2, numberOfIterations - 1)) / 2;
+	unsigned int midpointOffset =(int) ((resolution - 1) / pow(2, numberOfIterations - 1)) / 2;
 	std::cout << midpointOffset << std::endl;
 
 	unsigned currentMidpointPosition =

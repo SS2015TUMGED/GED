@@ -1,8 +1,10 @@
 #pragma once
 
 #include <vector>
+#include <Windows.h>
 #include "2DAControl.h"
 #include <iostream>
+#include <concurrent_vector.h>
 
 class Smoothing
 {
@@ -14,7 +16,7 @@ public:
 	//helper function to use a modified bresenham-algorithm to get coordinates of points inside a
 	//circular shape around the point with the coordinates x0 and y0.
 	//only returns valid coordinates
-	static std::vector<bestGroup::Vec2f> getSmoothingCoords(int x0,
+	static concurrency::concurrent_vector<bestGroup::Vec2f> getSmoothingCoords(int x0,
 		int y0, int range, int width, int height);
 
 	//very fast smoothing algorithm to only smooth in a very small, fixed radius

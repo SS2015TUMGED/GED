@@ -1,5 +1,7 @@
 #include "Smoothing.h"
 #include "2DAControl.h"
+#include <ppl.h>
+
 
 //determines if the coordinate is inside the 2D vector with width width and height height
 bool Smoothing::isValidCoord(int x, int y, int width, int height){
@@ -13,7 +15,7 @@ bool Smoothing::isValidCoord(int x, int y, int width, int height){
 Generates all the coordinates all the points that are used to smooth back into one
 array position
 */
-std::vector<bestGroup::Vec2f> Smoothing::getSmoothingCoords(int x0,
+concurrency::concurrent_vector<bestGroup::Vec2f> Smoothing::getSmoothingCoords(int x0,
 	int y0, int range, int width, int height){
 
 	int f = 1 - range;
@@ -22,7 +24,7 @@ std::vector<bestGroup::Vec2f> Smoothing::getSmoothingCoords(int x0,
 	int x = 0;
 	int y = range;
 	//creating new return vector
-	std::vector<bestGroup::Vec2f> coords;
+	concurrency::concurrent_vector<bestGroup::Vec2f> coords;
 
 	coords.push_back(bestGroup::Vec2f(x0, y0));
 	if (isValidCoord(x0, y0 + range, width, height))
@@ -53,22 +55,21 @@ std::vector<bestGroup::Vec2f> Smoothing::getSmoothingCoords(int x0,
 		x++;
 		ddF_x += 2;
 		f += ddF_x + 1;
-
+		
 		//coords.push_back(bestGroup::Vec2f(x0 + x, y0 + y));
 		//coords.push_back(bestGroup::Vec2f(x0 - x, y0 + y));
 		//coords.push_back(bestGroup::Vec2f(x0 + x, y0 - y));
 		//coords.push_back(bestGroup::Vec2f(x0 - x, y0 - y));
 		int ypos = (y0 + y);
 		int ypos2 = (y0 - y);
-		for (int xpos = (x0 - x); xpos <= (x0 + x); xpos++){
+		for(int xpos = (x0 - x); xpos <= (x0 + x); xpos++) {
 			if (isValidCoord(xpos, ypos, width, height)) {
 				coords.push_back(bestGroup::Vec2f(xpos, ypos));
 			}
 			if (isValidCoord(xpos, ypos2, width, height)) {
 				coords.push_back(bestGroup::Vec2f(xpos, ypos2));
 			}
-		}
-
+		};
 
 		//coords.push_back(bestGroup::Vec2f(x0 + y, y0 + x));
 		//coords.push_back(bestGroup::Vec2f(x0 - y, y0 + x));
@@ -84,13 +85,12 @@ std::vector<bestGroup::Vec2f> Smoothing::getSmoothingCoords(int x0,
 			if (isValidCoord(xpos, ypos2, width, height)) {
 				coords.push_back(bestGroup::Vec2f(xpos, ypos2));
 			}
-		}
-
+		};
+		
 	}
 
 	return coords;
 }
-
 
 void Smoothing::squareSmoothing(std::vector<float> &array2D_, int width_, int height_){
 
@@ -214,15 +214,17 @@ void Smoothing::circularSmoothing(std::vector<float> &array2D_, int width_, int 
 		std::cerr << "Smoothing failed! range too small!";
 	}
 
-	//create new, temporal array
-	std::vector<float> array2D = std::vector<float>(width_ * height_);
-
+	concurrency::concurrent_vector<float> array2D(width_ * height_);
+	
+	concurrency::concurrent_vector<float> array2D__(array2D_.begin(), array2D_.end());
+	
+	float counter = 1.0f;
 	//iterate through the array
-	for (int ypos = 0; ypos < height_; ypos++){
+	concurrency::parallel_for(int(0),height_,[&] (int ypos){
 		for (int xpos = 0; xpos < width_; xpos++)
 		{
 			//hold all the coordinates to smooth
-			std::vector<bestGroup::Vec2f> finalCoordinates;
+			concurrency::concurrent_vector<bestGroup::Vec2f> finalCoordinates;
 
 			finalCoordinates = getSmoothingCoords(xpos, ypos, range, width_, height_);
 
@@ -232,17 +234,19 @@ void Smoothing::circularSmoothing(std::vector<float> &array2D_, int width_, int 
 
 			//get all the values from the original array
 			for (unsigned i = 0; i < finalCoordinates.size(); i++){
-				value += array2D_[IDX(finalCoordinates[i].x, finalCoordinates[i].y, width_)];
+				value += array2D__[IDX(finalCoordinates[i].x, finalCoordinates[i].y, width_)];
 			}
 
 			value = value / finalCoordinates.size();
 			array2D[IDX(xpos, ypos, width_)] = value;
-
+			counter++;
 		}
-		std::cout << (int)(((ypos + 1.0f) / height_) * 100.0f) << "%                " << "\r";
+
+		//counter++;
+		std::cout << (int) (((counter / width_)/width_) * 100.0f) << "%                   " << "\r";
 		std::cout.flush();
 
-	}
+	});
 
 	//copy array2D to array2D_
 	for (int ypos = 0; ypos < height_; ypos++){
@@ -251,7 +255,6 @@ void Smoothing::circularSmoothing(std::vector<float> &array2D_, int width_, int 
 				array2D[IDX(xpos, ypos, width_)];
 		}
 	}
-
 }
 
 void Smoothing::squareSmoothing_nTimes(std::vector<float> &array2D_, int width_, int height_, int n){

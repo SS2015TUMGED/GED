@@ -24,3 +24,11 @@ namespace bestGroup{
 		Vec2f() : x(0), y(0) {}
 	};
 };
+
+template <class Function>
+__int64 time_call(Function&& f)
+{
+	__int64 begin = GetTickCount();
+	f();
+	return GetTickCount() - begin;
+}
