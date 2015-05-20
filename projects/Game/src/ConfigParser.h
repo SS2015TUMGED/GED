@@ -9,11 +9,15 @@ public:
 		float r,g,b;
 	};
 
-	struct terrainPath {
-		std::string height;
-		std::string color;
-		std::string normal;
-	} standart;
+	/*struct terrainPath {
+		static std::string height;
+		static std::string color;
+		static std::string normal;
+	};*/
+
+	static std::string height;
+	static std::string color;
+	static std::string normal;
 
 
 	

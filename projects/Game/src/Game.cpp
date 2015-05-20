@@ -190,7 +190,8 @@ void InitApp()
 
 
 	// load the config file
-	CustomData::parser.load(pathA);
+	ConfigParser parser;
+	parser.load(pathA);
 
 
     // Intialize the user interface

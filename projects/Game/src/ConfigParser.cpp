@@ -4,6 +4,11 @@
 #include <cstdlib>
 #include <sstream>
 
+
+std::string ConfigParser::height;
+std::string ConfigParser::color;
+std::string ConfigParser::normal;
+
 ConfigParser::ConfigParser()
 {
 	
@@ -17,6 +22,7 @@ ConfigParser::~ConfigParser()
 }
 
 void ConfigParser::load(std::string str){
+	
 	// to read the values  
 	int skip = 0;
 
@@ -63,7 +69,8 @@ void ConfigParser::load(std::string str){
 				//std::cout << color.r << " " << color.g << " " << color.b << std::endl;
 			}
 			else if (word.compare("TerrainPath") == 0){
-				iss >> ConfigParser::standart.height >> ConfigParser::standart.color >> ConfigParser::standart.normal;
+				iss >> height >> color >> normal;
+				
 			}
 			else if (word.compare("TerrainDepth") == 0){
 				iss >> terrainDepth;

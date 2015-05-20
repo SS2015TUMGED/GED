@@ -1,5 +1,5 @@
 #include "Terrain.h"
-#include "CustomData.h"
+#include "ConfigParser.h"
 #include "GameEffect.h"
 #include "SimpleImage.h"
 #include <DDSTextureLoader.h>
@@ -62,9 +62,9 @@ HRESULT Terrain::create(ID3D11Device* device)
 
 	
 	// 1 Load heightfield, Normal and Color
-	string heightPath = CustomData::parser.standart.height;
-	string colorPath = CustomData::parser.standart.color;
-	string normalPath = CustomData::parser.standart.normal;
+	string heightPath = ConfigParser::height;
+	string colorPath = ConfigParser::color;
+	string normalPath = ConfigParser::normal;
 
 
 	// load the heightmap to get the resolution

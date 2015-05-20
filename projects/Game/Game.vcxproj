@@ -58,7 +58,7 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>_WIN32_WINNT=0x600 ;WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>..\..\..\..\external\Tools\include\;$(SolutionDir)projects\Effects11\inc\;$(SolutionDir)projects\DXUT\Core\;$(SolutionDir)projects\DXUT\Optional\;$(SolutionDir)projects\DirectXTex\DirectXTex\;$(SolutionDir)projects\DirectXTex\WICTextureLoader\;$(SolutionDir)projects\DirectXTex\DDSTextureLoader\</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\..\..\external\Tools\include\;$(SolutionDir)projects\Effects11\inc\;$(SolutionDir)projects\DXUT\Core\;$(SolutionDir)projects\DXUT\Optional\;$(SolutionDir)projects\DirectXTex\DirectXTex\;$(SolutionDir)projects\DirectXTex\WICTextureLoader\;$(SolutionDir)projects\DirectXTex\DDSTextureLoader\;$(SolutionDir)projects\TerrainGenerator</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -95,7 +95,7 @@ exit 1</Command>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>_WIN32_WINNT=0x600 ;WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>..\..\..\..\external\Tools\include\;$(SolutionDir)projects\Effects11\inc\;$(SolutionDir)projects\DXUT\Core\;$(SolutionDir)projects\DXUT\Optional\;$(SolutionDir)projects\DirectXTex\DirectXTex\;$(SolutionDir)projects\DirectXTex\WICTextureLoader\;$(SolutionDir)projects\DirectXTex\DDSTextureLoader\</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\..\..\external\Tools\include\;$(SolutionDir)projects\Effects11\inc\;$(SolutionDir)projects\DXUT\Core\;$(SolutionDir)projects\DXUT\Optional\;$(SolutionDir)projects\DirectXTex\DirectXTex\;$(SolutionDir)projects\DirectXTex\WICTextureLoader\;$(SolutionDir)projects\DirectXTex\DDSTextureLoader\;$(SolutionDir)projects\TerrainGenerator\</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
