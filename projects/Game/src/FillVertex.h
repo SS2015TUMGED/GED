@@ -1,6 +1,7 @@
 #pragma once
 #include <iostream>
 #include "CustomData.h"
+#include "2DAControl.h"
 
 
 class FillVertex
@@ -8,7 +9,9 @@ class FillVertex
 public:
 	FillVertex();
 	~FillVertex();
-
+	
+	//copy paste
+	static void generateNormals(const std::vector<float> &heightfield, int resolution, std::vector<bestGroup::Vec3f> &normalsOut);
 
 	// takes the path of the heightmap and returns the height
 	static int returnResolution(std::string path);

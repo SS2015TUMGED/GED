@@ -5,6 +5,7 @@
 #include <DDSTextureLoader.h>
 #include "DirectXTex.h"
 #include "FillVertex.h"
+#include "IndexBuffer.h"
 
 // You can use this macro to access your height field
 #define IDX(X,Y,WIDTH) ((X) + (Y) * (WIDTH))
@@ -79,33 +80,15 @@ HRESULT Terrain::create(ID3D11Device* device)
 	// fill the vertex with Normals
 	FillVertex::insertNormalmap(triangle);
 
-	// §§
+
+
+
+
+
+
+
+
 	
-
-
-
-
-	// insert in index buffer
-
-
-
-
-
-	/*// Create and fill description
-	ZeroMemory(&bd, sizeof(bd));
-	bd.Usage = D3D11_USAGE_DEFAULT;
-	bd.ByteWidth = sizeof(unsigned int)* indices.size();
-	bd.BindFlags = D3D11_BIND_INDEX_BUFFER;
-	bd.CPUAccessFlags = 0;
-	bd.MiscFlags = 0;
-	// Define initial data
-	ZeroMemory(&id, sizeof(id));
-	id.pSysMem = &indices[0];
-	// Create Buffer
-	V(device->CreateBuffer(&bd, &id, &indexBuffer));
-	
-	DirectX::CreateDDSTextureFromFile(device, L"resources\\" + colorPath.c_str, nullptr, &diffuseTextureSRV);
-	*/
 
 	
 
@@ -139,6 +122,34 @@ HRESULT Terrain::create(ID3D11Device* device)
 
 	// Create index buffer
 	// TODO: Insert your code to create the index buffer
+
+	int indexBufferSize = (resolution - 1) * (resolution - 1) * 6;
+
+	std::vector<int> indices(indexBufferSize);
+
+	IndexBuffer::fillIndexBuffer(indices, resolution);
+
+
+
+	
+	// Create and fill description
+	ZeroMemory(&bd, sizeof(bd));
+	bd.Usage = D3D11_USAGE_DEFAULT;
+	bd.ByteWidth = sizeof(unsigned int)* indices.size();
+	bd.BindFlags = D3D11_BIND_INDEX_BUFFER;
+	bd.CPUAccessFlags = 0;
+	bd.MiscFlags = 0;
+	// Define initial data
+	ZeroMemory(&id, sizeof(id));
+	id.pSysMem = &indices[0];
+	// Create Buffer
+	V(device->CreateBuffer(&bd, &id, &indexBuffer));
+
+	DirectX::CreateDDSTextureFromFile(device, L"resources\\" + colorPath.c_str, nullptr, &diffuseTextureSRV);
+	
+
+	
+
 
 	// Load color texture (color map)
 	// TODO: Insert your code to load the color texture and create

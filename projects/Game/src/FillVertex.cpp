@@ -3,6 +3,7 @@
 #include "2DAControl.h"
 #include "MyTextureGenerator.h"
 #include <math.h>
+#include "2DAControl.h"
 
 FillVertex::FillVertex()
 {
@@ -19,7 +20,64 @@ FillVertex::~FillVertex()
 	return heightfield.getHeight();
 }
 
+ void FillVertex::generateNormals(const std::vector<float> &heightfield, int resolution,
+	 std::vector<bestGroup::Vec3f> &normalsOut)
+ {
 
+	 // documentation 
+	 // http://acko.net/blog/making-worlds-3-thats-no-moon/
+
+
+	 //  iterate through the rows
+	 for (int y = 0; y < resolution; y++)
+	 {
+		 //iterate through the cols
+		 for (int x = 0; x < resolution; x++)
+		 {
+			 //normal mapping
+
+			 //necessary variables
+			 float x1 = 0.0f;						// normal x1 direction
+			 float x2 = 0.0f;						// normal x2 direction
+			 float x3 = 1.0f / (resolution / 2.0f);	// normal x3 direction
+			 float length = 0.0f;					// normal length before normalizing
+
+
+			 // check if col exists and handle the borders/corners
+			 if (x > 0 && x < resolution - 1)
+				 x1 = (heightfield[IDX(x + 1, y, resolution)] - heightfield[IDX(x - 1, y, resolution)]) / 2.0f;
+			 else if (x == 0)
+				 x1 = (heightfield[IDX(x + 1, y, resolution)] - heightfield[IDX(x, y, resolution)]);
+			 else if (x == resolution - 1)
+				 x1 = (heightfield[IDX(x - 1, y, resolution)] - heightfield[IDX(x, y, resolution)]);
+
+			 // check if rows exists & handle the corners/borders
+			 if (y > 0 && y < resolution - 1)
+				 x2 = (heightfield[IDX(x, y + 1, resolution)] - heightfield[IDX(x, y - 1, resolution)]) / 2.0f;
+			 else if (y == 0)
+				 x2 = (heightfield[IDX(x, y + 1, resolution)] - heightfield[IDX(x, y, resolution)]);
+			 else if (y == resolution - 1)
+				 x2 = (heightfield[IDX(x, y - 1, resolution)] - heightfield[IDX(x, y, resolution)]);
+
+			 x1 *= -1;
+			 x2 *= -1;
+
+
+			 // normalize
+			 length = sqrtf(x1*x1 + x2*x2 + x3*x3);
+
+			 // normalize vector
+			 x1 = x1 / length;
+			 x2 = x2 / length;
+			 x3 = x3 / length;
+
+			 // Add the normal Vector to normalsOut
+			 normalsOut[IDX(x, y, resolution)].x = x1;
+			 normalsOut[IDX(x, y, resolution)].y = x2;
+			 normalsOut[IDX(x, y, resolution)].z = x3;
+		 }
+	 }
+ }
 
 void FillVertex::insertHeightfield(std::string path, std::vector<CustomData::SimpleVertex> &vertex){
 
@@ -37,9 +95,19 @@ void FillVertex::insertHeightfield(std::string path, std::vector<CustomData::Sim
 		for (int x = 0; x < width; x++)
 		{
 			// save the coordinates to the tmp_vertex
-			tmp_vertex.Pos.x = (float) x;
-			tmp_vertex.Pos.y = (float) y;
-			tmp_vertex.Pos.z = (float) heightfield.getPixel(x, y);
+			
+			// UV data
+			tmp_vertex.UV.x = (float) x / (width - 1);
+			tmp_vertex.UV.y = (float) y / (height - 1);
+
+			// Vertex Position
+			// intervall: 
+			//Pos.x [-width/2 ; width/s]
+			//Pos.y [0 ; height ]
+			//Pos.z [-depth / 2 ; depth/ 2 ]
+			tmp_vertex.Pos.x = (float) x - width / 2;
+			tmp_vertex.Pos.y = (float)heightfield.getPixel(x, y);
+			tmp_vertex.Pos.z = (float)y - height / 2;
 			tmp_vertex.Pos.w = 1.0f;
 
 			// put the tmp_vertex at position x,y in vertex
@@ -73,7 +141,7 @@ void FillVertex::insertNormalmap(std::vector<CustomData::SimpleVertex> &vertex){
 		throw "Deine Mutter";
 
 	// generate the normals and write them into the tmp_normals
-	//MyTextureGenerator::generateNormals(tmp_height, resolution, tmp_normals);
+	FillVertex::generateNormals(tmp_height, resolution, tmp_normals);
 
 
 	// copy the normals into the vertex

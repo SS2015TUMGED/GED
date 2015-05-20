@@ -38,6 +38,9 @@
     <ClInclude Include="src\CustomData.h">
       <Filter>Header</Filter>
     </ClInclude>
+    <ClInclude Include="src\IndexBuffer.h">
+      <Filter>Header</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Game.cpp">
@@ -50,6 +53,9 @@
       <Filter>Source</Filter>
     </ClCompile>
     <ClCompile Include="src\FillVertex.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="src\IndexBuffer.cpp">
       <Filter>Source</Filter>
     </ClCompile>
   </ItemGroup>

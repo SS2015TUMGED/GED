@@ -58,7 +58,7 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>_WIN32_WINNT=0x600 ;WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>..\..\..\..\external\Tools\include\;$(SolutionDir)projects\Effects11\inc\;$(SolutionDir)projects\DXUT\Core\;$(SolutionDir)projects\DXUT\Optional\;$(SolutionDir)projects\DirectXTex\DirectXTex\;$(SolutionDir)projects\DirectXTex\WICTextureLoader\;$(SolutionDir)projects\DirectXTex\DDSTextureLoader\;$(SolutionDir)projects\TerrainGenerator</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\..\..\external\Tools\include\;$(SolutionDir)projects\Effects11\inc\;$(SolutionDir)projects\DXUT\Core\;$(SolutionDir)projects\DXUT\Optional\;$(SolutionDir)projects\DirectXTex\DirectXTex\;$(SolutionDir)projects\DirectXTex\WICTextureLoader\;$(SolutionDir)projects\TerrainGenerator;$(SolutionDir)projects\DirectXTex\DDSTextureLoader\;$(SolutionDir)projects\TerrainGenerator</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -95,7 +95,7 @@ exit 1</Command>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>_WIN32_WINNT=0x600 ;WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>..\..\..\..\external\Tools\include\;$(SolutionDir)projects\Effects11\inc\;$(SolutionDir)projects\DXUT\Core\;$(SolutionDir)projects\DXUT\Optional\;$(SolutionDir)projects\DirectXTex\DirectXTex\;$(SolutionDir)projects\DirectXTex\WICTextureLoader\;$(SolutionDir)projects\DirectXTex\DDSTextureLoader\;$(SolutionDir)projects\TerrainGenerator\</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\..\..\external\Tools\include\;$(SolutionDir)projects\Effects11\inc\;$(SolutionDir)projects\DXUT\Core\;$(SolutionDir)projects\DXUT\Optional\;$(SolutionDir)projects\DirectXTex\DirectXTex\;$(SolutionDir)projects\DirectXTex\WICTextureLoader\;$(SolutionDir)projects\TerrainGenerator;$(SolutionDir)projects\DirectXTex\DDSTextureLoader\;$(SolutionDir)projects\TerrainGenerator\</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -134,12 +134,14 @@ exit 1</Command>
     <ClInclude Include="src\debug.h" />
     <ClInclude Include="src\FillVertex.h" />
     <ClInclude Include="src\GameEffect.h" />
+    <ClInclude Include="src\IndexBuffer.h" />
     <ClInclude Include="src\Terrain.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\ConfigParser.cpp" />
     <ClCompile Include="src\FillVertex.cpp" />
     <ClCompile Include="src\Game.cpp" />
+    <ClCompile Include="src\IndexBuffer.cpp" />
     <ClCompile Include="src\Terrain.cpp" />
   </ItemGroup>
   <ItemGroup>
