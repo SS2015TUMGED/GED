@@ -4,6 +4,9 @@
 #include <vector>
 
 
+//extern ConfigParser parser;
+
+
 namespace CustomData{
 
 	struct SimpleVertex{
@@ -12,7 +15,7 @@ namespace CustomData{
 		DirectX::XMFLOAT2 UV;
 	};
 
-	static ConfigParser parser;
+	
 	
 	
 };

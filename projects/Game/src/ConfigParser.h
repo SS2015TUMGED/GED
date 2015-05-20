@@ -28,7 +28,8 @@ public:
 	float getTerrainDepth();
 	float getTerrainHeight();
 	Color getBackgroundColor();
-
+	void getPathes(std::string path);
+	
 	void load(std::string str);
 
 	ConfigParser();
@@ -37,7 +38,7 @@ public:
 
 private:
 
-	void getPathes(std::string path);
+	
 
 	float spinning, spinSpeed,
 			terrainWidth, terrainDepth, terrainHeight;
