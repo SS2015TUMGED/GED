@@ -36,7 +36,7 @@ HRESULT Terrain::create(ID3D11Device* device)
         MessageBoxA (NULL, "Could not load texture \"resources\\debug_green.dds\"", "Invalid texture", MB_ICONERROR | MB_OK);
 		return hr;
 	}
-	///*
+	/*
 	// This buffer contains positions, normals and texture coordinates for one triangle
     float triangle[] = {
         // Vertex 0
@@ -71,13 +71,13 @@ HRESULT Terrain::create(ID3D11Device* device)
 	int resolution = FillVertex::returnResolution(heightPath);
 
 	// Create a new Vertex
-	std::vector<CustomData::SimpleVertex> *vertex = new std::vector<CustomData::SimpleVertex>(resolution * resolution);
+	std::vector<CustomData::SimpleVertex> triangle(resolution * resolution);
 
 	// fill the vertex with the data from the heightmap
-	FillVertex::insertHeightfield(heightPath, *vertex);
+	FillVertex::insertHeightfield(heightPath, triangle);
 	
 	// fill the vertex with Normals
-	FillVertex::insertNormalmap(*vertex);
+	FillVertex::insertNormalmap(triangle);
 
 	// §§
 	
@@ -91,24 +91,21 @@ HRESULT Terrain::create(ID3D11Device* device)
 
 
 
-	// Create and fill description
-	D3D11_SUBRESOURCE_DATA id;
-	id.pSysMem = &triangle[0];
-	id.SysMemPitch = 10 * sizeof(float); // Stride
-	id.SysMemSlicePitch = 0;
-	// Define initial data
-	D3D11_BUFFER_DESC bd;
-	bd.BindFlags = D3D11_BIND_VERTEX_BUFFER;
-	bd.ByteWidth = triangle.size() * sizeof(float);
+	/*// Create and fill description
+	ZeroMemory(&bd, sizeof(bd));
+	bd.Usage = D3D11_USAGE_DEFAULT;
+	bd.ByteWidth = sizeof(unsigned int)* indices.size();
+	bd.BindFlags = D3D11_BIND_INDEX_BUFFER;
 	bd.CPUAccessFlags = 0;
 	bd.MiscFlags = 0;
-	bd.Usage = D3D11_USAGE_DEFAULT;
-	// Create buffer
+	// Define initial data
+	ZeroMemory(&id, sizeof(id));
+	id.pSysMem = &indices[0];
+	// Create Buffer
 	V(device->CreateBuffer(&bd, &id, &indexBuffer));
-
 	
 	DirectX::CreateDDSTextureFromFile(device, L"resources\\" + colorPath.c_str, nullptr, &diffuseTextureSRV);
-
+	*/
 
 	
 
@@ -150,7 +147,6 @@ HRESULT Terrain::create(ID3D11Device* device)
 
 
 	// DELETE ALL CREATED VARS
-	delete vertex;
 
 	return hr;
 }
