@@ -131,7 +131,7 @@ HRESULT Terrain::create(ID3D11Device* device)
 
 
 
-	
+	/*
 	// Create and fill description
 	ZeroMemory(&bd, sizeof(bd));
 	bd.Usage = D3D11_USAGE_DEFAULT;
@@ -144,10 +144,10 @@ HRESULT Terrain::create(ID3D11Device* device)
 	id.pSysMem = &indices[0];
 	// Create Buffer
 	V(device->CreateBuffer(&bd, &id, &indexBuffer));
-
+	
 	DirectX::CreateDDSTextureFromFile(device, L"resources\\" + colorPath.c_str, nullptr, &diffuseTextureSRV);
 	
-
+	*/
 	
 
 
