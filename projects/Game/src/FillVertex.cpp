@@ -75,8 +75,8 @@ FillVertex::~FillVertex()
 
 			 // Add the normal Vector to normalsOut
 			 normalsOut[IDX(x, y, resolution)].x = x1;
-			 normalsOut[IDX(x, y, resolution)].y = x2;
-			 normalsOut[IDX(x, y, resolution)].z = x3;
+			 normalsOut[IDX(x, y, resolution)].y = x3;
+			 normalsOut[IDX(x, y, resolution)].z = x2;
 		 }
 	 }
  }
