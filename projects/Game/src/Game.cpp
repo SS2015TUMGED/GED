@@ -70,6 +70,9 @@ GameEffect								g_gameEffect; // CPU part of Shader
 //-------------------------------------------------------------------------------------
 // Our Killer Variables
 // ------------------------------------------------------------------------------------
+ConfigParser parser;
+
+
 
 //--------------------------------------------------------------------------------------
 // UI control IDs
@@ -183,7 +186,7 @@ void InitApp()
 
 
 	// load the config file
-	ConfigParser parser;
+	
 	parser.load(pathA);
 
 

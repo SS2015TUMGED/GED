@@ -27,3 +27,4 @@ namespace CustomData{
 	
 };
 
+extern ConfigParser parser;

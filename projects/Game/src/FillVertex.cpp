@@ -4,6 +4,7 @@
 #include "MyTextureGenerator.h"
 #include <math.h>
 #include "2DAControl.h"
+#include "ConfigParser.h"
 
 FillVertex::FillVertex()
 {
@@ -84,13 +85,13 @@ void FillVertex::insertHeightfield(std::string path, std::vector<CustomData::Sim
 	// load heightmapimage with simpleimage
 	GEDUtils::SimpleImage heightfield(path.c_str());
 
-	int height = heightfield.getHeight();
+	int depth = heightfield.getHeight();
 	int width = heightfield.getWidth();
 
 	CustomData::SimpleVertex tmp_vertex;
 
 	// iterate through the image
-	for (int y = 0; y < height; y++)
+	for (int y = 0; y < depth; y++)
 	{
 		for (int x = 0; x < width; x++)
 		{
@@ -98,16 +99,16 @@ void FillVertex::insertHeightfield(std::string path, std::vector<CustomData::Sim
 			
 			// UV data
 			tmp_vertex.UV.x = (float) x / (width - 1);
-			tmp_vertex.UV.y = (float) y / (height - 1);
+			tmp_vertex.UV.y = (float) y / (depth - 1);
 
 			// Vertex Position
 			// intervall: 
 			//Pos.x [-width/2 ; width/s]
 			//Pos.y [0 ; height ]
 			//Pos.z [-depth / 2 ; depth/ 2 ]
-			tmp_vertex.Pos.x = (float) x - width / 2;
-			tmp_vertex.Pos.y = (float)heightfield.getPixel(x, y);
-			tmp_vertex.Pos.z = (float)y - height / 2;
+			tmp_vertex.Pos.x = (float) (x - width / 2) / width * parser.getTerrainWidth();
+			tmp_vertex.Pos.y = (float) heightfield.getPixel(x, y) * parser.getTerrainHeight();
+			tmp_vertex.Pos.z = (float) (y - depth / 2) /depth * parser.getTerrainDepth();
 			tmp_vertex.Pos.w = 1.0f;
 
 			// put the tmp_vertex at position x,y in vertex
@@ -151,15 +152,15 @@ void FillVertex::insertNormalmap(std::vector<CustomData::SimpleVertex> &vertex){
 		{
 
 			// safe the normals into the vertex, and scale them to fit the resolution
-			vertex[IDX(x, y, resolution)].Normal.x = tmp_normals[IDX(x, y, resolution)].x ;
-			vertex[IDX(x, y, resolution)].Normal.y = tmp_normals[IDX(x, y, resolution)].y ;
-			vertex[IDX(x, y, resolution)].Normal.z = tmp_normals[IDX(x, y, resolution)].z ;
-			vertex[IDX(x, y, resolution)].Normal.w = 0.0f;
-
-			//vertex[IDX(x, y, resolution)].Normal.x = 0.0f;
-			//vertex[IDX(x, y, resolution)].Normal.y = 1.0f;
-			//vertex[IDX(x, y, resolution)].Normal.z = 0.0f;
+			//vertex[IDX(x, y, resolution)].Normal.x = tmp_normals[IDX(x, y, resolution)].x ;
+			///vertex[IDX(x, y, resolution)].Normal.y = tmp_normals[IDX(x, y, resolution)].y ;
+			//vertex[IDX(x, y, resolution)].Normal.z = tmp_normals[IDX(x, y, resolution)].z ;
 			//vertex[IDX(x, y, resolution)].Normal.w = 0.0f;
+
+			vertex[IDX(x, y, resolution)].Normal.x = 0.0f;
+			vertex[IDX(x, y, resolution)].Normal.y = 1.0f;
+			vertex[IDX(x, y, resolution)].Normal.z = 0.0f;
+			vertex[IDX(x, y, resolution)].Normal.w = 0.0f;
 
 
 		}

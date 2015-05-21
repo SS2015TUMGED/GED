@@ -131,6 +131,7 @@ HRESULT Terrain::create(ID3D11Device* device)
 	
 	
 	
+	
 	// Load color texture (color map)
 	// Insert your code to load the color texture and create
 	// the texture "diffuseTexture" as well as the shader resource view
