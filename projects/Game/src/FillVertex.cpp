@@ -5,6 +5,7 @@
 #include <math.h>
 #include "2DAControl.h"
 #include "ConfigParser.h"
+#include "CustomData.h"
 
 FillVertex::FillVertex()
 {
@@ -80,7 +81,7 @@ FillVertex::~FillVertex()
 	 }
  }
 
-void FillVertex::insertHeightfield(std::string path, std::vector<CustomData::SimpleVertex> &vertex){
+ void FillVertex::insertHeightfield(std::string path, std::vector<CustomData::SimpleVertex> &vertex){
 
 	// load heightmapimage with simpleimage
 	GEDUtils::SimpleImage heightfield(path.c_str());
@@ -123,24 +124,32 @@ void FillVertex::insertHeightfield(std::string path, std::vector<CustomData::Sim
 
 
 void FillVertex::insertNormalmap(std::vector<CustomData::SimpleVertex> &vertex){
-	
-	// tmp vector to use the MyTextureGenerator::generateNormals method
-	std::vector<float> tmp_height (vertex.size());
+	// load the heightmap
+	GEDUtils::SimpleImage heightfield(ConfigParser::height.c_str());
 
-	// copy the floats from the vertex
-	for (unsigned i = 0; i < vertex.size(); i++)
+	// get the resolution
+	int width = heightfield.getWidth();
+	int depth = heightfield.getHeight();
+
+
+	// tmp vector to use the MyTextureGenerator::generateNormals method
+	std::vector<float> tmp_height (width * depth);
+
+	// copy the height values from the image into the vector
+	for (int y = 0; y < depth; y++)
 	{
-		tmp_height[i] = vertex[i].Pos.z;
+		for (int x = 0; x < width; x++)
+		{
+			tmp_height[IDX(x, y, width)] = heightfield.getPixel(x, y);
+		}
 	}
 
 	// tmp normalsmap 
-	std::vector<bestGroup::Vec3f> tmp_normals(vertex.size());
+	std::vector<bestGroup::Vec3f> tmp_normals(width * depth);
 
 	// use  MyTextureGenerator::generateNormals to generate normals
-	int resolution = (int) sqrtf(vertex.size());
-	if ((resolution * resolution) != (int)vertex.size())
-		throw "Deine Mutter";
-
+	int resolution = width;
+	
 	// generate the normals and write them into the tmp_normals
 	FillVertex::generateNormals(tmp_height, resolution, tmp_normals);
 
@@ -152,15 +161,15 @@ void FillVertex::insertNormalmap(std::vector<CustomData::SimpleVertex> &vertex){
 		{
 
 			// safe the normals into the vertex, and scale them to fit the resolution
-			//vertex[IDX(x, y, resolution)].Normal.x = tmp_normals[IDX(x, y, resolution)].x ;
-			///vertex[IDX(x, y, resolution)].Normal.y = tmp_normals[IDX(x, y, resolution)].y ;
-			//vertex[IDX(x, y, resolution)].Normal.z = tmp_normals[IDX(x, y, resolution)].z ;
-			//vertex[IDX(x, y, resolution)].Normal.w = 0.0f;
-
-			vertex[IDX(x, y, resolution)].Normal.x = 0.0f;
-			vertex[IDX(x, y, resolution)].Normal.y = 1.0f;
-			vertex[IDX(x, y, resolution)].Normal.z = 0.0f;
+			vertex[IDX(x, y, resolution)].Normal.x = (float)tmp_normals[IDX(x, y, resolution)].x;
+			vertex[IDX(x, y, resolution)].Normal.y = (float)tmp_normals[IDX(x, y, resolution)].y;
+			vertex[IDX(x, y, resolution)].Normal.z = (float)tmp_normals[IDX(x, y, resolution)].z;
 			vertex[IDX(x, y, resolution)].Normal.w = 0.0f;
+
+			//vertex[IDX(x, y, resolution)].Normal.x = 0.0f;
+			//vertex[IDX(x, y, resolution)].Normal.y = 1.0f;
+			//vertex[IDX(x, y, resolution)].Normal.z = 0.0f;
+			//vertex[IDX(x, y, resolution)].Normal.w = 0.0f;
 
 
 		}

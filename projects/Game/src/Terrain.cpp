@@ -143,6 +143,9 @@ HRESULT Terrain::create(ID3D11Device* device)
 	DirectX::CreateDDSTextureFromFile(device, w.c_str() , nullptr, &diffuseTextureSRV);
 
 
+
+
+
 	// DELETE ALL CREATED VARS
 
 	return hr;
