@@ -166,11 +166,12 @@ void FillVertex::insertNormalmap(std::vector<CustomData::SimpleVertex> &vertex){
 			vertex[IDX(x, y, resolution)].Normal.z = (float)tmp_normals[IDX(x, y, resolution)].z;
 			vertex[IDX(x, y, resolution)].Normal.w = 0.0f;
 
-			//vertex[IDX(x, y, resolution)].Normal.x = 0.0f;
-			//vertex[IDX(x, y, resolution)].Normal.y = 1.0f;
-			//vertex[IDX(x, y, resolution)].Normal.z = 0.0f;
-			//vertex[IDX(x, y, resolution)].Normal.w = 0.0f;
-
+			/*
+			vertex[IDX(x, y, resolution)].Normal.x = 0.0f;
+			vertex[IDX(x, y, resolution)].Normal.y = 1.0f;
+			vertex[IDX(x, y, resolution)].Normal.z = 0.0f;
+			vertex[IDX(x, y, resolution)].Normal.w = 0.0f;
+			*/
 
 		}
 	}

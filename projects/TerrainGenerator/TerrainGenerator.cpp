@@ -155,9 +155,10 @@ int _tmain(int argc, _TCHAR* argv[])
 			//smoothing the vector
 
 			//faster
-			//Smoothing::anotherSimpleSmoothing(*vec, width, 40, 12);
-			//Smoothing::squareSmoothing_nTimes(*vec, width, height, 50);
+			Smoothing::anotherSimpleSmoothing(*vec, width, 40, 12);
+			Smoothing::squareSmoothing_nTimes(*vec, width, height, 50);
 
+			/*
 			//Slower, more realistic
 			cout << "Smoothing Started" << endl;
 			cout << "Smoothing done in  " << (float)(((time_call([&] {
@@ -169,6 +170,8 @@ int _tmain(int argc, _TCHAR* argv[])
 				//Smoothing::circularSmoothing_nTimes(*vec, width, height, 20, (width / 512));
 			})) /1000.0f) /60.0f) <<  " Minutes" << endl;
 			system("pause");
+			*/
+
 
 			// create the normals vector
 			std::vector<bestGroup::Vec3f> *normalsOut = new vector<bestGroup::Vec3f>(width * height);
