@@ -111,7 +111,7 @@ HRESULT Terrain::create(ID3D11Device* device)
 
 	IndexBuffer::fillIndexBuffer(indices, resolution);
 
-	/*
+	
 	// Create and fill description
 	ZeroMemory(&bd, sizeof(bd));
 	bd.Usage = D3D11_USAGE_DEFAULT;
@@ -125,14 +125,21 @@ HRESULT Terrain::create(ID3D11Device* device)
 	// Create Buffer
 	V(device->CreateBuffer(&bd, &id, &indexBuffer));
 	
-	DirectX::CreateDDSTextureFromFile(device, L"resources\\" + colorPath.c_str, nullptr, &diffuseTextureSRV);
 	
-	*/
+	
+	
 	
 	// Load color texture (color map)
-	// TODO: Insert your code to load the color texture and create
+	// Insert your code to load the color texture and create
 	// the texture "diffuseTexture" as well as the shader resource view
 	// "diffuseTextureSRV"
+
+	//device->ID3D11Device::CreateTexture2D();
+
+	// convert std::string to std::wstring neccessary
+	std::wstring w(colorPath.begin(), colorPath.end());
+	DirectX::CreateDDSTextureFromFile(device, w.c_str(), nullptr, &diffuseTextureSRV);
+
 
 	// DELETE ALL CREATED VARS
 
@@ -148,6 +155,8 @@ void Terrain::destroy()
 	//Release the terrain's shader resource view and texture
 	SAFE_RELEASE(debugSRV);
 
+	SAFE_RELEASE(diffuseTextureSRV);
+
     
     
 }
@@ -161,20 +170,23 @@ void Terrain::render(ID3D11DeviceContext* context, ID3DX11EffectPass* pass)
     ID3D11Buffer* vbs[] = { vertexBuffer, };
     unsigned int strides[] = { 10 * sizeof(float), }, offsets[] = { 0, };
     context->IASetVertexBuffers(0, 1, vbs, strides, offsets);
-	// TODO: Bind the terrain index buffer to the input assembler stage
+	// Bind the terrain index buffer to the input assembler stage
+	context->IASetIndexBuffer(indexBuffer, DXGI_FORMAT_R32_UINT, 0);
+
+
 
     // Tell the input assembler stage which primitive topology to use
     context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);    
 
-    // TODO: Bind the SRV of the terrain diffuse texture to the effect variable
+    // Bind the SRV of the terrain diffuse texture to the effect variable
     // (instead of the SRV of the debug texture)
-	V(g_gameEffect.diffuseEV->SetResource( debugSRV));
+	V(g_gameEffect.diffuseEV->SetResource(diffuseTextureSRV));
 
     // Apply the rendering pass in order to submit the necessary render state changes to the device
     V(pass->Apply(0, context));
 
     // Draw
-    // TODO: Use DrawIndexed to draw the terrain geometry using as shared vertex list
+    // Use DrawIndexed to draw the terrain geometry using as shared vertex list
     // (instead of drawing only the vertex buffer)
-    context->Draw(3, 0);
+    context->DrawIndexed( 3 ,0, 0);
 }
