@@ -155,16 +155,20 @@ int _tmain(int argc, _TCHAR* argv[])
 			//smoothing the vector
 
 			//faster
-			Smoothing::anotherSimpleSmoothing(*vec, width, 40, 12);
-			Smoothing::squareSmoothing_nTimes(*vec, width, height, 50);
+			//Smoothing::anotherSimpleSmoothing(*vec, width, 40, 12);
+			//Smoothing::squareSmoothing_nTimes(*vec, width, height, 50);
 
 			//Slower, more realistic
-			//cout << "Smoothing Started" << endl;
-			//cout << "Smoothing done in  " << (float)(((time_call([&] {
-			//	Smoothing::anotherSimpleSmoothing(*vec, width, 40, (width / 512));
-			//	Smoothing::circularSmoothing_nTimes(*vec, width, height, 1, (width / 128));
-			//})) /1000.0f) /60.0f) <<  " Minutes" << endl;
-			//system("pause");
+			cout << "Smoothing Started" << endl;
+			cout << "Smoothing done in  " << (float)(((time_call([&] {
+				Smoothing::anotherSimpleSmoothing(*vec, width, 1, (width / 128));
+				//Smoothing::squareSmoothing_nTimes(*vec, width, height, 1);
+				Smoothing::circularSmoothing_nTimes(*vec, width, height, 1, (width / 64));
+				Smoothing::squareSmoothing_nTimes(*vec, width, height, 10);
+				//Smoothing::anotherSimpleSmoothing(*vec, width, 3, 5);
+				//Smoothing::circularSmoothing_nTimes(*vec, width, height, 20, (width / 512));
+			})) /1000.0f) /60.0f) <<  " Minutes" << endl;
+			system("pause");
 
 			// create the normals vector
 			std::vector<bestGroup::Vec3f> *normalsOut = new vector<bestGroup::Vec3f>(width * height);
@@ -206,7 +210,7 @@ int _tmain(int argc, _TCHAR* argv[])
 			std::cout << "downsized image saved..." << std::endl;
 
 #pragma endregion
-#pragma endregion
+
 
 			//free memory
 			delete newHeightfield;

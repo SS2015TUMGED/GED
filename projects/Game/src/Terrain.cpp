@@ -6,9 +6,7 @@
 #include "DirectXTex.h"
 #include "FillVertex.h"
 #include "IndexBuffer.h"
-
-// You can use this macro to access your height field
-#define IDX(X,Y,WIDTH) ((X) + (Y) * (WIDTH))
+#include "CustomData.h"
 
 Terrain::Terrain(void):
 	indexBuffer(nullptr),
@@ -34,7 +32,7 @@ HRESULT Terrain::create(ID3D11Device* device)
     V(DirectX::CreateDDSTextureFromFile(device, L"..\\..\\Release\\resources\\debug_green.dds", nullptr, &debugSRV));
 
 	if (hr != S_OK) {
-        MessageBoxA (NULL, "Could not load texture \"resources\\debug_green.dds\"", "Invalid texture", MB_ICONERROR | MB_OK);
+        MessageBoxA (NULL, "Could not load texture \"\\Release\\resources\\debug_green.dds\"", "Invalid texture", MB_ICONERROR | MB_OK);
 		return hr;
 	}
 	/*
@@ -80,21 +78,6 @@ HRESULT Terrain::create(ID3D11Device* device)
 	// fill the vertex with Normals
 	FillVertex::insertNormalmap(triangle);
 
-
-
-
-
-
-
-
-
-	
-
-	
-
-
-
-
 	// Note 1: The normal map that you created last week will not be used
 	// in this assignment (Assignment 4). It will be of use in later assignments
 
@@ -121,15 +104,12 @@ HRESULT Terrain::create(ID3D11Device* device)
     V(device->CreateBuffer(&bd, &id, &vertexBuffer)); // http://msdn.microsoft.com/en-us/library/ff476899%28v=vs.85%29.aspx
 
 	// Create index buffer
-	// TODO: Insert your code to create the index buffer
 
 	int indexBufferSize = (resolution - 1) * (resolution - 1) * 6;
 
 	std::vector<int> indices(indexBufferSize);
 
 	IndexBuffer::fillIndexBuffer(indices, resolution);
-
-
 
 	/*
 	// Create and fill description
@@ -149,13 +129,10 @@ HRESULT Terrain::create(ID3D11Device* device)
 	
 	*/
 	
-
-
 	// Load color texture (color map)
 	// TODO: Insert your code to load the color texture and create
 	// the texture "diffuseTexture" as well as the shader resource view
 	// "diffuseTextureSRV"
-
 
 	// DELETE ALL CREATED VARS
 
@@ -166,11 +143,13 @@ HRESULT Terrain::create(ID3D11Device* device)
 void Terrain::destroy()
 {
 	SAFE_RELEASE(vertexBuffer);
+	//Release the index buffer
 	SAFE_RELEASE(indexBuffer);
+	//Release the terrain's shader resource view and texture
 	SAFE_RELEASE(debugSRV);
 
-    // TODO: Release the index buffer
-    // TODO: Release the terrain's shader resource view and texture
+    
+    
 }
 
 

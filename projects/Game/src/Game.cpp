@@ -12,7 +12,6 @@
 #include <string>
 #include <cstdint>
 
-
 #include "dxut.h"
 #include "DXUTmisc.h"
 #include "DXUTcamera.h"
@@ -29,9 +28,6 @@
 
 #include "debug.h"
 
-
-// Help macros
-#define DEG2RAD( a ) ( (a) * XM_PI / 180.f )
 
 using namespace std;
 using namespace DirectX;
@@ -74,9 +70,6 @@ GameEffect								g_gameEffect; // CPU part of Shader
 //-------------------------------------------------------------------------------------
 // Our Killer Variables
 // ------------------------------------------------------------------------------------
-
-
-
 
 //--------------------------------------------------------------------------------------
 // UI control IDs

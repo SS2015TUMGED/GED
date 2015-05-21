@@ -13,7 +13,7 @@ IndexBuffer::~IndexBuffer()
 void IndexBuffer::fillIndexBuffer(std::vector<int>& targetVector, int resolution){
 	
 	
-	// number of sqaures in the vector
+	// number of squares in the vector
 	int squares = (resolution - 1) *  (resolution - 1);
 
 	// counter for the buffer

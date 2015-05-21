@@ -24,14 +24,14 @@ void DiamondSquare::diamondSquareAlgorithm(std::vector<float> &vec, const unsign
 	//top left
 	vec[0] = normalDisRandom(min, max);
 
-	// button right
-	vec[(resolution * resolution ) - 1] = normalDisRandom(min,max);
+	// bottom right
+	vec[(resolution * resolution) - 1] = 0.3f; // normalDisRandom(min, max);
 
 	//top right
 	vec[resolution - 1] = normalDisRandom(min, max);
 
-	//button left
-	vec[IDX(0, resolution - 1, resolution)] = normalDisRandom(min, max);
+	//bottom left
+	vec[IDX(0, resolution - 1, resolution)] = 0.4f;//normalDisRandom(min, max);
 
 
 
@@ -86,7 +86,7 @@ void DiamondSquare::diamondStepSingle(std::vector<float>& v, int startx, int sta
 		
 		v[IDX(startx + (resolution - 1) / iteration / 2,
 			starty + (resolution - 1) / iteration / 2,
-			resolution)] = 0.9f;
+			resolution)] = 0.8f;
 		b += 1;
 	}
 	else if (iteration == 2 && b == 1){
@@ -94,7 +94,7 @@ void DiamondSquare::diamondStepSingle(std::vector<float>& v, int startx, int sta
 
 		v[IDX(((startx + (resolution - 1) / iteration / 2)) ,
 			starty + (resolution - 1) / iteration / 2,
-			resolution)] = 0.7f;
+			resolution)] = 0.6f;
 	}
 	
 
