@@ -29,37 +29,37 @@ HRESULT Terrain::create(ID3D11Device* device)
 	HRESULT hr;
 
 	// In our example, we load a debug texture
-    V(DirectX::CreateDDSTextureFromFile(device, L"..\\..\\Release\\resources\\debug_green.dds", nullptr, &debugSRV));
+	V(DirectX::CreateDDSTextureFromFile(device, L"..\\..\\Release\\resources\\debug_green.dds", nullptr, &debugSRV));
 
 	if (hr != S_OK) {
-        MessageBoxA (NULL, "Could not load texture \"\\Release\\resources\\debug_green.dds\"", "Invalid texture", MB_ICONERROR | MB_OK);
+		MessageBoxA(NULL, "Could not load texture \"\\Release\\resources\\debug_green.dds\"", "Invalid texture", MB_ICONERROR | MB_OK);
 		return hr;
 	}
 	/*
 	// This buffer contains positions, normals and texture coordinates for one triangle
-    float triangle[] = {
-        // Vertex 0
-           -400.0f, 0.0f, -400.0f,  1.0f, // Position
-           0.0f,    1.0f,    0.0f,  0.0f, // Normal
-           0.0f,    0.0f,                 // Texcoords
+	float triangle[] = {
+	// Vertex 0
+	-400.0f, 0.0f, -400.0f,  1.0f, // Position
+	0.0f,    1.0f,    0.0f,  0.0f, // Normal
+	0.0f,    0.0f,                 // Texcoords
 
-        // Vertex 1
-           400.0f,   0.0f, -400.0f, 1.0f, // Position
-           0.0f,     1.0f,    0.0f, 0.0f, // Normal
-           0.0f,     1.0f,                // Texcoords
+	// Vertex 1
+	400.0f,   0.0f, -400.0f, 1.0f, // Position
+	0.0f,     1.0f,    0.0f, 0.0f, // Normal
+	0.0f,     1.0f,                // Texcoords
 
-        // Vertex 2
-           -400.0f, 0.0f,  400.0f,  1.0f, // Position
-           0.0f,    1.0f,    0.0f,  0.0f, // Normal
-           1.0f,    0.0f,                 // Texcoords
-    };
+	// Vertex 2
+	-400.0f, 0.0f,  400.0f,  1.0f, // Position
+	0.0f,    1.0f,    0.0f,  0.0f, // Normal
+	1.0f,    0.0f,                 // Texcoords
+	};
 	//*/
 	// TODO: Replace this vertex array (triangle) with an array (or vector)
 	// which contains the vertices of your terrain. Calculate position,
 	// normal and texture coordinates according to your height field and
 	// the dimensions of the terrain specified by the ConfigParser
 
-	
+
 	// 1 Load heightfield, Normal and Color
 	string heightPath = ConfigParser::height;
 	string colorPath = ConfigParser::color;
@@ -74,7 +74,7 @@ HRESULT Terrain::create(ID3D11Device* device)
 
 	// fill the vertex with the data from the heightmap
 	FillVertex::insertHeightfield(heightPath, triangle);
-	
+
 	// fill the vertex with Normals
 	FillVertex::insertNormalmap(triangle);
 
@@ -84,17 +84,18 @@ HRESULT Terrain::create(ID3D11Device* device)
 	// Note 2: For each vertex 10 floats are stored. Do not use another
 	// layout.
 
-    // Note 3: In the coordinate system of the vertex buffer (output):
-    // x = east,    y = up,    z = south,          x,y,z in [0,1] (float)
+	// Note 3: In the coordinate system of the vertex buffer (output):
+	// x = east,    y = up,    z = south,          x,y,z in [0,1] (float)
 
-    D3D11_SUBRESOURCE_DATA id;
-    id.pSysMem = &triangle[0];
-    id.SysMemPitch = 10 * sizeof(float); // Stride
-    id.SysMemSlicePitch = 0;
+	D3D11_SUBRESOURCE_DATA id;
+	id.pSysMem = &triangle[0];
+	id.SysMemPitch = 10 * sizeof(float); // Stride
+	id.SysMemSlicePitch = 0;
 
-    D3D11_BUFFER_DESC bd;
-    bd.BindFlags = D3D11_BIND_VERTEX_BUFFER;
-	bd.ByteWidth = sizeof(triangle); //The size in bytes of the triangle array
+	D3D11_BUFFER_DESC bd;
+	bd.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+	bd.ByteWidth = triangle.size() * sizeof(float) * 10; 
+									//The size in bytes of the triangle array
 									//  Change this s.t. it fits the size
 									// of your vertex buffer
     bd.CPUAccessFlags = 0;
@@ -138,7 +139,7 @@ HRESULT Terrain::create(ID3D11Device* device)
 
 	// convert std::string to std::wstring neccessary
 	std::wstring w(colorPath.begin(), colorPath.end());
-	DirectX::CreateDDSTextureFromFile(device, w.c_str(), nullptr, &diffuseTextureSRV);
+	DirectX::CreateDDSTextureFromFile(device, w.c_str() , nullptr, &diffuseTextureSRV);
 
 
 	// DELETE ALL CREATED VARS
