@@ -13,8 +13,13 @@ public:
 
 	void render(ID3D11DeviceContext* context, ID3DX11EffectPass* pass);
 
+	 int numberOfIndicies;
+
 
 private:
+
+	
+
 	Terrain(const Terrain&);
 	Terrain(const Terrain&&);
 	void operator=(const Terrain&);

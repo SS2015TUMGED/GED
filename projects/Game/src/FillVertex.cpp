@@ -111,7 +111,7 @@ void FillVertex::insertHeightfield(std::string path, std::vector<CustomData::Sim
 			tmp_vertex.Pos.w = 1.0f;
 
 			// put the tmp_vertex at position x,y in vertex
-			vertex[IDX(x, y, width)];
+			vertex[IDX(x, y, width)] = tmp_vertex;
 
 		}
 	}
@@ -151,9 +151,9 @@ void FillVertex::insertNormalmap(std::vector<CustomData::SimpleVertex> &vertex){
 		{
 
 			// safe the normals into the vertex, and scale them to fit the resolution
-			vertex[IDX(x, y, resolution)].Normal.x = tmp_normals[IDX(x, y, resolution)].x * resolution;
-			vertex[IDX(x, y, resolution)].Normal.y = tmp_normals[IDX(x, y, resolution)].y * resolution;
-			vertex[IDX(x, y, resolution)].Normal.z = tmp_normals[IDX(x, y, resolution)].z * resolution;
+			vertex[IDX(x, y, resolution)].Normal.x = tmp_normals[IDX(x, y, resolution)].x ;
+			vertex[IDX(x, y, resolution)].Normal.y = tmp_normals[IDX(x, y, resolution)].y ;
+			vertex[IDX(x, y, resolution)].Normal.z = tmp_normals[IDX(x, y, resolution)].z ;
 			vertex[IDX(x, y, resolution)].Normal.w = 0.0f;
 		}
 	}

@@ -95,7 +95,7 @@ HRESULT Terrain::create(ID3D11Device* device)
     D3D11_BUFFER_DESC bd;
     bd.BindFlags = D3D11_BIND_VERTEX_BUFFER;
 	bd.ByteWidth = sizeof(triangle); //The size in bytes of the triangle array
-									// TODO: Change this s.t. it fits the size
+									//  Change this s.t. it fits the size
 									// of your vertex buffer
     bd.CPUAccessFlags = 0;
     bd.MiscFlags = 0;
@@ -106,6 +106,7 @@ HRESULT Terrain::create(ID3D11Device* device)
 	// Create index buffer
 
 	int indexBufferSize = (resolution - 1) * (resolution - 1) * 6;
+	numberOfIndicies = indexBufferSize;
 
 	std::vector<int> indices(indexBufferSize);
 
@@ -134,7 +135,6 @@ HRESULT Terrain::create(ID3D11Device* device)
 	// the texture "diffuseTexture" as well as the shader resource view
 	// "diffuseTextureSRV"
 
-	//device->ID3D11Device::CreateTexture2D();
 
 	// convert std::string to std::wstring neccessary
 	std::wstring w(colorPath.begin(), colorPath.end());
@@ -188,5 +188,5 @@ void Terrain::render(ID3D11DeviceContext* context, ID3DX11EffectPass* pass)
     // Draw
     // Use DrawIndexed to draw the terrain geometry using as shared vertex list
     // (instead of drawing only the vertex buffer)
-    context->DrawIndexed( 3 ,0, 0);
+    context->DrawIndexed( numberOfIndicies ,0, 0);
 }
