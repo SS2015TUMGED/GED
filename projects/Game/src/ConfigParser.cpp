@@ -11,14 +11,9 @@ std::string ConfigParser::normal;
 
 ConfigParser::ConfigParser()
 {
-	
-	
-
 }
 ConfigParser::~ConfigParser()
 {
-
-
 }
 
 void ConfigParser::load(std::string str){
