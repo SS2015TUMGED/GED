@@ -190,5 +190,5 @@ void Terrain::render(ID3D11DeviceContext* context, ID3DX11EffectPass* pass)
     // Draw
     // Use DrawIndexed to draw the terrain geometry using as shared vertex list
     // (instead of drawing only the vertex buffer)
-    context->DrawIndexed( numberOfIndicies ,0, 0);
+    context->DrawIndexed(numberOfIndicies ,0 , 0);
 }
