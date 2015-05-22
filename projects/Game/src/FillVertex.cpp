@@ -94,7 +94,7 @@ FillVertex::~FillVertex()
 	// iterate through the image
 	for (int y = 0; y < depth; y++)
 	{
-		for (int x = 0; x < width-1; x++)
+		for (int x = 0; x < width; x++)
 		{
 			// save the coordinates to the tmp_vertex
 			
