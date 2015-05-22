@@ -30,12 +30,12 @@ HRESULT Terrain::create(ID3D11Device* device)
 	HRESULT hr;
 
 	// In our example, we load a debug texture
-	V(DirectX::CreateDDSTextureFromFile(device, L"..\\..\\Release\\resources\\debug_green.dds", nullptr, &debugSRV));
+	//V(DirectX::CreateDDSTextureFromFile(device, L"..\\..\\Release\\resources\\debug_green.dds", nullptr, &debugSRV));
 
-	if (hr != S_OK) {
-		MessageBoxA(NULL, "Could not load texture \"\\Release\\resources\\debug_green.dds\"", "Invalid texture", MB_ICONERROR | MB_OK);
-		return hr;
-	}
+	//if (hr != S_OK) {
+	//	MessageBoxA(NULL, "Could not load texture \"\\Release\\resources\\debug_green.dds\"", "Invalid texture", MB_ICONERROR | MB_OK);
+	//	return hr;
+	//}
 	/*
 	// This buffer contains positions, normals and texture coordinates for one triangle
 	float triangle[] = {

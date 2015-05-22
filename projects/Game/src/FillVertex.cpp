@@ -31,10 +31,10 @@ FillVertex::~FillVertex()
 
 
 	 //  iterate through the rows
-	 for (int y = 0; y < resolution; y++)
+	 for (int y = 0; y < resolution - 1; y++)
 	 {
 		 //iterate through the cols
-		 for (int x = 0; x < resolution; x++)
+		 for (int x = 0; x < resolution ; x++)
 		 {
 			 //normal mapping
 
@@ -92,7 +92,7 @@ FillVertex::~FillVertex()
 	CustomData::SimpleVertex tmp_vertex;
 
 	// iterate through the image
-	for (int y = 0; y < depth-1; y++)
+	for (int y = 0; y < depth; y++)
 	{
 		for (int x = 0; x < width-1; x++)
 		{
