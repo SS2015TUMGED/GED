@@ -92,9 +92,9 @@ FillVertex::~FillVertex()
 	CustomData::SimpleVertex tmp_vertex;
 
 	// iterate through the image
-	for (int y = 0; y < depth; y++)
+	for (int y = 0; y < depth-1; y++)
 	{
-		for (int x = 0; x < width; x++)
+		for (int x = 0; x < width-1; x++)
 		{
 			// save the coordinates to the tmp_vertex
 			

@@ -8,6 +8,7 @@
 #include "IndexBuffer.h"
 #include "CustomData.h"
 
+
 Terrain::Terrain(void):
 	indexBuffer(nullptr),
 	vertexBuffer(nullptr),
@@ -170,7 +171,6 @@ void Terrain::destroy()
 void Terrain::render(ID3D11DeviceContext* context, ID3DX11EffectPass* pass)
 {
 	HRESULT hr;
-
 	// Bind the terrain vertex buffer to the input assembler stage 
     ID3D11Buffer* vbs[] = { vertexBuffer, };
     unsigned int strides[] = { 10 * sizeof(float), }, offsets[] = { 0, };
