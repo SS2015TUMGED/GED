@@ -28,7 +28,6 @@ void MyTextureGenerator::generateNormals(const std::vector<float> &heightfield, 
 			float x3 = 1.0f / (resolution / 2.0f);	// normal x3 direction
 			float length = 0.0f;					// normal length before normalizing
 
-
 			// check if col exists and handle the borders/corners
 			if (x > 0 && x < resolution - 1)
 				x1 = (heightfield[IDX(x + 1, y, resolution)] - heightfield[IDX(x - 1, y, resolution)]) / 2.0f;
@@ -44,7 +43,7 @@ void MyTextureGenerator::generateNormals(const std::vector<float> &heightfield, 
 				x2 = (heightfield[IDX(x, y + 1, resolution)] - heightfield[IDX(x, y, resolution)]);
 			else if (y == resolution - 1)
 				x2 = (heightfield[IDX(x, y - 1, resolution)] - heightfield[IDX(x, y, resolution)]);
-
+			
 			x1 *= -1;
 			x2 *= -1;
 

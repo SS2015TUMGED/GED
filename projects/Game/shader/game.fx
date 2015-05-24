@@ -2,7 +2,11 @@
 // Shader resources
 //--------------------------------------------------------------------------------------
 
-Texture2D   g_Diffuse; // Material albedo for diffuse lighting
+Buffer<float>	g_HeightMap; // Buffer for the heightmap	
+Texture2D		g_NormalMap;
+
+
+Texture2D		g_Diffuse; // Material albedo for diffuse lighting
 
 
 //--------------------------------------------------------------------------------------
@@ -12,10 +16,14 @@ Texture2D   g_Diffuse; // Material albedo for diffuse lighting
 cbuffer cbConstant
 {
     float4  g_LightDir; // Object space
+	int g_TerrainRes;
 };
 
 cbuffer cbChangesEveryFrame
 {
+
+	matrix g_WorldNormals;
+
     matrix  g_World;
     matrix  g_WorldViewProjection;
     float   g_Time;
@@ -44,6 +52,12 @@ struct PosTexLi
     float   Li : LIGHT_INTENSITY;
 	float3 normal: NORMAL;
 };
+struct PosTex
+{
+	float4 Pos : SV_POSITION;
+	float2 Tex : TEXCOORD;
+};
+
 
 //--------------------------------------------------------------------------------------
 // Samplers
