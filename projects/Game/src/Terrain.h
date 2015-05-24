@@ -25,10 +25,25 @@ private:
 	void operator=(const Terrain&);
 
 	// Terrain rendering resources
-	ID3D11Buffer*                           vertexBuffer;	// The terrain's vertices
+	
+	// assignment 05 remove vertexBuffer
+	//ID3D11Buffer*                           vertexBuffer;	// The terrain's vertices
 	ID3D11Buffer*                           indexBuffer;	// The terrain's triangulation
 	ID3D11Texture2D*                        diffuseTexture; // The terrain's material color for diffuse lighting
 	ID3D11ShaderResourceView*               diffuseTextureSRV; // Describes the structure of the diffuse texture to the shader stages
+
+	// assignment 05: add shader resource and shader resource view
+
+	// for the normalmap
+	ID3D11Texture2D*							normalmap_ShaderResource;
+	ID3D11ShaderResourceView*				normalmap_ShaderResView;
+
+	// for the heightmap
+	ID3D11Buffer*							heightmap_ShaderResource;
+	ID3D11ShaderResourceView*				heightmap_ShaderResView;
+
+
+
 
 	// General resources
 	ID3D11ShaderResourceView*               debugSRV;

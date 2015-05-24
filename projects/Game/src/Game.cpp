@@ -54,7 +54,8 @@ CDXUTTextHelper*                        g_txtHelper = NULL;
 CDXUTDialog                             g_hud;                  // dialog for standard controls
 CDXUTDialog                             g_sampleUI;             // dialog for sample specific controls
 
-ID3D11InputLayout*                      g_terrainVertexLayout; // Describes the structure of the vertex buffer to the input assembler stage
+// assignment 05 : remove the var
+//ID3D11InputLayout*                      g_terrainVertexLayout; // Describes the structure of the vertex buffer to the input assembler stage
 
 
 bool                                    g_terrainSpinning = true;
@@ -296,8 +297,9 @@ HRESULT CALLBACK OnD3D11CreateDevice( ID3D11Device* pd3dDevice,
 	// Create the input layout
     D3DX11_PASS_DESC pd;
 	V_RETURN(g_gameEffect.pass0->GetDesc(&pd));
-	V_RETURN( pd3dDevice->CreateInputLayout( layout, numElements, pd.pIAInputSignature,
-            pd.IAInputSignatureSize, &g_terrainVertexLayout ) );
+	
+	//V_RETURN( pd3dDevice->CreateInputLayout( layout, numElements, pd.pIAInputSignature,
+    //        pd.IAInputSignatureSize, &g_terrainVertexLayout ) );
 
 	// Create the terrain
 
@@ -319,7 +321,7 @@ void CALLBACK OnD3D11DestroyDevice( void* pUserContext )
     g_dialogResourceManager.OnD3D11DestroyDevice();
     g_settingsDlg.OnD3D11DestroyDevice();
     DXUTGetGlobalResourceCache().OnDestroyDevice();
-    SAFE_RELEASE( g_terrainVertexLayout );
+   // SAFE_RELEASE( g_terrainVertexLayout );
     
 	// Destroy the terrain
 	g_terrain.destroy();
@@ -551,7 +553,7 @@ void CALLBACK OnD3D11FrameRender( ID3D11Device* pd3dDevice, ID3D11DeviceContext*
 	V(g_gameEffect.lightDirEV->SetFloatVector( ( float* )&g_lightDir ));
 
     // Set input layout
-    pd3dImmediateContext->IASetInputLayout( g_terrainVertexLayout );
+    //pd3dImmediateContext->IASetInputLayout( g_terrainVertexLayout );
 
 	g_terrain.render(pd3dImmediateContext, g_gameEffect.pass0);
     
