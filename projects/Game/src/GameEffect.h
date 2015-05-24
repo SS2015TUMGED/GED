@@ -31,6 +31,13 @@ struct GameEffect
 	ID3DX11EffectShaderResourceVariable*    diffuseEV; // Effect variable for the diffuse color texture
 	ID3DX11EffectVectorVariable*            lightDirEV; // Light direction in object space
 
+	// added for  Assignment 05 
+	ID3DX11EffectShaderResourceVariable*	heightmap;
+	ID3DX11EffectShaderResourceVariable*	normalmap;
+	ID3DX11EffectScalarVariable*			shader;
+	ID3DX11EffectMatrixVariable*			worldNormalsMatrix;
+
+
 	GameEffect() { ZeroMemory(this, sizeof(*this)); }		// WARNING: This will set ALL members to 0!
 
 
@@ -63,7 +70,16 @@ struct GameEffect
 		SAFE_GET_MATRIX(effect, "g_WorldViewProjection", worldViewProjectionEV);   
 		SAFE_GET_VECTOR(effect, "g_LightDir", lightDirEV);  
 
+		// Assignment 05,  bind the new effect variables to the ones you created in your game.fx
+		SAFE_GET_RESOURCE(effect, "heightmap", heightmap);
+		SAFE_GET_RESOURCE(effect, "normalmap", normalmap);
+		SAFE_GET_SCALAR(effect, "shader", shader);
+		SAFE_GET_MATRIX(effect, "worldNormalsMatrix", worldNormalsMatrix);
+
 		return S_OK;
+
+
+
 	}
 
 
