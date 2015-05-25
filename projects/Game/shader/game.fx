@@ -164,22 +164,46 @@ PosTex TerrainVS(uint VertexID : SV_VertexID)  {
 	output.Pos.z = (float)(z - g_TerrainRes / 2);
 	output.Pos.w = 1.0f;
 
-	output.Pos = mul(Input.Pos, g_WorldViewProjection);
+	output.Pos = mul(output.Pos, g_WorldViewProjection);
 
 	// calculate textures
 	output.Tex.x = (float)x / g_TerrainRes;
-	output.Tex.z = (float)z / g_TerrainRes;
+	output.Tex.y = (float)z / g_TerrainRes;
 
 	return output;
 }
 
 
-	float4 SimplePS(PosTexLi Input) : SV_Target0{
-		// Perform lighting in object space, so that we can use the input normal "as it is"
-		//float4 matDiffuse = g_Diffuse.Sample(samAnisotropic, Input.Tex);
-		float4 matDiffuse = g_Diffuse.Sample(samLinearClamp, Input.Tex);
-		return float4(matDiffuse.rgb * Input.Li, 1);
-		//return float4(Input.normal, 1);
+	float4 TerrainPS(PosTex Input) : SV_Target0{
+
+		float3 n;
+		float4 matNormal = g_NormalMap.Sample(samAnisotropic, Input.Tex);
+
+			// apply the x,z coordinates
+			//n = (float4(matDiffuse.xz)  * 2).xz - 1;
+
+		n.x = matNormal.x * 2 - 1;
+		n.z = matNormal.z * 2 - 1;
+
+		// calc the height y , length of the vector is 1
+		//					length	= sqrt (x*x + y*y + z*z)
+		// ->					1	= x*x + y*y + z*z
+		// ->		1 - x*x - z*z	= y*y
+		// -> sqrt(1 - x*x - z*z)	= y
+		n.y = 1 - (n.x * n.x) - (n.z * n.z) ;
+		n.y = sqrt(n.y);
+
+
+		// transform and normalize 
+		n = normalize(mul(n, g_World).xyz); // Assume orthogonal world matrix
+
+
+		float3 matDiffuse = g_Diffuse.Sample(samAnisotropic, Input.Tex);
+		
+		float i = saturate(dot(n, g_LightDir.xyz));
+
+		return float4(matDiffuse.rgb * i, 1);
+
 	}
 
 
