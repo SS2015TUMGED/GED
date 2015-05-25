@@ -22,7 +22,7 @@ cbuffer cbConstant
 cbuffer cbChangesEveryFrame
 {
 
-	matrix g_WorldNormals;
+	matrix  g_WorldNormals;
 
     matrix  g_World;
     matrix  g_WorldViewProjection;
@@ -174,38 +174,34 @@ PosTex TerrainVS(uint VertexID : SV_VertexID)  {
 }
 
 
-	float4 TerrainPS(PosTex Input) : SV_Target0{
+float4 TerrainPS(PosTex Input) : SV_Target0 {
 
-		float3 n;
-		float4 matNormal = g_NormalMap.Sample(samAnisotropic, Input.Tex);
+	float3 n;
+	float4 matNormal = g_NormalMap.Sample(samAnisotropic, Input.Tex);
 
-			// apply the x,z coordinates
-			//n = (float4(matDiffuse.xz)  * 2).xz - 1;
+	// apply the x,z coordinates
+	//n = (float4(matDiffuse.xz)  * 2).xz - 1;
 
-		n.x = matNormal.x * 2 - 1;
-		n.z = matNormal.z * 2 - 1;
+	//n.xz = matNormal.xy * 2 - 1;
+	n.x = matNormal.x * 2 - 1;
+	n.z = matNormal.y * 2 - 1;
 
-		// calc the height y , length of the vector is 1
-		//					length	= sqrt (x*x + y*y + z*z)
-		// ->					1	= x*x + y*y + z*z
-		// ->		1 - x*x - z*z	= y*y
-		// -> sqrt(1 - x*x - z*z)	= y
-		n.y = 1 - (n.x * n.x) - (n.z * n.z) ;
-		n.y = sqrt(n.y);
+	// calc the height y , length of the vector is 1
+	//     length                      = sqrt (x*x + y*y + z*z)      | ^2
+	// ->       1                      = x*x + y*y + z*z             | -x*x -z*z
+	// ->       1 - x * x  -  z * z    = y*y                         | sqrt()
+	// -> sqrt(1 -  x * x  -  z * z )  = y
+	n.y = sqrt(1 - n.x*n.x - n.z*n.z);
 
+	// transform and normalize 
+	n = normalize(mul(n, g_WorldNormals).xyz); // Assume orthogonal world matrix
+	float i = saturate(dot(n, g_LightDir.xyz));
 
-		// transform and normalize 
-		n = normalize(mul(n, g_World).xyz); // Assume orthogonal world matrix
+	// sample diffuse texture
+	float3 matDiffuse = g_Diffuse.Sample(samLinearClamp, Input.Tex);
 
-
-		float3 matDiffuse = g_Diffuse.Sample(samAnisotropic, Input.Tex);
-		
-		float i = saturate(dot(n, g_LightDir.xyz));
-
-		return float4(matDiffuse.rgb * i, 1);
-
-	}
-
+	return float4(matDiffuse.rgb * i, 1);
+}
 
 
 //--------------------------------------------------------------------------------------
