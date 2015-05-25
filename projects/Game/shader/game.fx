@@ -148,6 +148,42 @@ float4 SimplePS(PosTexLi Input) : SV_Target0 {
 }
 
 
+// assignment 05
+PosTex TerrainVS(uint VertexID : SV_VertexID)  {
+	PosTex output = (PosTex)0;
+
+	// put the coordinates into the struct PosTex
+
+	// int % resolution = x
+	int x = (VertexID % g_TerrainRes);
+	// int / resolution = z
+	int z = (VertexID / g_TerrainRes);
+
+	output.Pos.x = (float)(x - g_TerrainRes / 2);
+	output.Pos.y = g_HeightMap[VertexID];
+	output.Pos.z = (float)(z - g_TerrainRes / 2);
+	output.Pos.w = 1.0f;
+
+	output.Pos = mul(Input.Pos, g_WorldViewProjection);
+
+	// calculate textures
+	output.Tex.x = (float)x / g_TerrainRes;
+	output.Tex.z = (float)z / g_TerrainRes;
+
+	return output;
+}
+
+
+	float4 SimplePS(PosTexLi Input) : SV_Target0{
+		// Perform lighting in object space, so that we can use the input normal "as it is"
+		//float4 matDiffuse = g_Diffuse.Sample(samAnisotropic, Input.Tex);
+		float4 matDiffuse = g_Diffuse.Sample(samLinearClamp, Input.Tex);
+		return float4(matDiffuse.rgb * Input.Li, 1);
+		//return float4(Input.normal, 1);
+	}
+
+
+
 //--------------------------------------------------------------------------------------
 // Techniques
 //--------------------------------------------------------------------------------------
@@ -155,9 +191,9 @@ technique11 Render
 {
     pass P0
     {
-        SetVertexShader(CompileShader(vs_4_0, SimpleVS()));
+		SetVertexShader(CompileShader(vs_4_0, TerrainVS()));
         SetGeometryShader(NULL);
-        SetPixelShader(CompileShader(ps_4_0, SimplePS()));
+        SetPixelShader(CompileShader(ps_4_0, TerrainPS()));
         
         SetRasterizerState(rsCullNone);
         SetDepthStencilState(EnableDepth, 0);

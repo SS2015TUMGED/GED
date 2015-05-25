@@ -71,10 +71,10 @@ struct GameEffect
 		SAFE_GET_VECTOR(effect, "g_LightDir", lightDirEV);  
 
 		// Assignment 05,  bind the new effect variables to the ones you created in your game.fx
-		SAFE_GET_RESOURCE(effect, "heightmap", heightmap);
-		SAFE_GET_RESOURCE(effect, "normalmap", normalmap);
-		SAFE_GET_SCALAR(effect, "shader", shader);
-		SAFE_GET_MATRIX(effect, "worldNormalsMatrix", worldNormalsMatrix);
+		SAFE_GET_RESOURCE(effect, "g_HeightMap", heightmap);
+		SAFE_GET_RESOURCE(effect, "g_NormalMap", normalmap);
+		SAFE_GET_SCALAR(effect, "g_TerrainRes", shader);
+		SAFE_GET_MATRIX(effect, "g_WorldNormals", worldNormalsMatrix);
 
 		return S_OK;
 

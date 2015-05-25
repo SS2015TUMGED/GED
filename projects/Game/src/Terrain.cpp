@@ -66,7 +66,6 @@ HRESULT Terrain::create(ID3D11Device* device)
 
 
 
-
 	// ***************** 1 Load heightfield, Normal and Color **********************
 	string heightPath = ConfigParser::height;
 	string colorPath = ConfigParser::color;
@@ -218,13 +217,14 @@ void Terrain::render(ID3D11DeviceContext* context, ID3DX11EffectPass* pass)
 {
 	HRESULT hr;
 	// Bind the terrain vertex buffer to the input assembler stage 
-    //ID3D11Buffer* vbs[] = { vertexBuffer, };
+    ID3D11Buffer* vbs[] = { nullptr, }; // assignment 04 vertexBuffer
     
 	
-	unsigned int strides[] = { 10 * sizeof(float), }, offsets[] = { 0, };
+	unsigned int strides[] = { 0, }, offsets[] = { 0, }; // assignment 04: 10 * sizeof(float)
     
 	
 	//context->IASetVertexBuffers(0, 1, vbs, strides, offsets);
+	
 	// Bind the terrain index buffer to the input assembler stage
 	context->IASetIndexBuffer(indexBuffer, DXGI_FORMAT_R32_UINT, 0);
 
@@ -236,6 +236,13 @@ void Terrain::render(ID3D11DeviceContext* context, ID3DX11EffectPass* pass)
     // Bind the SRV of the terrain diffuse texture to the effect variable
     // (instead of the SRV of the debug texture)
 	V(g_gameEffect.diffuseEV->SetResource(diffuseTextureSRV));
+	V(g_gameEffect.diffuseEV->SetResource(heightmap_ShaderResView));
+	V(g_gameEffect.diffuseEV->SetResource(normalmap_ShaderResView));
+
+	D3D11_BUFFER_DESC bd;
+	heightBuffer->GetDesc(&bd);
+	V(g_gameEffect.shader->SetInt( bd.ByteWidth / 10 / sizeof(float) ));
+
 
     // Apply the rendering pass in order to submit the necessary render state changes to the device
     V(pass->Apply(0, context));
