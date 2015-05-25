@@ -75,7 +75,7 @@ HRESULT Terrain::create(ID3D11Device* device)
 	// *********************** create a buffer for the heightmap ****************
 
 	// load the heightmap to get the resolution
-	int resolution = FillVertex::returnResolution(heightPath);
+	resolution = FillVertex::returnResolution(heightPath);
 
 	// *********************** Assignment 04 *************************************
 	// Create a new Vertex
@@ -124,13 +124,12 @@ HRESULT Terrain::create(ID3D11Device* device)
 	heightShader.Format = DXGI_FORMAT_R32_FLOAT;
 	heightShader.ViewDimension = D3D11_SRV_DIMENSION_BUFFER;
 
-	V(device->CreateBuffer(&bd, &id, &heightBuffer));
+	V(device->CreateBuffer(&bd, &id, &heightBuffer)); // http://msdn.microsoft.com/en-us/library/ff476899%28v=vs.85%29.aspx
 	V(device->CreateShaderResourceView(heightBuffer, &heightShader, &heightmap_ShaderResView));
 
 
 
 
-	// Assignment 04: V(device->CreateBuffer(&bd, &id, &heightBuffer)); // http://msdn.microsoft.com/en-us/library/ff476899%28v=vs.85%29.aspx
 
 
 	//*********************** Create index buffer ********************************
@@ -240,9 +239,8 @@ void Terrain::render(ID3D11DeviceContext* context, ID3DX11EffectPass* pass)
 	V(g_gameEffect.heightmap->SetResource(heightmap_ShaderResView));
 	V(g_gameEffect.normalmap->SetResource(normalmap_ShaderResView));
 
-	D3D11_BUFFER_DESC bd;
-	heightBuffer->GetDesc(&bd);
-	V(g_gameEffect.shader->SetInt( bd.ByteWidth / sizeof(float) ));
+	
+	V(g_gameEffect.shader->SetInt( resolution));
 
 
     // Apply the rendering pass in order to submit the necessary render state changes to the device

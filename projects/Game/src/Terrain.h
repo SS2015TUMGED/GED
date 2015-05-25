@@ -41,7 +41,7 @@ private:
 	// for the heightmap
 	ID3D11Buffer*							heightBuffer;
 	ID3D11ShaderResourceView*				heightmap_ShaderResView;
-
+	int resolution;
 
 
 
