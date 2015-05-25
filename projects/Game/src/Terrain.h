@@ -35,11 +35,11 @@ private:
 	// assignment 05: add shader resource and shader resource view
 
 	// for the normalmap
-	ID3D11Texture2D*							normalmap_ShaderResource;
+	ID3D11Texture2D*						normalmap_ShaderResource;
 	ID3D11ShaderResourceView*				normalmap_ShaderResView;
 
 	// for the heightmap
-	ID3D11Buffer*							heightmap_ShaderResource;
+	ID3D11Buffer*							heightBuffer;
 	ID3D11ShaderResourceView*				heightmap_ShaderResView;
 
 

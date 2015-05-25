@@ -59,53 +59,81 @@ HRESULT Terrain::create(ID3D11Device* device)
 	// which contains the vertices of your terrain. Calculate position,
 	// normal and texture coordinates according to your height field and
 	// the dimensions of the terrain specified by the ConfigParser
+	// Note 2: For each vertex 10 floats are stored. Do not use another
+	// layout.
+	// Note 3: In the coordinate system of the vertex buffer (output):
+	// x = east,    y = up,    z = south,          x,y,z in [0,1] (float)
 
 
-	// 1 Load heightfield, Normal and Color
+
+
+	// ***************** 1 Load heightfield, Normal and Color **********************
 	string heightPath = ConfigParser::height;
 	string colorPath = ConfigParser::color;
 	string normalPath = ConfigParser::normal;
 
 
+	// *********************** create a buffer for the heightmap ****************
+
 	// load the heightmap to get the resolution
 	int resolution = FillVertex::returnResolution(heightPath);
 
+	// *********************** Assignment 04 *************************************
 	// Create a new Vertex
-	std::vector<CustomData::SimpleVertex> triangle(resolution * resolution);
-
+	//std::vector<CustomData::SimpleVertex> triangle(resolution * resolution)
 	// fill the vertex with the data from the heightmap
-	FillVertex::insertHeightfield(heightPath, triangle);
-
+	//FillVertex::insertHeightfield(heightPath, triangle);
 	// fill the vertex with Normals
-	FillVertex::insertNormalmap(triangle);
+	//FillVertex::insertNormalmap(triangle);
+	// ************************* End Assignment 04 *******************************
 
-	// Note 1: The normal map that you created last week will not be used
-	// in this assignment (Assignment 4). It will be of use in later assignments
+	// ************************* Assignment 05 ****************************
+	
+		// vector where the array is stored
+		std::vector<float> heightfield(resolution * resolution);
 
-	// Note 2: For each vertex 10 floats are stored. Do not use another
-	// layout.
+		// load the heightfield from the picture
+		GEDUtils::SimpleImage hfield(heightPath.c_str());
 
-	// Note 3: In the coordinate system of the vertex buffer (output):
-	// x = east,    y = up,    z = south,          x,y,z in [0,1] (float)
+		// fill the heightfield vector
+		for (int y = 0; y < resolution; y++)
+		{
+			for (int x = 0; x < resolution; x++)
+			{
+				heightfield[IDX(x, y, resolution)] = hfield.getPixel(x, y);
+			}
+		}
+
+
 
 	D3D11_SUBRESOURCE_DATA id;
-	id.pSysMem = &triangle[0];
-	id.SysMemPitch = 10 * sizeof(float); // Stride
+	id.pSysMem = &heightfield[0]; // assignment 04 replace with triangle[0]
+	id.SysMemPitch = sizeof(float); // Stride, assignment 04 add * 10
 	id.SysMemSlicePitch = 0;
-
+	
 	D3D11_BUFFER_DESC bd;
-	bd.BindFlags = D3D11_BIND_VERTEX_BUFFER;
-	bd.ByteWidth = triangle.size() * sizeof(float) * 10; 
-									//The size in bytes of the triangle array
-									//  Change this s.t. it fits the size
-									// of your vertex buffer
+	bd.BindFlags = D3D11_BIND_SHADER_RESOURCE;  // assignment 04 : D3D11_BIND_VERTEX_BUFFER;
+	bd.ByteWidth = heightfield.size() * sizeof(float); // assignment 04 add * 10, replace heightfield with triangle
+
     bd.CPUAccessFlags = 0;
     bd.MiscFlags = 0;
     bd.Usage = D3D11_USAGE_DEFAULT;
 
-    //V(device->CreateBuffer(&bd, &id, &vertexBuffer)); // http://msdn.microsoft.com/en-us/library/ff476899%28v=vs.85%29.aspx
+	D3D11_SHADER_RESOURCE_VIEW_DESC heightShader;
+	heightShader.Buffer.FirstElement = 0;
+	heightShader.Buffer.NumElements = resolution * resolution;
+	heightShader.Format = DXGI_FORMAT_R32_FLOAT;
+	heightShader.ViewDimension = D3D11_SRV_DIMENSION_BUFFER;
 
-	// Create index buffer
+	V(device->CreateShaderResourceView(heightBuffer, &heightShader, &heightmap_ShaderResView));
+
+
+
+
+	// Assignment 04: V(device->CreateBuffer(&bd, &id, &heightBuffer)); // http://msdn.microsoft.com/en-us/library/ff476899%28v=vs.85%29.aspx
+
+
+	//*********************** Create index buffer ********************************
 
 	int indexBufferSize = (resolution - 1) * (resolution - 1) * 6;
 	numberOfIndicies = indexBufferSize;
@@ -132,16 +160,26 @@ HRESULT Terrain::create(ID3D11Device* device)
 	
 	
 	
-	
+	//************************ load textures ********************************
 	// Load color texture (color map)
 	// Insert your code to load the color texture and create
 	// the texture "diffuseTexture" as well as the shader resource view
 	// "diffuseTextureSRV"
 
-
 	// convert std::string to std::wstring neccessary
 	std::wstring w(colorPath.begin(), colorPath.end());
 	DirectX::CreateDDSTextureFromFile(device, w.c_str() , nullptr, &diffuseTextureSRV);
+
+
+	// ********************** load the normals *****************************
+
+	// convert the normalPath to wstring and load the normal
+	std::wstring w2(normalPath.begin(), normalPath.end());
+	DirectX::CreateDDSTextureFromFile(device, w2.c_str(), nullptr, &normalmap_ShaderResView);
+
+
+
+
 
 
 
@@ -156,12 +194,17 @@ HRESULT Terrain::create(ID3D11Device* device)
 void Terrain::destroy()
 {
 	//SAFE_RELEASE(vertexBuffer);
+	
 	//Release the index buffer
 	SAFE_RELEASE(indexBuffer);
 	//Release the terrain's shader resource view and texture
 	SAFE_RELEASE(debugSRV);
 
 	SAFE_RELEASE(diffuseTextureSRV);
+
+	SAFE_RELEASE(heightBuffer);
+
+	SAFE_RELEASE(heightmap_ShaderResView);
 
     
     
