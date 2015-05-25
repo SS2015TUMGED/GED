@@ -159,9 +159,9 @@ PosTex TerrainVS(uint VertexID : SV_VertexID)  {
 	// int / resolution = z
 	int z = (VertexID / g_TerrainRes);
 
-	output.Pos.x = (float)(x - g_TerrainRes / 2);
+	output.Pos.x = (float)(x - g_TerrainRes / 2) / g_TerrainRes;
 	output.Pos.y = g_HeightMap[VertexID];
-	output.Pos.z = (float)(z - g_TerrainRes / 2);
+	output.Pos.z = (float)(z - g_TerrainRes / 2) / g_TerrainRes;
 	output.Pos.w = 1.0f;
 
 	output.Pos = mul(output.Pos, g_WorldViewProjection);

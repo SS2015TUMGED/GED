@@ -124,6 +124,7 @@ HRESULT Terrain::create(ID3D11Device* device)
 	heightShader.Format = DXGI_FORMAT_R32_FLOAT;
 	heightShader.ViewDimension = D3D11_SRV_DIMENSION_BUFFER;
 
+	V(device->CreateBuffer(&bd, &id, &heightBuffer));
 	V(device->CreateShaderResourceView(heightBuffer, &heightShader, &heightmap_ShaderResView));
 
 
@@ -236,12 +237,12 @@ void Terrain::render(ID3D11DeviceContext* context, ID3DX11EffectPass* pass)
     // Bind the SRV of the terrain diffuse texture to the effect variable
     // (instead of the SRV of the debug texture)
 	V(g_gameEffect.diffuseEV->SetResource(diffuseTextureSRV));
-	V(g_gameEffect.diffuseEV->SetResource(heightmap_ShaderResView));
-	V(g_gameEffect.diffuseEV->SetResource(normalmap_ShaderResView));
+	V(g_gameEffect.heightmap->SetResource(heightmap_ShaderResView));
+	V(g_gameEffect.normalmap->SetResource(normalmap_ShaderResView));
 
 	D3D11_BUFFER_DESC bd;
 	heightBuffer->GetDesc(&bd);
-	V(g_gameEffect.shader->SetInt( bd.ByteWidth / 10 / sizeof(float) ));
+	V(g_gameEffect.shader->SetInt( bd.ByteWidth / sizeof(float) ));
 
 
     // Apply the rendering pass in order to submit the necessary render state changes to the device
