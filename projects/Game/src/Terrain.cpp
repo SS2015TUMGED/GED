@@ -206,6 +206,9 @@ void Terrain::destroy()
 
 	SAFE_RELEASE(heightmap_ShaderResView);
 
+	SAFE_RELEASE(normalmap_ShaderResource);
+
+	SAFE_RELEASE(normalmap_ShaderResView);
     
     
 }

@@ -496,6 +496,11 @@ void CALLBACK OnFrameMove( double fTime, float fElapsedTime, void* pUserContext 
 	// Start with identity matrix
     g_terrainWorld = XMMatrixIdentity();
     
+	// Assignment 05 Scale the terrainworld to the data form the .cfg file	
+	g_terrainWorld *= XMMatrixScaling(parser.getTerrainWidth(), parser.getTerrainHeight(), parser.getTerrainDepth());
+
+
+
     if( g_terrainSpinning ) 
     {
 		// If spinng enabled, rotate the world matrix around the y-axis
@@ -551,6 +556,10 @@ void CALLBACK OnD3D11FrameRender( ID3D11Device* pd3dDevice, ID3D11DeviceContext*
 	V(g_gameEffect.worldEV->SetMatrix( ( float* )&g_terrainWorld ));
 	V(g_gameEffect.worldViewProjectionEV->SetMatrix( ( float* )&worldViewProj ));
 	V(g_gameEffect.lightDirEV->SetFloatVector( ( float* )&g_lightDir ));
+
+	// TODO: Inverse missing
+	V(g_gameEffect.worldNormalsMatrix->SetMatrix((float*) &g_terrainWorld));
+
 
     // Set input layout
     //pd3dImmediateContext->IASetInputLayout( g_terrainVertexLayout );
