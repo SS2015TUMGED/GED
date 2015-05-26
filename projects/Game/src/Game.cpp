@@ -24,6 +24,7 @@
 #include "Terrain.h"
 #include "GameEffect.h"
 #include "ConfigParser.h"
+#include "Mesh.h"
 #include "CustomData.h"
 
 #include "debug.h"
@@ -72,7 +73,7 @@ GameEffect								g_gameEffect; // CPU part of Shader
 // Our Killer Variables
 // ------------------------------------------------------------------------------------
 ConfigParser parser;
-
+Mesh*        g_cockpitMesh = nullptr;
 
 
 //--------------------------------------------------------------------------------------
@@ -107,6 +108,12 @@ void CALLBACK OnD3D11FrameRender( ID3D11Device* pd3dDevice, ID3D11DeviceContext*
 
 void InitApp();
 void RenderText();
+
+// our added functions
+void DeinitApp();
+
+
+
 
 void ReleaseShader();
 HRESULT ReloadShader(ID3D11Device* pd3dDevice);
@@ -167,6 +174,11 @@ int _tmain(int argc, _TCHAR* argv[])
 
     DXUTMainLoop(); // Enter into the DXUT render loop
 
+	// assignment 06
+	DXUTShutdown();
+	DeinitApp();
+
+
     return DXUTGetExitCode();
 }
 
@@ -209,7 +221,33 @@ void InitApp()
     g_sampleUI.SetCallback( OnGUIEvent ); iY = 10;
     iY += 24;
     g_sampleUI.AddCheckBox( IDC_TOGGLESPIN, L"Toggle Spinning", 0, iY += 24, 125, 22, g_terrainSpinning );   
+
+
+	// assignment 06:
+	// create new mesh
+
+	g_cockpitMesh = new Mesh(parser.mesh_texture, parser.mesh_diffuse, parser.mesh_specular, parser.mesh_glow);
+
+
+
+
 }
+
+//****************************************************************************************************
+// **************************************** our methods **********************************************
+//****************************************************************************************************
+
+void DeinitApp(){
+	SAFE_DELETE(g_cockpitMesh);
+}
+
+
+
+
+
+
+
+
 
 //--------------------------------------------------------------------------------------
 // Render the help and statistics text. This function uses the ID3DXFont interface for 
@@ -266,10 +304,23 @@ bool CALLBACK ModifyDeviceSettings( DXUTDeviceSettings* pDeviceSettings, void* p
 HRESULT CALLBACK OnD3D11CreateDevice( ID3D11Device* pd3dDevice,
         const DXGI_SURFACE_DESC* pBackBufferSurfaceDesc, void* pUserContext )
 {
+	
+	
+	
+	
+	
+
+
+
 	UNREFERENCED_PARAMETER(pBackBufferSurfaceDesc);
 	UNREFERENCED_PARAMETER(pUserContext);
 
     HRESULT hr;
+
+	//assignment 06
+	(*g_cockpitMesh).create(pd3dDevice);
+
+
 
     ID3D11DeviceContext* pd3dImmediateContext = DXUTGetD3D11DeviceContext(); // http://msdn.microsoft.com/en-us/library/ff476891%28v=vs.85%29
     V_RETURN( g_dialogResourceManager.OnD3D11CreateDevice( pd3dDevice, pd3dImmediateContext ) );
@@ -307,6 +358,9 @@ HRESULT CALLBACK OnD3D11CreateDevice( ID3D11Device* pd3dDevice,
 	//       Therefore you can adjust the TerrainClass accordingly
 	V_RETURN(g_terrain.create(pd3dDevice));
 
+
+
+
     return S_OK;
 }
 
@@ -328,6 +382,11 @@ void CALLBACK OnD3D11DestroyDevice( void* pUserContext )
 
     SAFE_DELETE( g_txtHelper );
     ReleaseShader();
+
+
+	// assignment 06
+	(*g_cockpitMesh).destroy();
+
 }
 
 //--------------------------------------------------------------------------------------
@@ -363,6 +422,10 @@ HRESULT CALLBACK OnD3D11ResizedSwapChain( ID3D11Device* pd3dDevice, IDXGISwapCha
 	g_camera.SetRotateButtons(true, false, false);
 	g_camera.SetScalers( g_cameraRotateScaler, g_cameraMoveScaler );
 	g_camera.SetDrag( true );
+
+	// assignment 06
+	g_cockpitMesh.destroy();
+
 
     return S_OK;
 }
