@@ -423,9 +423,7 @@ HRESULT CALLBACK OnD3D11ResizedSwapChain( ID3D11Device* pd3dDevice, IDXGISwapCha
 	g_camera.SetScalers( g_cameraRotateScaler, g_cameraMoveScaler );
 	g_camera.SetDrag( true );
 
-	// assignment 06
-	g_cockpitMesh.destroy();
-
+	
 
     return S_OK;
 }
