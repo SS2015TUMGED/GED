@@ -191,16 +191,17 @@ float4 TerrainPS(PosTex Input) : SV_Target0 {
 	// ->       1                      = x*x + y*y + z*z             | -x*x -z*z
 	// ->       1 - x * x  -  z * z    = y*y                         | sqrt()
 	// -> sqrt(1 -  x * x  -  z * z )  = y
-	n.y = sqrt(1 - n.x*n.x - n.z*n.z);
+	n.y	 = sqrt(1 - n.x * n.x - n.z * n.z);
+	
 
 	// transform and normalize 
 	n = normalize(mul(n, g_WorldNormals).xyz); // Assume orthogonal world matrix
-	float i = saturate(dot(n, g_LightDir.xyz));
+	float i = saturate(dot(n, g_LightDir.xyz) + 0.1f);
 
 	// sample diffuse texture
 	float3 matDiffuse = g_Diffuse.Sample(samLinearClamp, Input.Tex);
 
-	return float4(matDiffuse.rgb * i, 1);
+	return float4(matDiffuse.rgb * i, 1.0f);
 }
 
 
