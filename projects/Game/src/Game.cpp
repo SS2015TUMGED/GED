@@ -305,12 +305,6 @@ HRESULT CALLBACK OnD3D11CreateDevice( ID3D11Device* pd3dDevice,
         const DXGI_SURFACE_DESC* pBackBufferSurfaceDesc, void* pUserContext )
 {
 	
-	
-	
-	
-	
-
-
 
 	UNREFERENCED_PARAMETER(pBackBufferSurfaceDesc);
 	UNREFERENCED_PARAMETER(pUserContext);
@@ -319,8 +313,6 @@ HRESULT CALLBACK OnD3D11CreateDevice( ID3D11Device* pd3dDevice,
 
 	//assignment 06
 	(*g_cockpitMesh).create(pd3dDevice);
-
-
 
     ID3D11DeviceContext* pd3dImmediateContext = DXUTGetD3D11DeviceContext(); // http://msdn.microsoft.com/en-us/library/ff476891%28v=vs.85%29
     V_RETURN( g_dialogResourceManager.OnD3D11CreateDevice( pd3dDevice, pd3dImmediateContext ) );
@@ -348,6 +340,12 @@ HRESULT CALLBACK OnD3D11CreateDevice( ID3D11Device* pd3dDevice,
 	// Create the input layout
     D3DX11_PASS_DESC pd;
 	V_RETURN(g_gameEffect.pass0->GetDesc(&pd));
+	
+	//assignment 06
+	D3DX11_PASS_DESC pd2;
+	pd2.pIAInputSignature;
+	Mesh::createInputLayout(pd3dDevice, g_gameEffect.meshPass1);
+	//end assignment 06
 	
 	//V_RETURN( pd3dDevice->CreateInputLayout( layout, numElements, pd.pIAInputSignature,
     //        pd.IAInputSignatureSize, &g_terrainVertexLayout ) );
@@ -387,6 +385,7 @@ void CALLBACK OnD3D11DestroyDevice( void* pUserContext )
 	// assignment 06
 	(*g_cockpitMesh).destroy();
 
+	Mesh::destroyInputLayout();
 }
 
 //--------------------------------------------------------------------------------------

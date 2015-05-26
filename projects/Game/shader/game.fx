@@ -8,6 +8,10 @@ Texture2D		g_NormalMap;
 
 Texture2D		g_Diffuse; // Material albedo for diffuse lighting
 
+//additional for assignment 06
+Texture2D specularEV;
+Texture2D glowEV;
+
 
 //--------------------------------------------------------------------------------------
 // Constant buffers
@@ -27,6 +31,10 @@ cbuffer cbChangesEveryFrame
     matrix  g_World;
     matrix  g_WorldViewProjection;
     float   g_Time;
+
+	//additional for assignment 06
+	float4 cameraPosWorldEV;
+	matrix meshPass1;
 };
 
 cbuffer cbUserChanges
@@ -56,6 +64,22 @@ struct PosTex
 {
 	float4 Pos : SV_POSITION;
 	float2 Tex : TEXCOORD;
+};
+
+//assignment 06
+struct T3dVertexVSIn {
+	float3 Pos : POSITION; //Position in object space 
+	float2 Tex : TEXCOORD; //Texture coordinate 
+	float3 Nor : NORMAL; //Normal in object space 
+	float3 Tan : TANGENT; //Tangent in object space (not used in Ass. 5) 
+}; 
+
+struct T3dVertexPSIn { 
+	float4 Pos : SV_POSITION; //Position in clip space 
+	float2 Tex : TEXCOORD; //Texture coordinate 
+	float3 PosWorld : POSITION; //Position in world space 
+	float3 NorWorld : NORMAL; //Normal in world space 
+	float3 TanWorld : TANGENT; //Tangent in world space (not used in Ass. 5) 
 };
 
 
@@ -204,6 +228,20 @@ float4 TerrainPS(PosTex Input) : SV_Target0 {
 	return float4(matDiffuse.rgb * i, 1.0f);
 }
 
+//assignment 06
+T3dVertexPSIn MeshVS(T3dVertexVSIn Input) {
+	T3dVertexPSIn output = (T3dVertexPSIn)0;
+	output.position = mul(Input.position, g_WorldViewProjection);
+	output.texture = Input.texture;
+	output.position.world = 
+	return output;
+}
+
+float4 MeshPS(T3dVertexPSIn Input) : SV_Target0{
+	return;
+}
+
+
 
 //--------------------------------------------------------------------------------------
 // Techniques
@@ -220,4 +258,15 @@ technique11 Render
         SetDepthStencilState(EnableDepth, 0);
         SetBlendState(NoBlending, float4(0.0f, 0.0f, 0.0f, 0.0f), 0xFFFFFFFF);
     }
+
+	pass P1_Mesh
+	{
+		SetVertexShader(CompileShader(vs_4_0, MeshVS()));
+		SetGeometryShader(NULL);
+		SetPixelShader(CompileShader(ps_4_0, MeshPS()));
+
+		SetRasterizerState(rsCullBack);
+		SetDepthStencilState(EnableDepth, 0);
+		SetBlendState(NoBlending, float4(0.0f, 0.0f, 0.0f, 0.0f), 0xFFFFFFFF);
+	}
 }

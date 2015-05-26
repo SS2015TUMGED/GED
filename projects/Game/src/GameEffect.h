@@ -35,8 +35,13 @@ struct GameEffect
 	ID3DX11EffectShaderResourceVariable*	heightmap;
 	ID3DX11EffectShaderResourceVariable*	normalmap;
 	ID3DX11EffectScalarVariable*			shader;
-	ID3DX11EffectMatrixVariable*			worldNormalsMatrix;
+	ID3DX11EffectMatrixVariable*			worldNormalsMatrix; //in assignment 06 referred as worldNormalsEV
 
+	//added for assignment 06
+	ID3DX11EffectShaderResourceVariable* specularEV;
+	ID3DX11EffectShaderResourceVariable* glowEV;
+	ID3DX11EffectVectorVariable* cameraPosWorldEV;
+	ID3DX11EffectPass* meshPass1;
 
 	GameEffect() { ZeroMemory(this, sizeof(*this)); }		// WARNING: This will set ALL members to 0!
 
@@ -75,6 +80,12 @@ struct GameEffect
 		SAFE_GET_RESOURCE(effect, "g_NormalMap", normalmap);
 		SAFE_GET_SCALAR(effect, "g_TerrainRes", shader);
 		SAFE_GET_MATRIX(effect, "g_WorldNormals", worldNormalsMatrix);
+
+		//assignment 06
+		SAFE_GET_RESOURCE(effect, "specularEV", specularEV);
+		SAFE_GET_RESOURCE(effect, "glowEV", glowEV);
+		SAFE_GET_VECTOR(effect, "cameraPosWorldEV", cameraPosWorldEV);
+		SAFE_GET_PASS(technique, "P1_Mesh", meshPass1);
 
 		return S_OK;
 
