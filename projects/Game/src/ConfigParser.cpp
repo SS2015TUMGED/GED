@@ -76,6 +76,11 @@ void ConfigParser::load(std::string str){
 			else if (word.compare("TerrainHeight") == 0){
 				iss >> terrainHeight;
 			}
+			else if (word.compare("Mesh") == 0){
+				iss >> mesh_indentifier >> mesh_texture >> mesh_diffuse >> mesh_specular >> mesh_glow;
+			}
+
+
 			else {
 				if (!word.empty())
 				std::cout << "Error: unknown Parameter!" << std::endl;
