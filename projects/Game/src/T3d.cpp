@@ -131,6 +131,7 @@ HRESULT T3d::createT3dInputLayout(ID3D11Device* pd3dDevice,
 
 	// Create the input layout
 	D3DX11_PASS_DESC pd;
+	
 	V_RETURN(pass->GetDesc(&pd));
 	V_RETURN( pd3dDevice->CreateInputLayout( layout, numElements, pd.pIAInputSignature,
 			  pd.IAInputSignatureSize, t3dInputLayout ) );

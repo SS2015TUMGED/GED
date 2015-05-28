@@ -314,6 +314,17 @@ HRESULT CALLBACK OnD3D11CreateDevice( ID3D11Device* pd3dDevice,
 	//assignment 06
 	(*g_cockpitMesh).create(pd3dDevice);
 
+	D3DX11_PASS_DESC pd2;
+	pd2.pIAInputSignature;
+
+	// In game.cpp: Create the input layout in OnD3D11CreateDevice() using Mesh::createInputLayout() 
+	// (as pass use g_gameEffect.meshPass1),
+	Mesh::createInputLayout(pd3dDevice, g_gameEffect.meshPass1);
+
+
+
+
+
     ID3D11DeviceContext* pd3dImmediateContext = DXUTGetD3D11DeviceContext(); // http://msdn.microsoft.com/en-us/library/ff476891%28v=vs.85%29
     V_RETURN( g_dialogResourceManager.OnD3D11CreateDevice( pd3dDevice, pd3dImmediateContext ) );
     V_RETURN( g_settingsDlg.OnD3D11CreateDevice( pd3dDevice ) );
@@ -341,11 +352,6 @@ HRESULT CALLBACK OnD3D11CreateDevice( ID3D11Device* pd3dDevice,
     D3DX11_PASS_DESC pd;
 	V_RETURN(g_gameEffect.pass0->GetDesc(&pd));
 	
-	//assignment 06
-	D3DX11_PASS_DESC pd2;
-	pd2.pIAInputSignature;
-	Mesh::createInputLayout(pd3dDevice, g_gameEffect.meshPass1);
-	//end assignment 06
 	
 	//V_RETURN( pd3dDevice->CreateInputLayout( layout, numElements, pd.pIAInputSignature,
     //        pd.IAInputSignatureSize, &g_terrainVertexLayout ) );
@@ -385,6 +391,7 @@ void CALLBACK OnD3D11DestroyDevice( void* pUserContext )
 	// assignment 06
 	(*g_cockpitMesh).destroy();
 
+	// don’t forget to release it in OnD3D11DestroyDevice() by calling Mesh::destroyInputLayout()	
 	Mesh::destroyInputLayout();
 }
 

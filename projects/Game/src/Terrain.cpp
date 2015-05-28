@@ -241,6 +241,19 @@ void Terrain::render(ID3D11DeviceContext* context, ID3DX11EffectPass* pass)
 
 	
 	V(g_gameEffect.shader->SetInt( resolution));
+	
+	// additional light effects
+	// weight of the light
+	V(g_gameEffect.weight->SetFloat(1.0f));
+
+	// the ambientlight color
+	const float ambient_light[3] = { 1.0f, 1.0f, 1.0f };
+	V(g_gameEffect.ambient_light->SetFloatVector(ambient_light));
+
+	// the color of the light
+	const float light_color[3] = { 1.0f, 1.0f, 1.0f };
+	V(g_gameEffect.light_color->SetFloatVector(light_color));
+
 
 
     // Apply the rendering pass in order to submit the necessary render state changes to the device

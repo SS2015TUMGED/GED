@@ -43,6 +43,13 @@ struct GameEffect
 	ID3DX11EffectVectorVariable* cameraPosWorldEV;
 	ID3DX11EffectPass* meshPass1;
 
+	// Additional vars for light control
+	ID3DX11EffectVectorVariable*			light_color;
+	ID3DX11EffectScalarVariable*			weight;
+	ID3DX11EffectVectorVariable*			ambient_light;
+
+
+
 	GameEffect() { ZeroMemory(this, sizeof(*this)); }		// WARNING: This will set ALL members to 0!
 
 
@@ -86,6 +93,11 @@ struct GameEffect
 		SAFE_GET_RESOURCE(effect, "glowEV", glowEV);
 		SAFE_GET_VECTOR(effect, "cameraPosWorldEV", cameraPosWorldEV);
 		SAFE_GET_PASS(technique, "P1_Mesh", meshPass1);
+
+		// additional variables
+		SAFE_GET_SCALAR(effect, "weight", weight);
+		SAFE_GET_VECTOR(effect, "ambient_light", ambient_light);
+
 
 		return S_OK;
 

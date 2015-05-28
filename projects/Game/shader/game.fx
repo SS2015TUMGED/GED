@@ -38,6 +38,10 @@ cbuffer cbChangesEveryFrame
 
 cbuffer cbUserChanges
 {
+	float3	ambient_light;
+	float3	light_color;
+	float	weight;
+	//float	intensity;
 };
 
 
@@ -238,7 +242,11 @@ T3dVertexPSIn MeshVS(T3dVertexVSIn Input) {
 	float4 tmp_PosWorld = mul(float4(Input.Pos, 1.0f) , g_World);
 		output.PosWorld = tmp_PosWorld.xyz * (1 / tmp_PosWorld.w);
 
-//	float4 tmp_Normal = mul(float4(Input.Nor))
+	float4 tmp_Normal = mul(float4(Input.Nor, 0.0f), g_WorldNormals);
+		output.NorWorld = normalize(tmp_Normal);
+
+	float4 tmp_TanWorld = mul(float4(Input.Tan, 0.0f), g_WorldNormals);
+		output.TanWorld = normalize(tmp_TanWorld);
 
 
 
@@ -246,7 +254,39 @@ T3dVertexPSIn MeshVS(T3dVertexVSIn Input) {
 }
 
 float4 MeshPS(T3dVertexPSIn Input) : SV_Target0{
-	return 0;
+	
+	// cd, cs, ca,cg control weighting of individual terms 
+	// try to find the best values!!
+	float c_d, c_s, c_a, c_g;
+	c_d = 0.5f;
+	c_s = 0.4f;
+	c_a = 0.1f;
+	c_g = 0.5f;
+	
+	float3 matDiffuse = g_Diffuse.Sample(samAnisotropic, Input.Tex);
+		float3 matSpecular = specularEV.Sample(samAnisotropic, Input.Tex);
+		float3 natGlow = glowEV.Sample(samAnisotropic, Input.Tex);
+
+		float3 n = normalize(Input.NorWorld);
+		float4 l = g_LightDir;
+		float4 r = reflect((-1)*l, ((n), 1.0f));
+		float4 v = normalize(cameraPosWorldEV - Input.Pos);
+
+
+		// slides
+		float line1;
+	line1 = c_d * matDiffuse * saturate(dot(n, l)) * light_color;
+	float line2 = c_s * matSpecular * pow(saturate(dot(r, v)), weight) * light_color;
+	float line3 = c_a * matDiffuse * light_color;
+	float line4 = c_g * natGlow;
+
+	// I have no idea what I am doing
+
+	//return line1 + line2 + line3 + line4;
+
+	// use until assignment 06 is not complete
+	return g_Diffuse.Sample(samAnisotropic, Input.Tex);
+
 } 
 
 
