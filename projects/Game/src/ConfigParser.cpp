@@ -8,6 +8,10 @@
 std::string ConfigParser::height;
 std::string ConfigParser::color;
 std::string ConfigParser::normal;
+std::string ConfigParser::mesh_indentifier, ConfigParser::mesh_diffuse, 
+ConfigParser::mesh_specular, ConfigParser::mesh_glow, ConfigParser::mesh_texture;
+
+
 
 ConfigParser::ConfigParser()
 {
@@ -58,14 +62,12 @@ void ConfigParser::load(std::string str){
 				iss >> spinSpeed;
 				//std::cout << "spinSpeed " << spinSpeed << std::endl;
 			}
-
 			else if (word.compare("backgroundColor") == 0){
 				iss >> backgroundColor.r >> backgroundColor.g >> backgroundColor.b;
 				//std::cout << color.r << " " << color.g << " " << color.b << std::endl;
 			}
 			else if (word.compare("TerrainPath") == 0){
-				iss >> height >> color >> normal;
-				
+				iss >> height >> color >> normal;	
 			}
 			else if (word.compare("TerrainDepth") == 0){
 				iss >> terrainDepth;
@@ -79,8 +81,6 @@ void ConfigParser::load(std::string str){
 			else if (word.compare("Mesh") == 0){
 				iss >> mesh_indentifier >> mesh_texture >> mesh_diffuse >> mesh_specular >> mesh_glow;
 			}
-
-
 			else {
 				if (!word.empty())
 				std::cout << "Error: unknown Parameter!" << std::endl;

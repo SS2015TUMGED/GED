@@ -27,7 +27,6 @@ cbuffer cbChangesEveryFrame
 {
 
 	matrix  g_WorldNormals;
-
     matrix  g_World;
     matrix  g_WorldViewProjection;
     float   g_Time;
@@ -228,18 +227,27 @@ float4 TerrainPS(PosTex Input) : SV_Target0 {
 	return float4(matDiffuse.rgb * i, 1.0f);
 }
 
-//assignment 06
+
+// *********************************** Assignment 06 ***************************************
 T3dVertexPSIn MeshVS(T3dVertexVSIn Input) {
 	T3dVertexPSIn output = (T3dVertexPSIn)0;
-	output.position = mul(Input.position, g_WorldViewProjection);
-	output.texture = Input.texture;
-	output.position.world = 
-	return output;
+	output.Pos = mul(Input.Pos, g_WorldViewProjection);
+	output.Tex = Input.Tex;
+	
+
+	float4 tmp_PosWorld = mul(float4(Input.Pos, 1.0f) , g_World);
+		output.PosWorld = tmp_PosWorld.xyz * (1 / tmp_PosWorld.w);
+
+//	float4 tmp_Normal = mul(float4(Input.Nor))
+
+
+
+		return output;
 }
 
 float4 MeshPS(T3dVertexPSIn Input) : SV_Target0{
-	return;
-}
+	return 0;
+} 
 
 
 
@@ -268,5 +276,5 @@ technique11 Render
 		SetRasterizerState(rsCullBack);
 		SetDepthStencilState(EnableDepth, 0);
 		SetBlendState(NoBlending, float4(0.0f, 0.0f, 0.0f, 0.0f), 0xFFFFFFFF);
-	}
+	} 
 }

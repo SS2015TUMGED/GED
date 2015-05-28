@@ -135,6 +135,8 @@ exit 1</Command>
     <ClInclude Include="src\FillVertex.h" />
     <ClInclude Include="src\GameEffect.h" />
     <ClInclude Include="src\IndexBuffer.h" />
+    <ClInclude Include="src\Mesh.h" />
+    <ClInclude Include="src\T3d.h" />
     <ClInclude Include="src\Terrain.h" />
   </ItemGroup>
   <ItemGroup>
@@ -142,6 +144,8 @@ exit 1</Command>
     <ClCompile Include="src\FillVertex.cpp" />
     <ClCompile Include="src\Game.cpp" />
     <ClCompile Include="src\IndexBuffer.cpp" />
+    <ClCompile Include="src\Mesh.cpp" />
+    <ClCompile Include="src\T3d.cpp" />
     <ClCompile Include="src\Terrain.cpp" />
   </ItemGroup>
   <ItemGroup>
