@@ -10,7 +10,7 @@ std::string ConfigParser::color;
 std::string ConfigParser::normal;
 std::string ConfigParser::mesh_indentifier, ConfigParser::mesh_diffuse, 
 ConfigParser::mesh_specular, ConfigParser::mesh_glow, ConfigParser::mesh_texture;
-
+bool ConfigParser::terrainSpinning;
 
 
 ConfigParser::ConfigParser()
@@ -77,6 +77,11 @@ void ConfigParser::load(std::string str){
 			}
 			else if (word.compare("TerrainHeight") == 0){
 				iss >> terrainHeight;
+			}
+			else if (word.compare("TerrainSpinning") == 0){
+				std::string tmp;
+				iss >> tmp;
+				terrainSpinning = (tmp.compare("1") == 0);
 			}
 			else if (word.compare("Mesh") == 0){
 				iss >> mesh_indentifier >> mesh_texture >> mesh_diffuse >> mesh_specular >> mesh_glow;

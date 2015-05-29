@@ -199,8 +199,12 @@ void InitApp()
 
 
 	// load the config file
-	
 	parser.load(pathA);
+	
+	// ************************** Assignment 06 ***************************
+	// Set g_terrainSpinning to 0 (= disable spinning by default). You could also add this to your config. 
+	// apply terrainSpinning from the parser
+	g_terrainSpinning = parser.terrainSpinning;
 
 
     // Intialize the user interface
@@ -223,9 +227,8 @@ void InitApp()
     g_sampleUI.AddCheckBox( IDC_TOGGLESPIN, L"Toggle Spinning", 0, iY += 24, 125, 22, g_terrainSpinning );   
 
 
-	// assignment 06:
+	// ************************************* Assignment 06 ****************************************************
 	// create new mesh
-
 	g_cockpitMesh = new Mesh(parser.mesh_texture, parser.mesh_diffuse, parser.mesh_specular, parser.mesh_glow);
 
 
@@ -311,7 +314,8 @@ HRESULT CALLBACK OnD3D11CreateDevice( ID3D11Device* pd3dDevice,
 
     HRESULT hr;
 
-	//assignment 06
+	// *************************** Assignment 06 ******************************************
+	// In game.cpp: In OnD3D11CreateDevice() call the create() method of g_CockpitMesh
 	(*g_cockpitMesh).create(pd3dDevice);
 
 	D3DX11_PASS_DESC pd2;
@@ -334,10 +338,24 @@ HRESULT CALLBACK OnD3D11CreateDevice( ID3D11Device* pd3dDevice,
     
     
     // Initialize the camera
-	XMVECTOR vEye = XMVectorSet(0.0f, 400.0f, -500.0f, 0.0f);   // Camera eye is here
+	
+	// ************************************************** Assignment 06
+	// In game.cpp: In OnD3D11CreateDevice(), search for the part where the camera g_camera is initialized. 
+	// Change the parameter Eye to be in the center of the terrain, i.e. set Eye.x and Eye.z to 0, and set Eye.y to an appropriate value 
+	// depending on your heightfield (Hint: move  the camera initialization 
+	// code to after the position where the heightfield is read; also the terrainHeight read from game.cfg might help). 
+
+	XMVECTOR vEye = XMVectorSet(0.0f, (parser.getTerrainHeight() / 2.0f) , 0.0f, 0.0f);   // Camera eye is here
     XMVECTOR vAt = XMVectorSet(0.0f, 0.0f, 0.0f, 1.0f);               // ... facing at this position
     g_camera.SetViewParams(vEye, vAt); // http://msdn.microsoft.com/en-us/library/windows/desktop/bb206342%28v=vs.85%29.aspx
 	g_camera.SetScalers(g_cameraRotateScaler, g_cameraMoveScaler);
+
+
+
+
+
+
+
 
 	// Define the input layout
 	const D3D11_INPUT_ELEMENT_DESC layout[] = // http://msdn.microsoft.com/en-us/library/bb205117%28v=vs.85%29.aspx
@@ -424,7 +442,13 @@ HRESULT CALLBACK OnD3D11ResizedSwapChain( ID3D11Device* pd3dDevice, IDXGISwapCha
     g_cameraParams.farPlane = 5000.f;
 
     g_camera.SetProjParams(g_cameraParams.fovy, g_cameraParams.aspect, g_cameraParams.nearPlane, g_cameraParams.farPlane);
-	g_camera.SetEnablePositionMovement(true);
+	
+	// ********************************************* Assignment 06 *************************************************************
+	// In game.cpp: Search for other occurrences of g_camera and disable the position movement of the camera
+	g_camera.SetEnablePositionMovement(false);
+
+
+
 	g_camera.SetRotateButtons(true, false, false);
 	g_camera.SetScalers( g_cameraRotateScaler, g_cameraMoveScaler );
 	g_camera.SetDrag( true );
