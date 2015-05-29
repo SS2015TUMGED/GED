@@ -158,6 +158,7 @@ HRESULT Mesh::render(ID3D11DeviceContext* context, ID3DX11EffectPass* pass,
 
 	V(pass->Apply(0, context));
 
+	
 	context->DrawIndexed(indexCount, 0, 0);
 
 	return S_OK;

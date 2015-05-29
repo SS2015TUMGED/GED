@@ -620,15 +620,73 @@ void CALLBACK OnD3D11FrameRender( ID3D11Device* pd3dDevice, ID3D11DeviceContext*
     XMMATRIX const view = g_camera.GetViewMatrix(); // http://msdn.microsoft.com/en-us/library/windows/desktop/bb206342%28v=vs.85%29.aspx
     XMMATRIX const proj = g_camera.GetProjMatrix(); // http://msdn.microsoft.com/en-us/library/windows/desktop/bb147302%28v=vs.85%29.aspx
     XMMATRIX worldViewProj = g_terrainWorld * view * proj;
-	V(g_gameEffect.worldEV->SetMatrix( ( float* )&g_terrainWorld ));
-	V(g_gameEffect.worldViewProjectionEV->SetMatrix( ( float* )&worldViewProj ));
-	V(g_gameEffect.lightDirEV->SetFloatVector( ( float* )&g_lightDir ));
+	
+
+	// ************************ Assignment 06 ****************************
+
+	//Create the transformation matrices for the cockpit mesh and set the corresponding effect variables of g_gameEffect: 
+	
+	// vars for the transformation
+	XMMATRIX mTrans, mScale, mRot;
+
+	// tmp vars for the transfomation matrices
+	XMMATRIX tmp_worldEV, tmp_worldViewProjectionEV;
+
+	// slides 06 page 12
+	// For the cockpit mesh: rotation angle = 180°, translation = (0, -16, 42), scaling = (0.05, 0.05, 0.05). 
+
+	// set the rotation matrix
+	//               convert degree to radian
+	//               radian     = degree * pi / 180;
+	//         =>    degree     = 180
+	//         =>    radians    = 180 / 180 * pi
+	//         =>    radians    = pi
+	// https://msdn.microsoft.com/en-us/library/windows/desktop/microsoft.directx_sdk.matrix.xmmatrixrotationy%28v=vs.85%29.aspx
+	mRot = XMMatrixRotationY(XM_PI);
+	
+	// set translation matrix with 0,-16,42 as given in the slides
+	// https://msdn.microsoft.com/en-us/library/windows/desktop/microsoft.directx_sdk.matrix.xmmatrixtranslation%28v=vs.85%29.aspx
+	mTrans = XMMatrixTranslation(0.0f, (-16.0f), 42.0f);
+
+	// set the scale matrix
+	mScale = XMMatrixScaling(0.05f, 0.05f, 0.05f);
+
+	// apply transformation as given in the slides
+	tmp_worldEV               = mRot * mTrans * mScale * g_camera.GetWorldMatrix();
+	tmp_worldViewProjectionEV = tmp_worldEV * g_camera.GetWorldMatrix() * g_camera.GetProjMatrix();
+
+	// apply the tmp vars
+	V(g_gameEffect.worldEV->SetMatrix((float*) &tmp_worldEV));
+	V(g_gameEffect.worldViewProjectionEV->SetMatrix((float*) &tmp_worldViewProjectionEV));
+	    /*
+		// A 05
+		V(g_gameEffect.worldEV->SetMatrix( ( float* )&g_terrainWorld ));
+		V(g_gameEffect.worldViewProjectionEV->SetMatrix( ( float* )&worldViewProj ));
+		V(g_gameEffect.lightDirEV->SetFloatVector( ( float* )&g_lightDir ));
+        */
 
 	// get the inverse transposed matrix for g_terrainWorld
 	V(g_gameEffect.worldNormalsMatrix->SetMatrix((float*) &XMMatrixTranspose(XMMatrixInverse(nullptr, g_terrainWorld))));
 
-    // Set input layout
-    //pd3dImmediateContext->IASetInputLayout( g_terrainVertexLayout );
+	// Set the effect variable g_gameEffect.cameraPosWorldEV to the camera position in world 
+	// space. For this you can use the value from g_camera.GetEyePt()
+	V(g_gameEffect.cameraPosWorldEV->SetFloatVector((float*)&g_camera.GetEyePt()));
+
+	//Now call the g_cockpitMesh->render() method from OnD3D11FrameRender(). 
+	(*g_cockpitMesh).render(pd3dImmediateContext, g_gameEffect.pass0,g_gameEffect.diffuseEV, g_gameEffect.specularEV, g_gameEffect.glowEV);
+
+
+
+		// Set input layout
+	    //pd3dImmediateContext->IASetInputLayout( g_terrainVertexLayout );
+
+
+	
+
+
+
+	// ************************* End A06 *********************************
+
 
 	g_terrain.render(pd3dImmediateContext, g_gameEffect.pass0);
     

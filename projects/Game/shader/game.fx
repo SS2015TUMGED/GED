@@ -263,7 +263,7 @@ float4 MeshPS(T3dVertexPSIn Input) : SV_Target0{
 	c_a = 0.1f;
 	c_g = 0.5f;
 	
-	float3 matDiffuse = g_Diffuse.Sample(samAnisotropic, Input.Tex);
+		float3 matDiffuse = g_Diffuse.Sample(samAnisotropic, Input.Tex);
 		float3 matSpecular = specularEV.Sample(samAnisotropic, Input.Tex);
 		float3 natGlow = glowEV.Sample(samAnisotropic, Input.Tex);
 
@@ -306,7 +306,7 @@ technique11 Render
         SetDepthStencilState(EnableDepth, 0);
         SetBlendState(NoBlending, float4(0.0f, 0.0f, 0.0f, 0.0f), 0xFFFFFFFF);
     }
-
+	
 	pass P1_Mesh
 	{
 		SetVertexShader(CompileShader(vs_4_0, MeshVS()));
