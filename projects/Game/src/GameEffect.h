@@ -97,6 +97,7 @@ struct GameEffect
 		// additional variables
 		SAFE_GET_SCALAR(effect, "weight", weight);
 		SAFE_GET_VECTOR(effect, "ambient_light", ambient_light);
+		SAFE_GET_VECTOR(effect, "light_color", light_color);
 
 
 		return S_OK;

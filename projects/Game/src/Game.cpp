@@ -150,7 +150,6 @@ int _tmain(int argc, _TCHAR* argv[])
         exit(-1);
     }*/
 
-
     // Set DXUT callbacks
     DXUTSetCallbackMsgProc( MsgProc );
     DXUTSetCallbackKeyboard( OnKeyboard );
@@ -321,9 +320,7 @@ HRESULT CALLBACK OnD3D11CreateDevice( ID3D11Device* pd3dDevice,
 	D3DX11_PASS_DESC pd2;
 	pd2.pIAInputSignature;
 
-	// In game.cpp: Create the input layout in OnD3D11CreateDevice() using Mesh::createInputLayout() 
-	// (as pass use g_gameEffect.meshPass1),
-	Mesh::createInputLayout(pd3dDevice, g_gameEffect.meshPass1);
+	
 
 
 
@@ -336,6 +333,10 @@ HRESULT CALLBACK OnD3D11CreateDevice( ID3D11Device* pd3dDevice,
 
     V_RETURN( ReloadShader(pd3dDevice) );
     
+	// In game.cpp: Create the input layout in OnD3D11CreateDevice() using Mesh::createInputLayout() 
+	// (as pass use g_gameEffect.meshPass1),
+	Mesh::createInputLayout(pd3dDevice, g_gameEffect.meshPass1);
+
     
     // Initialize the camera
 	
@@ -345,7 +346,7 @@ HRESULT CALLBACK OnD3D11CreateDevice( ID3D11Device* pd3dDevice,
 	// depending on your heightfield (Hint: move  the camera initialization 
 	// code to after the position where the heightfield is read; also the terrainHeight read from game.cfg might help). 
 
-	XMVECTOR vEye = XMVectorSet(0.0f, (parser.getTerrainHeight() / 2.0f) , 0.0f, 0.0f);   // Camera eye is here
+	XMVECTOR vEye = XMVectorSet(0.0f, 400.0f, -500.0f, 0.0f);   // Camera eye is here
     XMVECTOR vAt = XMVectorSet(0.0f, 0.0f, 0.0f, 1.0f);               // ... facing at this position
     g_camera.SetViewParams(vEye, vAt); // http://msdn.microsoft.com/en-us/library/windows/desktop/bb206342%28v=vs.85%29.aspx
 	g_camera.SetScalers(g_cameraRotateScaler, g_cameraMoveScaler);

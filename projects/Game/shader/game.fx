@@ -282,10 +282,10 @@ float4 MeshPS(T3dVertexPSIn Input) : SV_Target0{
 
 	// I have no idea what I am doing
 
-	//return line1 + line2 + line3 + line4;
+	return line1 + line2 + line3 + line4;
 
 	// use until assignment 06 is not complete
-	return g_Diffuse.Sample(samAnisotropic, Input.Tex);
+	//return g_Diffuse.Sample(samAnisotropic, Input.Tex);
 
 } 
 
