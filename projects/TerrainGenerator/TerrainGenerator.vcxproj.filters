@@ -45,6 +45,9 @@
     <ClInclude Include="2DAControl.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
+    <ClInclude Include="SimplexNoise.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -66,6 +69,9 @@
       <Filter>Quelldateien</Filter>
     </ClCompile>
     <ClCompile Include="Smoothing.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
+    <ClCompile Include="SimplexNoise.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
   </ItemGroup>

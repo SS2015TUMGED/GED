@@ -17,9 +17,11 @@
 #include "HeightfieldDownsizing.h"
 #include "Smoothing.h"
 #include "2DAControl.h"
+#include "SimplexNoise.h"
 
 //declare the random number generator
 std::default_random_engine DiamondSquare::rng;
+std::default_random_engine SimplexNoise::rng;
 
 void printArray2D(std::vector<float> &array2D_, int width_, int height_){
 	int ypos_;
@@ -130,11 +132,12 @@ int _tmain(int argc, _TCHAR* argv[])
 #pragma endregion
 
 #pragma region Random Number Generation
-			int seed = time(NULL);
+			int seed = (int) time(NULL);
 			cout << "seed: " << seed << endl << endl;
 
 			//seed the rng
 			DiamondSquare::rng.seed(seed);
+			SimplexNoise::rng.seed(seed);
 #pragma endregion
 
 
@@ -144,19 +147,23 @@ int _tmain(int argc, _TCHAR* argv[])
 			static int height = param2;
 
 			//creating new array
-			vector<float> *vec = new vector<float>((width + 1) * (height + 1));
+			vector<float> *vec = new vector<float>((width + 0) * (height + 0));
 
-			cout << endl << "Jetzt der DiamondSquare" << endl;
-			DiamondSquare::diamondSquareAlgorithm(*vec, width + 1);
+			cout << "\nSimplexNoise, BIATCHES! \n";
+			SimplexNoise::simplex(*vec, width  );
+
+			//system("pause");
+			//cout << endl << "Jetzt der DiamondSquare" << endl;
+			//DiamondSquare::diamondSquareAlgorithm(*vec, width + 1);
 
 			//cutting the boundrys
-			vec = DiamondSquare::CutBoundarys(*vec);
+			//vec = DiamondSquare::CutBoundarys(*vec);
 
 			//smoothing the vector
 
 			//faster
-			Smoothing::anotherSimpleSmoothing(*vec, width, 40, 12);
-			Smoothing::squareSmoothing_nTimes(*vec, width, height, 50);
+			//Smoothing::anotherSimpleSmoothing(*vec, width, 40, 12);
+			Smoothing::squareSmoothing_nTimes(*vec, width, height, 2);
 
 			/*
 			//Slower, more realistic

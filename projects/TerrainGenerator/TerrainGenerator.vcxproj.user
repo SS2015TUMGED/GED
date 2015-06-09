@@ -5,7 +5,7 @@
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <LocalDebuggerCommandArguments>-r 1024 -o_height terrain_height.tiff -o_color terrain_color.tiff -o_normal terrain_normal.tiff</LocalDebuggerCommandArguments>
+    <LocalDebuggerCommandArguments>-r 4096 -o_height terrain_height.tiff -o_color terrain_color.tiff -o_normal terrain_normal.tiff</LocalDebuggerCommandArguments>
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
   </PropertyGroup>
 </Project>

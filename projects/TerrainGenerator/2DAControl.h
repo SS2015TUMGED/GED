@@ -1,5 +1,6 @@
 #pragma once
 
+#include "SimpleImage.h"
 
 // Access a 2D array of width w at position x / y 
 #define IDX(xpos, ypos, width) ((xpos) + (ypos) * (width))
@@ -22,6 +23,18 @@ namespace bestGroup{
 
 		Vec2f(int x, int y) : x(x), y(y) {}
 		Vec2f() : x(0), y(0) {}
+	};
+
+	struct Tex{
+		GEDUtils::SimpleImage image;
+		std::string name;
+		float alpha;
+		float height;
+		float slope;
+
+		Tex(GEDUtils::SimpleImage &image, std::string name, float alpha, float height, float slope) : 
+			image(image), name(name), alpha(alpha), height(height), slope(slope) {}
+
 	};
 };
 
