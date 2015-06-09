@@ -274,8 +274,7 @@ float4 MeshPS(T3dVertexPSIn Input) : SV_Target0{
 
 
 		// slides
-		float line1;
-	line1 = c_d * matDiffuse * saturate(dot(n, l)) * light_color;
+		float line1 = c_d * matDiffuse * saturate(dot(n, l)) * light_color;
 	float line2 = c_s * matSpecular * pow(saturate(dot(r, v)), weight) * light_color;
 	float line3 = c_a * matDiffuse * light_color;
 	float line4 = c_g * natGlow;

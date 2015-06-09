@@ -315,15 +315,10 @@ HRESULT CALLBACK OnD3D11CreateDevice( ID3D11Device* pd3dDevice,
 
 	// *************************** Assignment 06 ******************************************
 	// In game.cpp: In OnD3D11CreateDevice() call the create() method of g_CockpitMesh
-	(*g_cockpitMesh).create(pd3dDevice);
+	g_cockpitMesh->create(pd3dDevice);
 
 	D3DX11_PASS_DESC pd2;
 	pd2.pIAInputSignature;
-
-	
-
-
-
 
 
     ID3D11DeviceContext* pd3dImmediateContext = DXUTGetD3D11DeviceContext(); // http://msdn.microsoft.com/en-us/library/ff476891%28v=vs.85%29
@@ -346,7 +341,7 @@ HRESULT CALLBACK OnD3D11CreateDevice( ID3D11Device* pd3dDevice,
 	// depending on your heightfield (Hint: move  the camera initialization 
 	// code to after the position where the heightfield is read; also the terrainHeight read from game.cfg might help). 
 
-	XMVECTOR vEye = XMVectorSet(0.0f, 400.0f, -500.0f, 0.0f);   // Camera eye is here
+	XMVECTOR vEye = XMVectorSet(0.0f, 100.0f, -200.0f, 0.0f);   // Camera eye is here
     XMVECTOR vAt = XMVectorSet(0.0f, 0.0f, 0.0f, 1.0f);               // ... facing at this position
     g_camera.SetViewParams(vEye, vAt); // http://msdn.microsoft.com/en-us/library/windows/desktop/bb206342%28v=vs.85%29.aspx
 	g_camera.SetScalers(g_cameraRotateScaler, g_cameraMoveScaler);
@@ -544,6 +539,21 @@ void CALLBACK OnKeyboard( UINT nChar, bool bKeyDown, bool bAltDown, void* pUserC
 	UNREFERENCED_PARAMETER(bKeyDown);
 	UNREFERENCED_PARAMETER(bAltDown);
 	UNREFERENCED_PARAMETER(pUserContext);
+
+	// **************************** Assignment 06 ***************************************
+	// In game.cpp: For debugging purposes, you still might want to be able to 
+	// “fly around”. One possibility to achieve this is binding a hotkey that re-enables
+	// the camera movement when pressed. To do so, add a similar line to OnKeyboard(): 
+	// Enable position movement when the C-key is pressed if (nChar=='C' && bKeyDown)
+	// { /* enable position movement here */ } 
+
+	//Enable position movement when the C-key is pressed 
+	if (nChar=='C' && bKeyDown) 
+	{ 
+		g_camera.SetEnablePositionMovement(true);
+
+		} 
+
 }
 
 //--------------------------------------------------------------------------------------
@@ -642,9 +652,13 @@ void CALLBACK OnD3D11FrameRender( ID3D11Device* pd3dDevice, ID3D11DeviceContext*
     pd3dImmediateContext->ClearDepthStencilView( pDSV, D3D11_CLEAR_DEPTH, 1.0, 0 );
     
     // Update variables that change once per frame
-    XMMATRIX const view = g_camera.GetViewMatrix(); // http://msdn.microsoft.com/en-us/library/windows/desktop/bb206342%28v=vs.85%29.aspx
-    XMMATRIX const proj = g_camera.GetProjMatrix(); // http://msdn.microsoft.com/en-us/library/windows/desktop/bb147302%28v=vs.85%29.aspx
-    XMMATRIX worldViewProj = g_terrainWorld * view * proj;
+    XMMATRIX const view = g_camera.GetViewMatrix(); 
+	// http://msdn.microsoft.com/en-us/library/windows/desktop/bb206342%28v=vs.85%29.aspx
+    
+	XMMATRIX const proj = g_camera.GetProjMatrix(); 
+	// http://msdn.microsoft.com/en-us/library/windows/desktop/bb147302%28v=vs.85%29.aspx
+   
+	XMMATRIX worldViewProj = g_terrainWorld * view * proj;
 	
 
 	// ************************ Assignment 06 ****************************
@@ -683,12 +697,14 @@ void CALLBACK OnD3D11FrameRender( ID3D11Device* pd3dDevice, ID3D11DeviceContext*
 	// apply the tmp vars
 	V(g_gameEffect.worldEV->SetMatrix((float*) &tmp_worldEV));
 	V(g_gameEffect.worldViewProjectionEV->SetMatrix((float*) &tmp_worldViewProjectionEV));
-	    /*
+	   
+		/*
 		// A 05
 		V(g_gameEffect.worldEV->SetMatrix( ( float* )&g_terrainWorld ));
 		V(g_gameEffect.worldViewProjectionEV->SetMatrix( ( float* )&worldViewProj ));
-		V(g_gameEffect.lightDirEV->SetFloatVector( ( float* )&g_lightDir ));
+		
         */
+	V(g_gameEffect.lightDirEV->SetFloatVector((float*)&g_lightDir));
 
 	// get the inverse transposed matrix for g_terrainWorld
 	V(g_gameEffect.worldNormalsMatrix->SetMatrix((float*) &XMMatrixTranspose(XMMatrixInverse(nullptr, g_terrainWorld))));
@@ -698,7 +714,7 @@ void CALLBACK OnD3D11FrameRender( ID3D11Device* pd3dDevice, ID3D11DeviceContext*
 	V(g_gameEffect.cameraPosWorldEV->SetFloatVector((float*)&g_camera.GetEyePt()));
 
 	//Now call the g_cockpitMesh->render() method from OnD3D11FrameRender(). 
-	(*g_cockpitMesh).render(pd3dImmediateContext, g_gameEffect.pass0,g_gameEffect.diffuseEV, g_gameEffect.specularEV, g_gameEffect.glowEV);
+	g_cockpitMesh->render(pd3dImmediateContext, g_gameEffect.meshPass1,g_gameEffect.diffuseEV, g_gameEffect.specularEV, g_gameEffect.glowEV);
 
 
 
@@ -711,6 +727,7 @@ void CALLBACK OnD3D11FrameRender( ID3D11Device* pd3dDevice, ID3D11DeviceContext*
 
 
 	// ************************* End A06 *********************************
+	V(g_gameEffect.worldViewProjectionEV->SetMatrix( ( float* )&worldViewProj ));
 
 
 	g_terrain.render(pd3dImmediateContext, g_gameEffect.pass0);
