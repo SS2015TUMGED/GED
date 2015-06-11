@@ -21,26 +21,36 @@ ConfigParser::~ConfigParser()
 }
 
 void ConfigParser::load(std::string str){
+
+	using namespace std;
 	
 	// to read the values  
 	int skip = 0;
 
 	// stream to read file
-	std::ifstream ifs(str);
+	ifstream ifs(str);
 
 
-	std::string tmp_terrainPath;
+	string tmp_terrainPath;
 
 	// check if file is open
 	if (ifs.is_open()){
-		std::cout << "file is open" << std::endl;
+		cout << "file is open" << endl;
 		
 		// string for line
-		std::string line;
+		string line;
 		
 		// string for the first word in the line
-		std::string word;
+		string word;
 
+		string dir;
+#ifdef _DEBUG
+		// program is in the Debug configuration
+		dir = "..\\..\\Debug";
+#else
+		// program is in the Release configuration
+		dir = "..\\..\\Release";
+#endif
 
 		int i = 0;
 
@@ -50,7 +60,7 @@ void ConfigParser::load(std::string str){
 
 
 			//get the components in the line
-			std::istringstream iss(line);
+			istringstream iss(line);
 			iss >> word;
 
 			if (word.compare("spinning") == 0){
@@ -67,7 +77,10 @@ void ConfigParser::load(std::string str){
 				//std::cout << color.r << " " << color.g << " " << color.b << std::endl;
 			}
 			else if (word.compare("TerrainPath") == 0){
-				iss >> height >> color >> normal;	
+				iss >> height >> color >> normal;
+				height = dir + height;
+				color = dir + color;
+				normal = dir + normal;
 			}
 			else if (word.compare("TerrainDepth") == 0){
 				iss >> terrainDepth;
@@ -79,16 +92,21 @@ void ConfigParser::load(std::string str){
 				iss >> terrainHeight;
 			}
 			else if (word.compare("TerrainSpinning") == 0){
-				std::string tmp;
+				string tmp;
 				iss >> tmp;
 				terrainSpinning = (tmp.compare("1") == 0);
 			}
 			else if (word.compare("Mesh") == 0){
 				iss >> mesh_indentifier >> mesh_texture >> mesh_diffuse >> mesh_specular >> mesh_glow;
+				mesh_indentifier = dir + mesh_indentifier;
+				mesh_texture = dir + mesh_texture;
+				mesh_diffuse = dir + mesh_diffuse;
+				mesh_specular = dir + mesh_specular;
+				mesh_glow = dir + mesh_glow;
 			}
 			else {
 				if (!word.empty())
-				std::cout << "Error: unknown Parameter!" << std::endl;
+				cout << "Error: unknown Parameter!" << endl;
 			}
 			//empty word
 			word = "";
@@ -98,10 +116,10 @@ void ConfigParser::load(std::string str){
 	ifs.close();
 	if (!ifs.is_open())
 	{
-		std::cout << "file closed...OK" << std::endl << std::endl;
+		cout << "file closed...OK" << endl << endl;
 	}
 	else
-		std::cout << "Error: file not closed!" << std::endl;
+		cout << "Error: file not closed!" << endl;
 }
 
 
