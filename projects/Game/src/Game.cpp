@@ -681,7 +681,7 @@ void CALLBACK OnD3D11FrameRender( ID3D11Device* pd3dDevice, ID3D11DeviceContext*
 	//         =>    radians    = 180 / 180 * pi
 	//         =>    radians    = pi
 	// https://msdn.microsoft.com/en-us/library/windows/desktop/microsoft.directx_sdk.matrix.xmmatrixrotationy%28v=vs.85%29.aspx
-	mRot = XMMatrixRotationY(XM_PI);
+	mRot = XMMatrixRotationRollPitchYaw(0, XM_PI, 0);
 	
 	// set translation matrix with 0,-16,42 as given in the slides
 	// https://msdn.microsoft.com/en-us/library/windows/desktop/microsoft.directx_sdk.matrix.xmmatrixtranslation%28v=vs.85%29.aspx
@@ -691,8 +691,8 @@ void CALLBACK OnD3D11FrameRender( ID3D11Device* pd3dDevice, ID3D11DeviceContext*
 	mScale = XMMatrixScaling(0.05f, 0.05f, 0.05f);
 
 	// apply transformation as given in the slides
-	tmp_worldEV               = mRot * mTrans * mScale * g_camera.GetWorldMatrix();
-	tmp_worldViewProjectionEV = tmp_worldEV * g_camera.GetWorldMatrix() * g_camera.GetProjMatrix();
+	tmp_worldEV = mRot * mTrans * mScale *g_camera.GetWorldMatrix();
+	tmp_worldViewProjectionEV = tmp_worldEV * g_camera.GetViewMatrix() * g_camera.GetProjMatrix();
 
 	// apply the tmp vars
 	V(g_gameEffect.worldEV->SetMatrix((float*) &tmp_worldEV));

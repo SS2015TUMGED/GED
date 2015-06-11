@@ -239,14 +239,14 @@ T3dVertexPSIn MeshVS(T3dVertexVSIn Input) {
 	output.Tex = Input.Tex;
 	
 
-	float4 tmp_PosWorld = mul(float4(Input.Pos, 1.0f) , g_World);
+	/*float4 tmp_PosWorld = mul(float4(Input.Pos, 1.0f) , g_World);
 		output.PosWorld = tmp_PosWorld.xyz * (1 / tmp_PosWorld.w);
 
 	float4 tmp_Normal = mul(float4(Input.Nor, 0.0f), g_WorldNormals);
 		output.NorWorld = normalize(tmp_Normal);
 
 	float4 tmp_TanWorld = mul(float4(Input.Tan, 0.0f), g_WorldNormals);
-		output.TanWorld = normalize(tmp_TanWorld);
+		output.TanWorld = normalize(tmp_TanWorld);*/
 
 
 
