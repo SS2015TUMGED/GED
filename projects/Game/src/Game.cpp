@@ -230,7 +230,7 @@ void InitApp()
 	// create new mesh
 	g_cockpitMesh = new Mesh(parser.mesh_texture, parser.mesh_diffuse, parser.mesh_specular, parser.mesh_glow);
 
-
+	
 
 
 }
@@ -313,10 +313,6 @@ HRESULT CALLBACK OnD3D11CreateDevice( ID3D11Device* pd3dDevice,
 
     HRESULT hr;
 
-	// *************************** Assignment 06 ******************************************
-	// In game.cpp: In OnD3D11CreateDevice() call the create() method of g_CockpitMesh
-	g_cockpitMesh->create(pd3dDevice);
-
 	D3DX11_PASS_DESC pd2;
 	pd2.pIAInputSignature;
 
@@ -341,7 +337,7 @@ HRESULT CALLBACK OnD3D11CreateDevice( ID3D11Device* pd3dDevice,
 	// depending on your heightfield (Hint: move  the camera initialization 
 	// code to after the position where the heightfield is read; also the terrainHeight read from game.cfg might help). 
 
-	XMVECTOR vEye = XMVectorSet(0.0f, 100.0f, -200.0f, 0.0f);   // Camera eye is here
+	XMVECTOR vEye = XMVectorSet(0.0f, 200.0f, 1.0f, 0.0f);   // Camera eye is here
     XMVECTOR vAt = XMVectorSet(0.0f, 0.0f, 0.0f, 1.0f);               // ... facing at this position
     g_camera.SetViewParams(vEye, vAt); // http://msdn.microsoft.com/en-us/library/windows/desktop/bb206342%28v=vs.85%29.aspx
 	g_camera.SetScalers(g_cameraRotateScaler, g_cameraMoveScaler);
@@ -377,6 +373,9 @@ HRESULT CALLBACK OnD3D11CreateDevice( ID3D11Device* pd3dDevice,
 	V_RETURN(g_terrain.create(pd3dDevice));
 
 
+	// *************************** Assignment 06 ******************************************
+	// In game.cpp: In OnD3D11CreateDevice() call the create() method of g_CockpitMesh
+	g_cockpitMesh->create(pd3dDevice);
 
 
     return S_OK;
@@ -401,12 +400,11 @@ void CALLBACK OnD3D11DestroyDevice( void* pUserContext )
     SAFE_DELETE( g_txtHelper );
     ReleaseShader();
 
-
-	// assignment 06
-	(*g_cockpitMesh).destroy();
-
 	// don’t forget to release it in OnD3D11DestroyDevice() by calling Mesh::destroyInputLayout()	
 	Mesh::destroyInputLayout();
+	// assignment 06
+	g_cockpitMesh->destroy();
+
 }
 
 //--------------------------------------------------------------------------------------
@@ -696,7 +694,6 @@ void CALLBACK OnD3D11FrameRender( ID3D11Device* pd3dDevice, ID3D11DeviceContext*
 
 	// apply the tmp vars
 	V(g_gameEffect.worldEV->SetMatrix((float*) &tmp_worldEV));
-	V(g_gameEffect.worldViewProjectionEV->SetMatrix((float*) &tmp_worldViewProjectionEV));
 	   
 		/*
 		// A 05
@@ -712,9 +709,6 @@ void CALLBACK OnD3D11FrameRender( ID3D11Device* pd3dDevice, ID3D11DeviceContext*
 	// Set the effect variable g_gameEffect.cameraPosWorldEV to the camera position in world 
 	// space. For this you can use the value from g_camera.GetEyePt()
 	V(g_gameEffect.cameraPosWorldEV->SetFloatVector((float*)&g_camera.GetEyePt()));
-
-	//Now call the g_cockpitMesh->render() method from OnD3D11FrameRender(). 
-	g_cockpitMesh->render(pd3dImmediateContext, g_gameEffect.meshPass1,g_gameEffect.diffuseEV, g_gameEffect.specularEV, g_gameEffect.glowEV);
 
 
 
@@ -732,6 +726,12 @@ void CALLBACK OnD3D11FrameRender( ID3D11Device* pd3dDevice, ID3D11DeviceContext*
 
 	g_terrain.render(pd3dImmediateContext, g_gameEffect.pass0);
     
+	V(g_gameEffect.worldViewProjectionEV->SetMatrix((float*)&tmp_worldViewProjectionEV));
+
+	//Now call the g_cockpitMesh->render() method from OnD3D11FrameRender(). 
+	g_cockpitMesh->render(pd3dImmediateContext, g_gameEffect.meshPass1, g_gameEffect.diffuseEV, g_gameEffect.specularEV, g_gameEffect.glowEV);
+
+
     DXUT_BeginPerfEvent( DXUT_PERFEVENTCOLOR, L"HUD / Stats" );
     V(g_hud.OnRender( fElapsedTime ));
     V(g_sampleUI.OnRender( fElapsedTime ));

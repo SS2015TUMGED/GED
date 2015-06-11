@@ -235,22 +235,19 @@ float4 TerrainPS(PosTex Input) : SV_Target0 {
 // *********************************** Assignment 06 ***************************************
 T3dVertexPSIn MeshVS(T3dVertexVSIn Input) {
 	T3dVertexPSIn output = (T3dVertexPSIn)0;
-	output.Pos = mul(Input.Pos, g_WorldViewProjection);
+	output.Pos = mul(float4(Input.Pos, 1.0f), g_WorldViewProjection);
 	output.Tex = Input.Tex;
-	
 
-	/*float4 tmp_PosWorld = mul(float4(Input.Pos, 1.0f) , g_World);
-		output.PosWorld = tmp_PosWorld.xyz * (1 / tmp_PosWorld.w);
+	float4 tmp_PosWorld = mul(float4(Input.Pos, 1.0f) , g_World);
+		output.PosWorld = tmp_PosWorld.xyz * (1.0f / tmp_PosWorld.w);
 
 	float4 tmp_Normal = mul(float4(Input.Nor, 0.0f), g_WorldNormals);
-		output.NorWorld = normalize(tmp_Normal);
+		output.NorWorld = tmp_Normal.xyz;
 
 	float4 tmp_TanWorld = mul(float4(Input.Tan, 0.0f), g_WorldNormals);
-		output.TanWorld = normalize(tmp_TanWorld);*/
+		output.TanWorld = tmp_TanWorld.xyz;
 
-
-
-		return output;
+	return output;
 }
 
 float4 MeshPS(T3dVertexPSIn Input) : SV_Target0{
@@ -262,26 +259,30 @@ float4 MeshPS(T3dVertexPSIn Input) : SV_Target0{
 	c_s = 0.4f;
 	c_a = 0.1f;
 	c_g = 0.5f;
-	
-		float3 matDiffuse = g_Diffuse.Sample(samAnisotropic, Input.Tex);
-		float3 matSpecular = specularEV.Sample(samAnisotropic, Input.Tex);
-		float3 natGlow = glowEV.Sample(samAnisotropic, Input.Tex);
-
-		float3 n = normalize(Input.NorWorld);
-		float4 l = g_LightDir;
-		float4 r = reflect((-1)*l, ((n), 1.0f));
-		float4 v = normalize(cameraPosWorldEV - Input.Pos);
 
 
-		// slides
-		float3 line1;
-		line1 = c_d * matDiffuse * saturate(dot(n, l));
-		line1 = float3(line1.x*light_color.x, line1.y*light_color.y, line1.z*light_color.z);
-	float3 line2 = c_s * matSpecular * pow(saturate(dot(r, v)), weight);
-		line2 = float3(line2.x*light_color.x, line2.y*light_color.y, line2.z*light_color.z);
-	float3 line3 = c_a * matDiffuse;
-		line3 = float3(line3.x*light_color.x, line3.y*light_color.y, line3.z*light_color.z);
-	float3 line4 = c_g * natGlow;
+	float3 matDiffuse = g_Diffuse.Sample(samAnisotropic, Input.Tex);
+
+	float3 matSpecular = specularEV.Sample(samAnisotropic, Input.Tex);
+	float3 matGlow = glowEV.Sample(samAnisotropic, Input.Tex);
+	float4 colLight = float4(1, 1, 1, 1);
+	float4 colLightAmbient = float4(1, 1, 1, 1);
+
+
+	float3 n = normalize(Input.NorWorld);
+	float3 l = g_LightDir;
+	float3 r = reflect(-1*l, n);
+	float3 v = normalize(cameraPosWorldEV - Input.PosWorld);
+
+
+	// slides
+	float3 line1 = c_d * matDiffuse * saturate(dot(n, l)) * colLight;
+	//line1 = float3(line1.x*light_color.x, line1.y*light_color.y, line1.z*light_color.z);
+	float3 line2 = c_s * matSpecular * pow(saturate(dot(r, v)), 100) * colLight;
+	//line2 = float3(line2.x*light_color.x, line2.y*light_color.y, line2.z*light_color.z);
+	float3 line3 = c_a * matDiffuse * colLightAmbient;
+	//line3 = float3(line3.x*light_color.x, line3.y*light_color.y, line3.z*light_color.z);
+	float3 line4 = c_g * matGlow;
 
 	// I have no idea what I am doing
 
