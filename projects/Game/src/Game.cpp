@@ -337,7 +337,7 @@ HRESULT CALLBACK OnD3D11CreateDevice( ID3D11Device* pd3dDevice,
 	// depending on your heightfield (Hint: move  the camera initialization 
 	// code to after the position where the heightfield is read; also the terrainHeight read from game.cfg might help). 
 
-	XMVECTOR vEye = XMVectorSet(0.0f, 200.0f, 1.0f, 0.0f);   // Camera eye is here
+	XMVECTOR vEye = XMVectorSet(0.0f, 130.0f, 1.0f, 0.0f);   // Camera eye is here
     XMVECTOR vAt = XMVectorSet(0.0f, 0.0f, 0.0f, 1.0f);               // ... facing at this position
     g_camera.SetViewParams(vEye, vAt); // http://msdn.microsoft.com/en-us/library/windows/desktop/bb206342%28v=vs.85%29.aspx
 	g_camera.SetScalers(g_cameraRotateScaler, g_cameraMoveScaler);
