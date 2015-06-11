@@ -434,7 +434,7 @@ HRESULT CALLBACK OnD3D11ResizedSwapChain( ID3D11Device* pd3dDevice, IDXGISwapCha
 
     g_cameraParams.aspect = pBackBufferSurfaceDesc->Width / ( FLOAT )pBackBufferSurfaceDesc->Height;
     g_cameraParams.fovy = 0.785398f;
-    g_cameraParams.nearPlane = 1.f;
+    g_cameraParams.nearPlane = 0.f;
     g_cameraParams.farPlane = 5000.f;
 
     g_camera.SetProjParams(g_cameraParams.fovy, g_cameraParams.aspect, g_cameraParams.nearPlane, g_cameraParams.farPlane);

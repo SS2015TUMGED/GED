@@ -274,14 +274,18 @@ float4 MeshPS(T3dVertexPSIn Input) : SV_Target0{
 
 
 		// slides
-		float line1 = c_d * matDiffuse * saturate(dot(n, l)) * light_color;
-	float line2 = c_s * matSpecular * pow(saturate(dot(r, v)), weight) * light_color;
-	float line3 = c_a * matDiffuse * light_color;
-	float line4 = c_g * natGlow;
+		float3 line1;
+		line1 = c_d * matDiffuse * saturate(dot(n, l));
+		line1 = float3(line1.x*light_color.x, line1.y*light_color.y, line1.z*light_color.z);
+	float3 line2 = c_s * matSpecular * pow(saturate(dot(r, v)), weight);
+		line2 = float3(line2.x*light_color.x, line2.y*light_color.y, line2.z*light_color.z);
+	float3 line3 = c_a * matDiffuse;
+		line3 = float3(line3.x*light_color.x, line3.y*light_color.y, line3.z*light_color.z);
+	float3 line4 = c_g * natGlow;
 
 	// I have no idea what I am doing
 
-	return line1 + line2 + line3 + line4;
+	return float4 ( line1 + line2 + line3 + line4, 1.0);
 
 	// use until assignment 06 is not complete
 	//return g_Diffuse.Sample(samAnisotropic, Input.Tex);
