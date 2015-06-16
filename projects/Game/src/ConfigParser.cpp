@@ -3,15 +3,14 @@
 #include <fstream>
 #include <cstdlib>
 #include <sstream>
-
+#include <map>
+#include "Mesh.h"
 
 std::string ConfigParser::height;
 std::string ConfigParser::color;
 std::string ConfigParser::normal;
-std::string ConfigParser::mesh_indentifier, ConfigParser::mesh_diffuse, 
-ConfigParser::mesh_specular, ConfigParser::mesh_glow, ConfigParser::mesh_texture;
 bool ConfigParser::terrainSpinning;
-
+std::map<std::string, Mesh*> ConfigParser::g_Meshes;
 
 ConfigParser::ConfigParser()
 {
@@ -97,12 +96,22 @@ void ConfigParser::load(std::string str){
 				terrainSpinning = (tmp.compare("1") == 0);
 			}
 			else if (word.compare("Mesh") == 0){
+				std::string mesh_indentifier, mesh_diffuse,
+					mesh_specular, mesh_glow, mesh_texture;
+
 				iss >> mesh_indentifier >> mesh_texture >> mesh_diffuse >> mesh_specular >> mesh_glow;
-				mesh_indentifier = dir + mesh_indentifier;
+				mesh_indentifier = mesh_indentifier;
 				mesh_texture = dir + mesh_texture;
-				mesh_diffuse = dir + mesh_diffuse;
-				mesh_specular = dir + mesh_specular;
-				mesh_glow = dir + mesh_glow;
+				if (mesh_diffuse != "-") {
+					mesh_diffuse = dir + mesh_diffuse;
+				}
+				if (mesh_diffuse != "-") {
+					mesh_specular = dir + mesh_specular;
+				}
+				if (mesh_diffuse != "-") {
+					mesh_glow = dir + mesh_glow;
+				}
+				g_Meshes[mesh_indentifier] = new Mesh(mesh_texture, mesh_diffuse, mesh_specular, mesh_glow);
 			}
 			else {
 				if (!word.empty())

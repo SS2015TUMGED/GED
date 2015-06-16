@@ -1,6 +1,8 @@
 #pragma once
 #include <iostream>
 #include <set>
+#include <map>
+#include "Mesh.h"
 
 class ConfigParser
 {
@@ -18,9 +20,8 @@ public:
 	static std::string height;
 	static std::string color;
 	static std::string normal;
-	static std::string mesh_indentifier, mesh_diffuse, mesh_specular, mesh_glow, mesh_texture;
 	static bool terrainSpinning;
-
+	static std::map<std::string, Mesh*> g_Meshes;
 
 	
 	// getters

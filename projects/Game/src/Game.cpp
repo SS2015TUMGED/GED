@@ -28,6 +28,7 @@
 #include "CustomData.h"
 
 #include "debug.h"
+#include <map>
 
 
 using namespace std;
@@ -73,8 +74,7 @@ GameEffect								g_gameEffect; // CPU part of Shader
 // Our Killer Variables
 // ------------------------------------------------------------------------------------
 ConfigParser parser;
-Mesh*        g_cockpitMesh = nullptr;
-
+//Mesh*        g_cockpitMesh = nullptr;
 
 //--------------------------------------------------------------------------------------
 // UI control IDs
@@ -228,9 +228,8 @@ void InitApp()
 
 	// ************************************* Assignment 06 ****************************************************
 	// create new mesh
-	g_cockpitMesh = new Mesh(parser.mesh_texture, parser.mesh_diffuse, parser.mesh_specular, parser.mesh_glow);
+	//g_cockpitMesh = parser.g_Meshes["Cockpit"];
 
-	
 
 
 }
@@ -240,7 +239,11 @@ void InitApp()
 //****************************************************************************************************
 
 void DeinitApp(){
-	SAFE_DELETE(g_cockpitMesh);
+	SAFE_DELETE(parser.g_Meshes["Cockpit"]);
+	SAFE_DELETE(parser.g_Meshes["Gatling"]);
+	SAFE_DELETE(parser.g_Meshes["Plasma"]);
+	SAFE_DELETE(parser.g_Meshes["Bare"]);
+	SAFE_DELETE(parser.g_Meshes["Crazy_Tree"]);
 }
 
 
@@ -375,8 +378,22 @@ HRESULT CALLBACK OnD3D11CreateDevice( ID3D11Device* pd3dDevice,
 
 	// *************************** Assignment 06 ******************************************
 	// In game.cpp: In OnD3D11CreateDevice() call the create() method of g_CockpitMesh
-	g_cockpitMesh->create(pd3dDevice);
+	//g_cockpitMesh->create(pd3dDevice);
 
+	// Assignment 07: Create all the new meshes
+	/*parser.g_Meshes["Gatling"]->create(pd3dDevice);
+	parser.g_Meshes["Plasma"]->create(pd3dDevice);
+	parser.g_Meshes["Bare"]->create(pd3dDevice);
+	parser.g_Meshes["Crazy_Tree"]->create(pd3dDevice);*/
+	// TODO: maybe with for()
+	for (const auto& kv : parser.g_Meshes) {
+		kv.second->create(pd3dDevice);
+	}
+
+	/*for (map<string, Mesh*>::iterator it = parser.g_Meshes.begin(); it != parser.g_Meshes.end(); it++)
+	{
+		it->second->create(pd3dDevice);
+	}*/
 
     return S_OK;
 }
@@ -403,8 +420,11 @@ void CALLBACK OnD3D11DestroyDevice( void* pUserContext )
 	// don’t forget to release it in OnD3D11DestroyDevice() by calling Mesh::destroyInputLayout()	
 	Mesh::destroyInputLayout();
 	// assignment 06
-	g_cockpitMesh->destroy();
-
+	//g_cockpitMesh->destroy();
+	// assignment 07
+	for (const auto& kv : parser.g_Meshes) {
+		kv.second->destroy();
+	}
 }
 
 //--------------------------------------------------------------------------------------
@@ -729,7 +749,7 @@ void CALLBACK OnD3D11FrameRender( ID3D11Device* pd3dDevice, ID3D11DeviceContext*
 	V(g_gameEffect.worldViewProjectionEV->SetMatrix((float*)&tmp_worldViewProjectionEV));
 
 	//Now call the g_cockpitMesh->render() method from OnD3D11FrameRender(). 
-	g_cockpitMesh->render(pd3dImmediateContext, g_gameEffect.meshPass1, g_gameEffect.diffuseEV, g_gameEffect.specularEV, g_gameEffect.glowEV);
+	parser.g_Meshes["Cockpit"]->render(pd3dImmediateContext, g_gameEffect.meshPass1, g_gameEffect.diffuseEV, g_gameEffect.specularEV, g_gameEffect.glowEV);
 
 
     DXUT_BeginPerfEvent( DXUT_PERFEVENTCOLOR, L"HUD / Stats" );

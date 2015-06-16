@@ -90,10 +90,15 @@ HRESULT Mesh::create(ID3D11Device* device)
 
 
 	// Create textures
-	V(createTexture(device, filenameDDSDiffuse, &diffuseTex, &diffuseSRV)	);
-	V(createTexture(device, filenameDDSSpecular, &specularTex, &specularSRV));
-	V(createTexture(device, filenameDDSGlow, &glowTex, &glowSRV)			);
-
+	if (filenameDDSDiffuse != std::wstring(L"-")) {
+		V(createTexture(device, filenameDDSDiffuse, &diffuseTex, &diffuseSRV)	);
+	}
+	if (filenameDDSSpecular != std::wstring(L"-")) {
+		V(createTexture(device, filenameDDSSpecular, &specularTex, &specularSRV));
+	}
+	if (filenameDDSGlow != std::wstring(L"-")) {
+		V(createTexture(device, filenameDDSGlow, &glowTex, &glowSRV));
+	}
 
 	return S_OK;
 }

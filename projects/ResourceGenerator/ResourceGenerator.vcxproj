@@ -66,7 +66,26 @@ mkdir "$(OutDir)resources"
 "$(SolutionDir)..\..\external\Tools\bin\obj2t3d.exe" -i "$(SolutionDir)..\..\external\art\01-Cockpit\cockpit\final\cockpit_o_low.obj" -o "$(OutDir)resources\cockpit_o_low.t3d" –y  
 "$(OutDir)texconv" -o "$(OutDir)resources" -srgbi -f BC1_UNORM_SRGB "$(SolutionDir)..\..\external\art\01-Cockpit\cockpit\final\cockpit_m_diffuse.png"  
 "$(OutDir)texconv" -o "$(OutDir)resources" -srgbi -f BC1_UNORM_SRGB "$(SolutionDir)..\..\external\art\01-Cockpit\cockpit\final\cockpit_m_specular.png"  
-"$(OutDir)texconv" -o "$(OutDir)resources" -srgbi -f BC1_UNORM_SRGB "$(SolutionDir)..\..\external\art\01-Cockpit\cockpit\final\cockpit_m_glow.png" </NMakeBuildCommandLine>
+"$(OutDir)texconv" -o "$(OutDir)resources" -srgbi -f BC1_UNORM_SRGB "$(SolutionDir)..\..\external\art\01-Cockpit\cockpit\final\cockpit_m_glow.png"
+
+"$(SolutionDir)..\..\external\Tools\bin\obj2t3d.exe" -i "$(SolutionDir)..\..\external\art\01-Cockpit\gatling_gun\final\gatling_o_base.obj" -o "$(OutDir)resources\gatling_o_base.t3d" –y  
+"$(OutDir)texconv" -o "$(OutDir)resources" -srgbi -f BC1_UNORM_SRGB "$(SolutionDir)..\..\external\art\01-Cockpit\gatling_gun\final\gatling_m_diffuse.png"  
+"$(OutDir)texconv" -o "$(OutDir)resources" -srgbi -f BC1_UNORM_SRGB "$(SolutionDir)..\..\external\art\01-Cockpit\gatling_gun\final\gatling_m_specular.png"  
+"$(OutDir)texconv" -o "$(OutDir)resources" -srgbi -f BC1_UNORM_SRGB "$(SolutionDir)..\..\external\art\01-Cockpit\gatling_gun\final\gatling_m_glow.png"
+
+"$(SolutionDir)..\..\external\Tools\bin\obj2t3d.exe" -i "$(SolutionDir)..\..\external\art\01-Cockpit\plasma_gun\final\plasma_o_base.obj" -o "$(OutDir)resources\plasma_o_base.t3d" –y  
+"$(OutDir)texconv" -o "$(OutDir)resources" -srgbi -f BC1_UNORM_SRGB "$(SolutionDir)..\..\external\art\01-Cockpit\plasma_gun\final\plasma_m_diffuse.png"  
+"$(OutDir)texconv" -o "$(OutDir)resources" -srgbi -f BC1_UNORM_SRGB "$(SolutionDir)..\..\external\art\01-Cockpit\plasma_gun\final\plasma_m_specular.png"  
+"$(OutDir)texconv" -o "$(OutDir)resources" -srgbi -f BC1_UNORM_SRGB "$(SolutionDir)..\..\external\art\01-Cockpit\plasma_gun\final\plasma_m_glow.png"  
+
+"$(SolutionDir)..\..\external\Tools\bin\obj2t3d.exe" -i "$(SolutionDir)..\..\external\art\03-Environment\trees\bare\bare_01.obj" -o "$(OutDir)resources\bare_01.t3d" –y  
+"$(OutDir)texconv" -o "$(OutDir)resources" -srgbi -f BC1_UNORM_SRGB "$(SolutionDir)..\..\external\art\03-Environment\trees\bare\bare_diffuse.png"  
+
+"$(SolutionDir)..\..\external\Tools\bin\obj2t3d.exe" -i "$(SolutionDir)..\..\external\art\03-Environment\trees\crazy_tree\crazy_tree_01.obj" -o "$(OutDir)resources\crazy_tree_01.t3d" –y  
+"$(OutDir)texconv" -o "$(OutDir)resources" -srgbi -f BC1_UNORM_SRGB "$(SolutionDir)..\..\external\art\03-Environment\trees\crazy_tree\crazy_tree_m_diffuse.png"  
+"$(OutDir)texconv" -o "$(OutDir)resources" -srgbi -f BC1_UNORM_SRGB "$(SolutionDir)..\..\external\art\03-Environment\trees\crazy_tree\crazy_tree_m_transparency.png"  
+
+</NMakeBuildCommandLine>
     <NMakeCleanCommandLine>echo "Deleting old resources..."
 del /Q "$(IntDir)*"
 del /Q "$(OutDir)resources\*"</NMakeCleanCommandLine>
