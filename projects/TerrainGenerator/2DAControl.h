@@ -27,13 +27,13 @@ namespace bestGroup{
 
 	struct Tex{
 		GEDUtils::SimpleImage image;
-		std::string name;
 		float alpha;
-		float height;
+		float midpoint;
+		float range;
 		float slope;
 
-		Tex(GEDUtils::SimpleImage &image, std::string name, float alpha, float height, float slope) : 
-			image(image), name(name), alpha(alpha), height(height), slope(slope) {}
+		Tex(GEDUtils::SimpleImage &image,  float alpha, float midpoint, float range, float slope) : 
+			image(image), alpha(alpha), midpoint(midpoint), range(range), slope(slope) {}
 
 	};
 };

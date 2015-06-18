@@ -7,65 +7,61 @@
 #include <string>
 
 // load the textures into the ram
-GEDUtils::SimpleImage lowSteep("..\\..\\..\\..\\external\\textures\\ground02.jpg");
-GEDUtils::SimpleImage highSteep("..\\..\\..\\..\\external\\textures\\rock4.jpg");
-GEDUtils::SimpleImage highFlat("..\\..\\..\\..\\external\\textures\\rock3.jpg");
-GEDUtils::SimpleImage lowFlat("..\\..\\..\\..\\external\\textures\\gras15.jpg");
+//Default Texture
+GEDUtils::SimpleImage default("..\\TerrainGenerator\\Textures\\Black.h");
+
+//other Textures
+GEDUtils::SimpleImage red("..\\TerrainGenerator\\Textures\\Red.h");
+GEDUtils::SimpleImage yellow("..\\TerrainGenerator\\Textures\\Yellow.h");
+GEDUtils::SimpleImage dirt1("..\\TerrainGenerator\\Textures\\Dirt1.h");
+GEDUtils::SimpleImage rock2("..\\TerrainGenerator\\Textures\\Rock2.h");
+GEDUtils::SimpleImage rock1("..\\TerrainGenerator\\Textures\\Rock1.h");
+GEDUtils::SimpleImage grass("..\\TerrainGenerator\\Textures\\Grass.h");
 GEDUtils::SimpleImage snow("..\\TerrainGenerator\\Textures\\Snow.h");
 
-// Array for the images 
-//std::vector<float> TextureBlending::alphas = { 0.0f, 0.0f, 0.0f, 0.0f, 0.0f };
-//std::vector<GEDUtils::SimpleImage> TextureBlending::textures = { lowSteep, lowFlat, highFlat, highSteep, snow };
+
+// Array for the Textures
 std::vector<bestGroup::Tex> TextureBlending::textures;
 
 void TextureBlending::init(){
 	
-	bestGroup::Tex tex = bestGroup::Tex(lowFlat, "lowFlat", 0.0f, 0.15f, 0.2f);
+	bestGroup::Tex tex = bestGroup::Tex(default,  0.0f, 0.0f, 0.0f, 0.0f);
 	textures.push_back(tex);
 
-	tex = bestGroup::Tex(highFlat, "highFlat", 0.0f, 0.6f, 0.2f);
+	tex = bestGroup::Tex(rock1, 0.0f, 0.2f, 0.1, 0.3f);
 	textures.push_back(tex);
 
-	tex = bestGroup::Tex(lowSteep, "lowSteep", 0.0f, 0.15f, 0.6f);
+	tex = bestGroup::Tex(rock2, 0.0f, 0.3f, 0.15f, 0.4f);
 	textures.push_back(tex);
 
-	tex = bestGroup::Tex(highSteep, "highSteep", 0.0f, 0.6f, 0.6f);
+	tex = bestGroup::Tex(dirt1, 0.0f, 0.01f, 0.05f, 0.01f);
 	textures.push_back(tex);
 
-	tex = bestGroup::Tex(snow, "snow", 0.0f, 0.85f, 0.55f);
+	tex = bestGroup::Tex(grass, 0.0f, 0.01f, 0.02f, 0.01f);
 	textures.push_back(tex);
-
+	
+	tex = bestGroup::Tex(snow, 0.0f, 0.5f, 0.07f, 0.2f);
+	textures.push_back(tex);
 }
 
 inline void TextureBlending::calcAlphas(float height, float slope){
 	textures.shrink_to_fit();
-	slope *= 1/slope;
-	for (auto i = 0; i< textures.size(); i++){
-		textures[i].alpha = (height > textures[i].height) ? (textures[i].height / height) : (height / textures[i].height);
-		textures[i].alpha *= (slope > textures[i].slope) ? (textures[i].slope / slope) : (slope / textures[i].slope);
-	}
-}
-/*
-inline void TextureBlending::calcAlphas(float height, float slope){
-	slope *= slope;
-	alphas[0] = 1.0f;
-	alphas[1] = (1 - height) * slope + 0.1f;
-	if (alphas[1] > 1.0f){ alphas[1] = 1.0f; }
-	//alphas[4] = 0.0f;
-	if (height > 0.5f){
-		alphas[1] = 0.8f - height*slope;
-		alphas[2] = height;
-		alphas[3] = height* slope;
-	}
-	else{
-		alphas[2] = height*0.99f;
-		alphas[3] = height*0.99f*slope;
-	}
+	for (auto i = 1; i< textures.size(); i++){
+		//____________HEIGHT_______________________________________________
+		textures[i].alpha = 
+			((-1.0f * textures[i].midpoint) / //(-midpoint / range^2)
+			(textures[i].range * textures[i].range)) * 
+			((height - textures[i].midpoint) * (height - textures[i].midpoint)) //(x - midpoint) ^2
+			+ textures[i].midpoint
+			+ 1.0f - textures[i].midpoint; // +m
+		textures[i].alpha = (textures[i].alpha <= 0.0f) ? (0.0f) : textures[i].alpha;
 
-	alphas[4] = height*slope*height*1.8f;
-	if (alphas[4] > 1.0f){ alphas[4] = 1.0f; }
+		//____________SLOPE________________________________________________
+		textures[i].alpha *= (slope + textures[i].slope);
+		textures[i].alpha *= (slope + textures[i].slope);
+	}
 }
-*/
+
 inline void TextureBlending::getColorTiled(GEDUtils::SimpleImage &image, int x, int y, float& r, float& g, float& b)
 {
 	int imageWidth = image.getWidth();
@@ -152,7 +148,7 @@ void TextureBlending::createImage(std::vector<float>& heightmap, std::vector<bes
 		}
 	}
 	image.save(filename);
-	
+	//system("pause");
 }
 
 void TextureBlending::grayscale(unsigned resolution){
