@@ -244,6 +244,7 @@ void DeinitApp(){
 	SAFE_DELETE(parser.g_Meshes["Plasma"]);
 	SAFE_DELETE(parser.g_Meshes["Bare"]);
 	SAFE_DELETE(parser.g_Meshes["Crazy_Tree"]);
+	parser.g_Meshes.clear();
 }
 
 
@@ -344,12 +345,6 @@ HRESULT CALLBACK OnD3D11CreateDevice( ID3D11Device* pd3dDevice,
     XMVECTOR vAt = XMVectorSet(0.0f, 0.0f, 0.0f, 1.0f);               // ... facing at this position
     g_camera.SetViewParams(vEye, vAt); // http://msdn.microsoft.com/en-us/library/windows/desktop/bb206342%28v=vs.85%29.aspx
 	g_camera.SetScalers(g_cameraRotateScaler, g_cameraMoveScaler);
-
-
-
-
-
-
 
 
 	// Define the input layout
@@ -678,79 +673,129 @@ void CALLBACK OnD3D11FrameRender( ID3D11Device* pd3dDevice, ID3D11DeviceContext*
    
 	XMMATRIX worldViewProj = g_terrainWorld * view * proj;
 	
-
-	// ************************ Assignment 06 ****************************
-
-	//Create the transformation matrices for the cockpit mesh and set the corresponding effect variables of g_gameEffect: 
-	
 	// vars for the transformation
 	XMMATRIX mTrans, mScale, mRot;
 
 	// tmp vars for the transfomation matrices
 	XMMATRIX tmp_worldEV, tmp_worldViewProjectionEV;
 
-	// slides 06 page 12
-	// For the cockpit mesh: rotation angle = 180°, translation = (0, -16, 42), scaling = (0.05, 0.05, 0.05). 
+	//Create the transformation matrices for the cockpit mesh and set the corresponding effect variables of g_gameEffect: 
+	for (auto cockpitObject : parser.cockpitObjects) {
 
-	// set the rotation matrix
-	//               convert degree to radian
-	//               radian     = degree * pi / 180;
-	//         =>    degree     = 180
-	//         =>    radians    = 180 / 180 * pi
-	//         =>    radians    = pi
-	// https://msdn.microsoft.com/en-us/library/windows/desktop/microsoft.directx_sdk.matrix.xmmatrixrotationy%28v=vs.85%29.aspx
-	mRot = XMMatrixRotationRollPitchYaw(0, XM_PI, 0);
+		if (parser.g_Meshes.find(cockpitObject.Name) == parser.g_Meshes.end()) {
+			cout << "Error: Mesh for name(" << cockpitObject.Name << ") does not exist." << endl;
+			system("pause");
+		}
+
+		// set the rotation matrix
+		//               convert degree to radian
+		//               radian     = degree * pi / 180;
+		// https://msdn.microsoft.com/en-us/library/windows/desktop/microsoft.directx_sdk.matrix.xmmatrixrotationy%28v=vs.85%29.aspx
+		mRot = XMMatrixRotationRollPitchYaw(cockpitObject.RotX * XM_PI / 180,
+			cockpitObject.RotY * XM_PI / 180,
+			cockpitObject.RotZ * XM_PI / 180);
 	
-	// set translation matrix with 0,-16,42 as given in the slides
-	// https://msdn.microsoft.com/en-us/library/windows/desktop/microsoft.directx_sdk.matrix.xmmatrixtranslation%28v=vs.85%29.aspx
-	mTrans = XMMatrixTranslation(0.0f, (-16.0f), 42.0f);
+		// set translation matrix as given in the config
+		// https://msdn.microsoft.com/en-us/library/windows/desktop/microsoft.directx_sdk.matrix.xmmatrixtranslation%28v=vs.85%29.aspx
+		mTrans = XMMatrixTranslation(cockpitObject.TransX, cockpitObject.TransY, cockpitObject.TransZ);
 
-	// set the scale matrix
-	mScale = XMMatrixScaling(0.05f, 0.05f, 0.05f);
+		// set the scale matrix
+		mScale = XMMatrixScaling(cockpitObject.Scale, cockpitObject.Scale, cockpitObject.Scale);
 
-	// apply transformation as given in the slides
-	tmp_worldEV = mRot * mTrans * mScale *g_camera.GetWorldMatrix();
-	tmp_worldViewProjectionEV = tmp_worldEV * g_camera.GetViewMatrix() * g_camera.GetProjMatrix();
+		// apply transformation as given in the config
+		tmp_worldEV = mRot * mTrans * mScale *g_camera.GetWorldMatrix();
+		tmp_worldViewProjectionEV = tmp_worldEV * g_camera.GetViewMatrix() * g_camera.GetProjMatrix();
 
-	// apply the tmp vars
-	V(g_gameEffect.worldEV->SetMatrix((float*) &tmp_worldEV));
+		// apply the tmp vars
+		V(g_gameEffect.worldEV->SetMatrix((float*) &tmp_worldEV));
 	   
 		/*
 		// A 05
 		V(g_gameEffect.worldEV->SetMatrix( ( float* )&g_terrainWorld ));
 		V(g_gameEffect.worldViewProjectionEV->SetMatrix( ( float* )&worldViewProj ));
-		
-        */
-	V(g_gameEffect.lightDirEV->SetFloatVector((float*)&g_lightDir));
+		*/
+		V(g_gameEffect.lightDirEV->SetFloatVector((float*)&g_lightDir));
 
-	// get the inverse transposed matrix for g_terrainWorld
-	V(g_gameEffect.worldNormalsMatrix->SetMatrix((float*) &XMMatrixTranspose(XMMatrixInverse(nullptr, g_terrainWorld))));
+		// get the inverse transposed matrix for g_terrainWorld
+		V(g_gameEffect.worldNormalsMatrix->SetMatrix((float*) &XMMatrixTranspose(XMMatrixInverse(nullptr, g_terrainWorld))));
 
-	// Set the effect variable g_gameEffect.cameraPosWorldEV to the camera position in world 
-	// space. For this you can use the value from g_camera.GetEyePt()
-	V(g_gameEffect.cameraPosWorldEV->SetFloatVector((float*)&g_camera.GetEyePt()));
-
-
+		// Set the effect variable g_gameEffect.cameraPosWorldEV to the camera position in world 
+		// space. For this you can use the value from g_camera.GetEyePt()
+		V(g_gameEffect.cameraPosWorldEV->SetFloatVector((float*)&g_camera.GetEyePt()));
 
 		// Set input layout
-	    //pd3dImmediateContext->IASetInputLayout( g_terrainVertexLayout );
+		//pd3dImmediateContext->IASetInputLayout( g_terrainVertexLayout );
+
+		// ************************* End A06 *********************************
+		V(g_gameEffect.worldViewProjectionEV->SetMatrix( ( float* )&worldViewProj ));
 
 
-	
-
-
-
-	// ************************* End A06 *********************************
-	V(g_gameEffect.worldViewProjectionEV->SetMatrix( ( float* )&worldViewProj ));
-
-
-	g_terrain.render(pd3dImmediateContext, g_gameEffect.pass0);
+		g_terrain.render(pd3dImmediateContext, g_gameEffect.pass0);
     
-	V(g_gameEffect.worldViewProjectionEV->SetMatrix((float*)&tmp_worldViewProjectionEV));
+		V(g_gameEffect.worldViewProjectionEV->SetMatrix((float*)&tmp_worldViewProjectionEV));
 
-	//Now call the g_cockpitMesh->render() method from OnD3D11FrameRender(). 
-	parser.g_Meshes["Cockpit"]->render(pd3dImmediateContext, g_gameEffect.meshPass1, g_gameEffect.diffuseEV, g_gameEffect.specularEV, g_gameEffect.glowEV);
+		//Now call the ->render() method for the mesh
+		parser.g_Meshes[cockpitObject.Name]->render(pd3dImmediateContext, g_gameEffect.meshPass1, g_gameEffect.diffuseEV, g_gameEffect.specularEV, g_gameEffect.glowEV);
+	}
 
+	//Create the transformation matrices for the cockpit mesh and set the corresponding effect variables of g_gameEffect: 
+	for (auto groundObject : parser.groundObjects) {
+
+		if (parser.g_Meshes.find(groundObject.Name) == parser.g_Meshes.end()) {
+			cout << "Error: Mesh for name(" << groundObject.Name << ") does not exist." << endl;
+			system("pause");
+		}
+
+		// set the rotation matrix
+		//               convert degree to radian
+		//               radian     = degree * pi / 180;
+		// https://msdn.microsoft.com/en-us/library/windows/desktop/microsoft.directx_sdk.matrix.xmmatrixrotationy%28v=vs.85%29.aspx
+		mRot = XMMatrixRotationRollPitchYaw(groundObject.RotX * XM_PI / 180,
+			groundObject.RotY * XM_PI / 180,
+			groundObject.RotZ * XM_PI / 180);
+
+		// set translation matrix as given in the config
+		// https://msdn.microsoft.com/en-us/library/windows/desktop/microsoft.directx_sdk.matrix.xmmatrixtranslation%28v=vs.85%29.aspx
+		mTrans = XMMatrixTranslation(groundObject.TransX, groundObject.TransY, groundObject.TransZ);
+
+		// set the scale matrix
+		mScale = XMMatrixScaling(groundObject.Scale, groundObject.Scale, groundObject.Scale);
+
+		// apply transformation as given in the config
+		tmp_worldEV = mRot * mTrans * mScale;
+		tmp_worldViewProjectionEV = tmp_worldEV * g_camera.GetViewMatrix() * g_camera.GetProjMatrix();
+
+		// apply the tmp vars
+		V(g_gameEffect.worldEV->SetMatrix((float*)&tmp_worldEV));
+
+		/*
+		// A 05
+		V(g_gameEffect.worldEV->SetMatrix( ( float* )&g_terrainWorld ));
+		V(g_gameEffect.worldViewProjectionEV->SetMatrix( ( float* )&worldViewProj ));
+		*/
+		V(g_gameEffect.lightDirEV->SetFloatVector((float*)&g_lightDir));
+
+		// get the inverse transposed matrix for g_terrainWorld
+		V(g_gameEffect.worldNormalsMatrix->SetMatrix((float*)&XMMatrixTranspose(XMMatrixInverse(nullptr, g_terrainWorld))));
+
+		// Set the effect variable g_gameEffect.cameraPosWorldEV to the camera position in world 
+		// space. For this you can use the value from g_camera.GetEyePt()
+		V(g_gameEffect.cameraPosWorldEV->SetFloatVector((float*)&g_camera.GetEyePt()));
+
+		// Set input layout
+		//pd3dImmediateContext->IASetInputLayout( g_terrainVertexLayout );
+
+		// ************************* End A06 *********************************
+		V(g_gameEffect.worldViewProjectionEV->SetMatrix((float*)&worldViewProj));
+
+
+		g_terrain.render(pd3dImmediateContext, g_gameEffect.pass0);
+
+		V(g_gameEffect.worldViewProjectionEV->SetMatrix((float*)&tmp_worldViewProjectionEV));
+
+		//Now call the ->render() method for the mesh
+		parser.g_Meshes[groundObject.Name]->render(pd3dImmediateContext, g_gameEffect.meshPass1, g_gameEffect.diffuseEV, g_gameEffect.specularEV, g_gameEffect.glowEV);
+	}
 
     DXUT_BeginPerfEvent( DXUT_PERFEVENTCOLOR, L"HUD / Stats" );
     V(g_hud.OnRender( fElapsedTime ));

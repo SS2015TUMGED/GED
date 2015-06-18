@@ -6,11 +6,15 @@
 #include <map>
 #include "Mesh.h"
 
+
 std::string ConfigParser::height;
 std::string ConfigParser::color;
 std::string ConfigParser::normal;
 bool ConfigParser::terrainSpinning;
 std::map<std::string, Mesh*> ConfigParser::g_Meshes;
+// contains all Cockpit- and GroundObjects
+std::vector<ConfigParser::CockpitObject> ConfigParser::cockpitObjects;
+std::vector<ConfigParser::GroundObject> ConfigParser::groundObjects;
 
 ConfigParser::ConfigParser()
 {
@@ -20,7 +24,6 @@ ConfigParser::~ConfigParser()
 }
 
 void ConfigParser::load(std::string str){
-
 	using namespace std;
 	
 	// to read the values  
@@ -62,40 +65,44 @@ void ConfigParser::load(std::string str){
 			istringstream iss(line);
 			iss >> word;
 
-			if (word.compare("spinning") == 0){
+			// lines with # are commented out
+			if (word[0] == '#') {
+				continue;
+			}
+
+			if (word.compare("spinning") == 0) {
 				iss >> spinning;
 				//std::cout << "spinning " << spinning << std::endl;
 			}
-
-			else if (word.compare("spinSpeed") == 0){
+			else if (word.compare("spinSpeed") == 0) {
 				iss >> spinSpeed;
 				//std::cout << "spinSpeed " << spinSpeed << std::endl;
 			}
-			else if (word.compare("backgroundColor") == 0){
+			else if (word.compare("backgroundColor") == 0) {
 				iss >> backgroundColor.r >> backgroundColor.g >> backgroundColor.b;
 				//std::cout << color.r << " " << color.g << " " << color.b << std::endl;
 			}
-			else if (word.compare("TerrainPath") == 0){
+			else if (word.compare("TerrainPath") == 0) {
 				iss >> height >> color >> normal;
 				height = dir + height;
 				color = dir + color;
 				normal = dir + normal;
 			}
-			else if (word.compare("TerrainDepth") == 0){
+			else if (word.compare("TerrainDepth") == 0) {
 				iss >> terrainDepth;
 			}
-			else if (word.compare("TerrainWidth") == 0){
+			else if (word.compare("TerrainWidth") == 0) {
 				iss >> terrainWidth;
 			}
-			else if (word.compare("TerrainHeight") == 0){
+			else if (word.compare("TerrainHeight") == 0) {
 				iss >> terrainHeight;
 			}
-			else if (word.compare("TerrainSpinning") == 0){
+			else if (word.compare("TerrainSpinning") == 0) {
 				string tmp;
 				iss >> tmp;
 				terrainSpinning = (tmp.compare("1") == 0);
 			}
-			else if (word.compare("Mesh") == 0){
+			else if (word.compare("Mesh") == 0) {
 				std::string mesh_indentifier, mesh_diffuse,
 					mesh_specular, mesh_glow, mesh_texture;
 
@@ -113,9 +120,22 @@ void ConfigParser::load(std::string str){
 				}
 				g_Meshes[mesh_indentifier] = new Mesh(mesh_texture, mesh_diffuse, mesh_specular, mesh_glow);
 			}
+			else if (word.compare("CockpitObject") == 0) {
+				CockpitObject object;
+				iss >> object.Name >> object.Scale >> object.RotX >> object.RotY >> object.RotZ
+					>> object.TransX >> object.TransY >> object.TransZ;
+				cockpitObjects.push_back(object);
+			}
+			else if (word.compare("GroundObject") == 0) {
+				GroundObject object;
+				iss >> object.Name >> object.Scale >> object.RotX >> object.RotY >> object.RotZ
+					>> object.TransX >> object.TransY >> object.TransZ;
+				groundObjects.push_back(object);
+			}
 			else {
-				if (!word.empty())
-				cout << "Error: unknown Parameter!" << endl;
+				if (!word.empty()) {
+					cout << "Error: unknown Parameter!" << endl;
+				}
 			}
 			//empty word
 			word = "";
@@ -123,12 +143,11 @@ void ConfigParser::load(std::string str){
 		}
 	}
 	ifs.close();
-	if (!ifs.is_open())
-	{
+	if (!ifs.is_open()) {
 		cout << "file closed...OK" << endl << endl;
-	}
-	else
+	} else {
 		cout << "Error: file not closed!" << endl;
+	}
 }
 
 
