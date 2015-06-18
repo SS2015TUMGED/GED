@@ -239,20 +239,11 @@ void InitApp()
 //****************************************************************************************************
 
 void DeinitApp(){
-	SAFE_DELETE(parser.g_Meshes["Cockpit"]);
-	SAFE_DELETE(parser.g_Meshes["Gatling"]);
-	SAFE_DELETE(parser.g_Meshes["Plasma"]);
-	SAFE_DELETE(parser.g_Meshes["Bare"]);
-	SAFE_DELETE(parser.g_Meshes["Crazy_Tree"]);
+	for (auto iterator = parser.g_Meshes.begin(); iterator != parser.g_Meshes.end(); iterator++) {
+		SAFE_DELETE(iterator->second);
+	}
 	parser.g_Meshes.clear();
 }
-
-
-
-
-
-
-
 
 
 //--------------------------------------------------------------------------------------
