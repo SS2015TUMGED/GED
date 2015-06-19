@@ -112,10 +112,10 @@ void ConfigParser::load(std::string str){
 				if (mesh_diffuse != "-") {
 					mesh_diffuse = dir + mesh_diffuse;
 				}
-				if (mesh_diffuse != "-") {
+				if (mesh_specular != "-") {
 					mesh_specular = dir + mesh_specular;
 				}
-				if (mesh_diffuse != "-") {
+				if (mesh_glow != "-") {
 					mesh_glow = dir + mesh_glow;
 				}
 				g_Meshes[mesh_indentifier] = new Mesh(mesh_texture, mesh_diffuse, mesh_specular, mesh_glow);
