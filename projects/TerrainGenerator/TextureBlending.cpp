@@ -143,6 +143,12 @@ void TextureBlending::createImage(std::vector<float>& heightmap, std::vector<bes
 			blend(x, y, 0, r, g, b);
 
 			// write rgb in the file
+			r = (r < 0.0f) ? 0.0f : r;
+			r = (r > 1.0f) ? 1.0f : r;
+			g = (g < 0.0f) ? 0.0f : g;
+			g = (g > 1.0f) ? 1.0f : g;
+			b = (b < 0.0f) ? 0.0f : b;
+			b = (b > 1.0f) ? 1.0f : b;
 			image.setPixel(x, y, r, g, b);
 
 		}
