@@ -13,11 +13,11 @@ GEDUtils::SimpleImage default("..\\TerrainGenerator\\Textures\\Black.h");
 //other Textures
 GEDUtils::SimpleImage red("..\\TerrainGenerator\\Textures\\Red.h");
 GEDUtils::SimpleImage yellow("..\\TerrainGenerator\\Textures\\Yellow.h");
-GEDUtils::SimpleImage dirt1("..\\TerrainGenerator\\Textures\\Dirt1.h");
-GEDUtils::SimpleImage rock2("..\\TerrainGenerator\\Textures\\Rock2.h");
-GEDUtils::SimpleImage rock1("..\\TerrainGenerator\\Textures\\Rock1.h");
-GEDUtils::SimpleImage grass("..\\TerrainGenerator\\Textures\\Grass.h");
-GEDUtils::SimpleImage snow("..\\TerrainGenerator\\Textures\\Snow.h");
+GEDUtils::SimpleImage dirt1("..\\TerrainGenerator\\Textures\\Tex_Ground_01.h");
+GEDUtils::SimpleImage rock2("..\\TerrainGenerator\\Textures\\Tex_Rock_02.h");
+GEDUtils::SimpleImage rock1("..\\TerrainGenerator\\Textures\\Tex_Rock_01.h");
+GEDUtils::SimpleImage grass("..\\TerrainGenerator\\Textures\\Tex_Grass_01.h");
+GEDUtils::SimpleImage snow("..\\TerrainGenerator\\Textures\\Tex_Snow.h");
 
 
 // Array for the Textures
