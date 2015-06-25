@@ -29,7 +29,9 @@
 
 #include "debug.h"
 #include <map>
-
+#include "Ememy.h"
+#include <random>
+#include <time.h>
 
 using namespace std;
 using namespace DirectX;
@@ -72,6 +74,7 @@ GameEffect								g_gameEffect; // CPU part of Shader
 
 //Assignment 08: Enemy Handling
 float								g_SpawnTimer = 0.0;
+std::default_random_engine Ememy::rng;
 
 //-------------------------------------------------------------------------------------
 // Our Killer Variables
@@ -134,6 +137,15 @@ int _tmain(int argc, _TCHAR* argv[])
 #if defined(DEBUG) | defined(_DEBUG)
     _CrtSetDbgFlag( _CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF );
 #endif
+
+#pragma region Random Number Generation
+	int seed = (int)time(NULL);
+	cout << "seed: " << seed << endl << endl;
+
+	//seed the rng
+	Ememy::rng.seed(seed);
+#pragma endregion
+
 
     // Old Direct3D Documentation:
     // Start > All Programs > Microsoft DirectX SDK (June 2010) > Windows DirectX Graphics Documentation
@@ -589,7 +601,8 @@ void CALLBACK OnGUIEvent( UINT nEvent, int nControlID, CDXUTControl* pControl, v
     }
 }
 
-
+//checks if a enemy is out of the map
+bool out_of_map(Ememy::EnemyInstance &e) { return (DirectX::XMVectorGetByIndex(DirectX::XMVector3Length(e.pos), 0) > parser.getTerrainWidth() + 10); }
 //--------------------------------------------------------------------------------------
 // Handle updates to the scene.  This is called regardless of which D3D API is used
 //--------------------------------------------------------------------------------------
@@ -629,9 +642,16 @@ void CALLBACK OnFrameMove(double fTime, float fElapsedTime, void* pUserContext)
 		if (fmod(g_SpawnTimer, enemy.second.SpawnRate) == 0.0)
 		{
 			//spawning new enemy
-
+			Ememy::spawn(enemy.second, parser.getTerrainWidth());
 		}
 	}
+	//deletes enemys from list
+	Ememy::g_EnemyInstances.remove_if(out_of_map);
+	for (auto enemy : Ememy::g_EnemyInstances)
+	{
+		enemy.pos = enemy.pos + (enemy.vel*fElapsedTime);
+	}
+	
 }
 
 
