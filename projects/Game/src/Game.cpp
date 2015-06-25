@@ -70,6 +70,9 @@ Terrain									g_terrain;
 
 GameEffect								g_gameEffect; // CPU part of Shader
 
+//Assignment 08: Enemy Handling
+float								g_SpawnTimer = 0.0;
+
 //-------------------------------------------------------------------------------------
 // Our Killer Variables
 // ------------------------------------------------------------------------------------
@@ -590,32 +593,45 @@ void CALLBACK OnGUIEvent( UINT nEvent, int nControlID, CDXUTControl* pControl, v
 //--------------------------------------------------------------------------------------
 // Handle updates to the scene.  This is called regardless of which D3D API is used
 //--------------------------------------------------------------------------------------
-void CALLBACK OnFrameMove( double fTime, float fElapsedTime, void* pUserContext )
+void CALLBACK OnFrameMove(double fTime, float fElapsedTime, void* pUserContext)
 {
 	UNREFERENCED_PARAMETER(pUserContext);
-    // Update the camera's position based on user input 
-    g_camera.FrameMove( fElapsedTime );
-    
-    // Initialize the terrain world matrix
-    // http://msdn.microsoft.com/en-us/library/windows/desktop/bb206365%28v=vs.85%29.aspx
-    
+	// Update the camera's position based on user input 
+	g_camera.FrameMove(fElapsedTime);
+
+	// Initialize the terrain world matrix
+	// http://msdn.microsoft.com/en-us/library/windows/desktop/bb206365%28v=vs.85%29.aspx
+
 	// Start with identity matrix
-    g_terrainWorld = XMMatrixIdentity();
-    
+	g_terrainWorld = XMMatrixIdentity();
+
 	// Assignment 05 Scale the terrainworld to the data form the .cfg file	
 	g_terrainWorld *= XMMatrixScaling(parser.getTerrainWidth(), parser.getTerrainHeight(), parser.getTerrainDepth());
 
 
 
-    if( g_terrainSpinning ) 
-    {
+	if (g_terrainSpinning)
+	{
 		// If spinng enabled, rotate the world matrix around the y-axis
-        g_terrainWorld *= XMMatrixRotationY(30.0f * DEG2RAD((float)fTime)); // Rotate around world-space "up" axis
-    }
+		g_terrainWorld *= XMMatrixRotationY(30.0f * DEG2RAD((float)fTime)); // Rotate around world-space "up" axis
+	}
 
 	// Set the light vector
-    g_lightDir = XMVectorSet(1, 1, 1, 0); // Direction to the directional light in world space    
-    g_lightDir = XMVector3Normalize(g_lightDir);
+	g_lightDir = XMVectorSet(1, 1, 1, 0); // Direction to the directional light in world space    
+	g_lightDir = XMVector3Normalize(g_lightDir);
+
+	//Enemy handling
+	g_SpawnTimer += fElapsedTime;
+
+	for (auto enemy : parser.enemys)
+	{
+		//check if it is time to spawn a new enemy
+		if (fmod(g_SpawnTimer, enemy.second.SpawnRate) == 0.0)
+		{
+			//spawning new enemy
+
+		}
+	}
 }
 
 

@@ -53,6 +53,7 @@ public:
 		float TransX;
 		float TransY;
 		float TransZ;
+		float SpawnRate;
 	};
 
 	static std::string height;
@@ -63,6 +64,7 @@ public:
 	// contains all Cockpit- and GroundObjects
 	static std::vector<CockpitObject> cockpitObjects;
 	static std::vector<GroundObject> groundObjects;
+	//contains all Enemys
 	static std::map<std::string, EnemyType> enemys;
 
 	// getters

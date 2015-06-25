@@ -138,7 +138,8 @@ void ConfigParser::load(std::string str){
 				iss >> enemy.Name >> enemy.Hitpoints >> enemy.Size >> enemy.Speed
 					>> enemy.Mesh >> enemy.Scale
 					>> enemy.RotX >> enemy.RotY >> enemy.RotZ
-					>> enemy.TransX >> enemy.TransY >> enemy.TransZ;
+					>> enemy.TransX >> enemy.TransY >> enemy.TransZ
+					>> enemy.SpawnRate;
 				enemys[enemy.Name] = enemy;
 			}
 			else {

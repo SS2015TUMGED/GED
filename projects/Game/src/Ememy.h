@@ -28,5 +28,6 @@ private:
 	float velocityY;
 	float velocityZ;
 	int remainingHitpoints;
+	float spawnRate;
 };
 
