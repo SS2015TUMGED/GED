@@ -40,6 +40,21 @@ public:
 		float TransZ;
 	};
 
+	struct EnemyType {
+		std::string Name;
+		int Hitpoints;
+		int Size;
+		int Speed;
+		std::string Mesh;
+		float Scale;
+		int RotX;
+		int RotY;
+		int RotZ;
+		float TransX;
+		float TransY;
+		float TransZ;
+	};
+
 	static std::string height;
 	static std::string color;
 	static std::string normal;
@@ -48,6 +63,7 @@ public:
 	// contains all Cockpit- and GroundObjects
 	static std::vector<CockpitObject> cockpitObjects;
 	static std::vector<GroundObject> groundObjects;
+	static std::map<std::string, EnemyType> enemys;
 
 	// getters
 	float getSpinning();
