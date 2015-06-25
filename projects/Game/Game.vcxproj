@@ -132,6 +132,7 @@ exit 1</Command>
     <ClInclude Include="src\ConfigParser.h" />
     <ClInclude Include="src\CustomData.h" />
     <ClInclude Include="src\debug.h" />
+    <ClInclude Include="src\Ememy.h" />
     <ClInclude Include="src\FillVertex.h" />
     <ClInclude Include="src\GameEffect.h" />
     <ClInclude Include="src\IndexBuffer.h" />
@@ -141,6 +142,7 @@ exit 1</Command>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\ConfigParser.cpp" />
+    <ClCompile Include="src\Ememy.cpp" />
     <ClCompile Include="src\FillVertex.cpp" />
     <ClCompile Include="src\Game.cpp" />
     <ClCompile Include="src\IndexBuffer.cpp" />

@@ -47,6 +47,9 @@
     <ClInclude Include="src\Mesh.h">
       <Filter>Header</Filter>
     </ClInclude>
+    <ClInclude Include="src\Ememy.h">
+      <Filter>Header</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Game.cpp">
@@ -68,6 +71,9 @@
       <Filter>Source</Filter>
     </ClCompile>
     <ClCompile Include="src\T3d.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Ememy.cpp">
       <Filter>Source</Filter>
     </ClCompile>
   </ItemGroup>
