@@ -258,6 +258,11 @@ void DeinitApp(){
 		SAFE_DELETE(iterator->second);
 	}
 	parser.g_Meshes.clear();
+	Ememy::g_EnemyInstances.clear();
+	//for (auto iterator = parser.enemys.begin(); iterator != parser.enemys.end(); iterator++) {
+	//	parser.enemys.erase(iterator);
+	//}
+	parser.enemys.clear();
 }
 
 
@@ -826,10 +831,10 @@ void CALLBACK OnD3D11FrameRender( ID3D11Device* pd3dDevice, ID3D11DeviceContext*
 
 	for (auto enemy : Ememy::g_EnemyInstances) {
 
-		/*if (parser.g_Meshes.find(groundObject.Name) == parser.g_Meshes.end()) {
-			cout << "Error: Mesh for name(" << groundObject.Name << ") does not exist." << endl;
+		if (parser.g_Meshes.find(enemy.type.Mesh) == parser.g_Meshes.end()) {
+			cout << "Error: Mesh for name(" << enemy.name << ") does not exist." << endl;
 			system("pause");
-		}*/
+		}
 
 		// set the rotation matrix
 		//               convert degree to radian
@@ -853,11 +858,6 @@ void CALLBACK OnD3D11FrameRender( ID3D11Device* pd3dDevice, ID3D11DeviceContext*
 		// apply the tmp vars
 		V(g_gameEffect.worldEV->SetMatrix((float*)&tmp_worldEV));
 
-		/*
-		// A 05
-		V(g_gameEffect.worldEV->SetMatrix( ( float* )&g_terrainWorld ));
-		V(g_gameEffect.worldViewProjectionEV->SetMatrix( ( float* )&worldViewProj ));
-		*/
 		V(g_gameEffect.lightDirEV->SetFloatVector((float*)&g_lightDir));
 
 		// get the inverse transposed matrix for g_terrainWorld
@@ -880,7 +880,7 @@ void CALLBACK OnD3D11FrameRender( ID3D11Device* pd3dDevice, ID3D11DeviceContext*
 
 		//Now call the ->render() method for the mesh
 		//Mesh fehlt
-		//parser.enemys[enemy.name]->render(pd3dImmediateContext, g_gameEffect.meshPass1, g_gameEffect.diffuseEV, g_gameEffect.specularEV, g_gameEffect.glowEV);
+		parser.g_Meshes[enemy.type.Mesh]->render(pd3dImmediateContext, g_gameEffect.meshPass1, g_gameEffect.diffuseEV, g_gameEffect.specularEV, g_gameEffect.glowEV);
 	}
 
     DXUT_BeginPerfEvent( DXUT_PERFEVENTCOLOR, L"HUD / Stats" );
