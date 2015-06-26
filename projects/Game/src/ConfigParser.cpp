@@ -15,7 +15,7 @@ std::map<std::string, Mesh*> ConfigParser::g_Meshes;
 // contains all Cockpit- and GroundObjects
 std::vector<ConfigParser::CockpitObject> ConfigParser::cockpitObjects;
 std::vector<ConfigParser::GroundObject> ConfigParser::groundObjects;
-std::map<std::string, ConfigParser::EnemyType> ConfigParser::enemys;
+std::map<std::string, ConfigParser::EnemyType*> ConfigParser::enemys;
 
 ConfigParser::ConfigParser()
 {

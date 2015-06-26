@@ -639,10 +639,10 @@ void CALLBACK OnFrameMove(double fTime, float fElapsedTime, void* pUserContext)
 	for (auto enemy : parser.enemys)
 	{
 		//check if it is time to spawn a new enemy
-		if (fmod(g_SpawnTimer, enemy.second.SpawnRate) == 0.0)
+		if (fmod(g_SpawnTimer, (*enemy.second).SpawnRate) == 0.0)
 		{
 			//spawning new enemy
-			Ememy::spawn(enemy.second, parser.getTerrainWidth());
+			Ememy::spawn(*enemy.second, parser.getTerrainWidth());
 		}
 	}
 	//deletes enemys from list
@@ -822,6 +822,65 @@ void CALLBACK OnD3D11FrameRender( ID3D11Device* pd3dDevice, ID3D11DeviceContext*
 
 		//Now call the ->render() method for the mesh
 		parser.g_Meshes[groundObject.Name]->render(pd3dImmediateContext, g_gameEffect.meshPass1, g_gameEffect.diffuseEV, g_gameEffect.specularEV, g_gameEffect.glowEV);
+	}
+
+	for (auto enemy : Ememy::g_EnemyInstances) {
+
+		/*if (parser.g_Meshes.find(groundObject.Name) == parser.g_Meshes.end()) {
+			cout << "Error: Mesh for name(" << groundObject.Name << ") does not exist." << endl;
+			system("pause");
+		}*/
+
+		// set the rotation matrix
+		//               convert degree to radian
+		//               radian     = degree * pi / 180;
+		// https://msdn.microsoft.com/en-us/library/windows/desktop/microsoft.directx_sdk.matrix.xmmatrixrotationy%28v=vs.85%29.aspx
+		mRot = XMMatrixRotationRollPitchYaw(enemy.type.RotX * XM_PI / 180,
+			enemy.type.RotY * XM_PI / 180,
+			enemy.type.RotZ * XM_PI / 180);
+
+		// set translation matrix as given in the config
+		// https://msdn.microsoft.com/en-us/library/windows/desktop/microsoft.directx_sdk.matrix.xmmatrixtranslation%28v=vs.85%29.aspx
+		mTrans = XMMatrixTranslation(enemy.type.TransX, enemy.type.TransY, enemy.type.TransZ);
+
+		// set the scale matrix
+		mScale = XMMatrixScaling(enemy.type.Scale, enemy.type.Scale, enemy.type.Scale);
+
+		// apply transformation as given in the config
+		tmp_worldEV = mRot * mTrans * mScale;
+		tmp_worldViewProjectionEV = tmp_worldEV * g_camera.GetViewMatrix() * g_camera.GetProjMatrix();
+
+		// apply the tmp vars
+		V(g_gameEffect.worldEV->SetMatrix((float*)&tmp_worldEV));
+
+		/*
+		// A 05
+		V(g_gameEffect.worldEV->SetMatrix( ( float* )&g_terrainWorld ));
+		V(g_gameEffect.worldViewProjectionEV->SetMatrix( ( float* )&worldViewProj ));
+		*/
+		V(g_gameEffect.lightDirEV->SetFloatVector((float*)&g_lightDir));
+
+		// get the inverse transposed matrix for g_terrainWorld
+		V(g_gameEffect.worldNormalsMatrix->SetMatrix((float*)&XMMatrixTranspose(XMMatrixInverse(nullptr, g_terrainWorld))));
+
+		// Set the effect variable g_gameEffect.cameraPosWorldEV to the camera position in world 
+		// space. For this you can use the value from g_camera.GetEyePt()
+		V(g_gameEffect.cameraPosWorldEV->SetFloatVector((float*)&g_camera.GetEyePt()));
+
+		// Set input layout
+		//pd3dImmediateContext->IASetInputLayout( g_terrainVertexLayout );
+
+		// ************************* End A06 *********************************
+		V(g_gameEffect.worldViewProjectionEV->SetMatrix((float*)&worldViewProj));
+
+
+		g_terrain.render(pd3dImmediateContext, g_gameEffect.pass0);
+
+		V(g_gameEffect.worldViewProjectionEV->SetMatrix((float*)&tmp_worldViewProjectionEV));
+
+		//Now call the ->render() method for the mesh
+		//Mesh fehlt
+		//parser.enemys[enemy.name]->render(pd3dImmediateContext, g_gameEffect.meshPass1, g_gameEffect.diffuseEV, g_gameEffect.specularEV, g_gameEffect.glowEV);
 	}
 
     DXUT_BeginPerfEvent( DXUT_PERFEVENTCOLOR, L"HUD / Stats" );
