@@ -607,7 +607,9 @@ void CALLBACK OnGUIEvent( UINT nEvent, int nControlID, CDXUTControl* pControl, v
 }
 
 //checks if a enemy is out of the map
-bool out_of_map(Ememy::EnemyInstance &e) { return (DirectX::XMVectorGetByIndex(DirectX::XMVector3Length(e.pos), 0) > parser.getTerrainWidth() + 10); }
+bool out_of_map(Ememy::EnemyInstance &e) {
+	return (DirectX::XMVectorGetByIndex(DirectX::XMVector3Length(e.pos), 0) > parser.getTerrainWidth() + 10);
+}
 //--------------------------------------------------------------------------------------
 // Handle updates to the scene.  This is called regardless of which D3D API is used
 //--------------------------------------------------------------------------------------
@@ -626,8 +628,6 @@ void CALLBACK OnFrameMove(double fTime, float fElapsedTime, void* pUserContext)
 	// Assignment 05 Scale the terrainworld to the data form the .cfg file	
 	g_terrainWorld *= XMMatrixScaling(parser.getTerrainWidth(), parser.getTerrainHeight(), parser.getTerrainDepth());
 
-
-
 	if (g_terrainSpinning)
 	{
 		// If spinng enabled, rotate the world matrix around the y-axis
@@ -644,15 +644,13 @@ void CALLBACK OnFrameMove(double fTime, float fElapsedTime, void* pUserContext)
 	for (auto enemy : parser.enemys)
 	{
 		//check if it is time to spawn a new enemy
-		if ((int)g_SpawnTimer % (int) ((enemy.second).SpawnRate) == 0)
+		if ((int)g_SpawnTimer % enemy.second.SpawnRate == 0)
 		{
 			//spawning new enemy
 			if (enemy.second.Spawn == false){
 				Ememy::spawn(enemy.second, parser.getTerrainWidth());
 				parser.enemys[enemy.first].Spawn = true;
-				std::cout << Ememy::g_EnemyInstances.size() << endl;
 			}
-	
 		}
 		else{
 			if (enemy.second.Spawn == true)
@@ -665,9 +663,7 @@ void CALLBACK OnFrameMove(double fTime, float fElapsedTime, void* pUserContext)
 	//iterate over all list elements
 	for (auto it = Ememy::g_EnemyInstances.begin(); it != Ememy::g_EnemyInstances.end(); it++)
 	{
-		//you have to use a reference ("int&") in order to affect "value" in list
 		it->pos = it->pos + fElapsedTime * it->vel;
-		//do something with value...
 	}
 }
 
@@ -723,6 +719,18 @@ void CALLBACK OnD3D11FrameRender( ID3D11Device* pd3dDevice, ID3D11DeviceContext*
 	// tmp vars for the transfomation matrices
 	XMMATRIX tmp_worldEV, tmp_worldViewProjectionEV;
 
+	V(g_gameEffect.worldViewProjectionEV->SetMatrix( ( float* )&worldViewProj ));
+	V(g_gameEffect.lightDirEV->SetFloatVector((float*)&g_lightDir));
+
+	// get the inverse transposed matrix for g_terrainWorld
+	V(g_gameEffect.worldNormalsMatrix->SetMatrix((float*)&XMMatrixTranspose(XMMatrixInverse(nullptr, g_terrainWorld))));
+
+	// Set the effect variable g_gameEffect.cameraPosWorldEV to the camera position in world 
+	// space. For this you can use the value from g_camera.GetEyePt()
+	V(g_gameEffect.cameraPosWorldEV->SetFloatVector((float*)&g_camera.GetEyePt()));
+
+	g_terrain.render(pd3dImmediateContext, g_gameEffect.pass0);
+
 	//Create the transformation matrices for the cockpit mesh and set the corresponding effect variables of g_gameEffect: 
 	for (auto cockpitObject : parser.cockpitObjects) {
 
@@ -753,35 +761,15 @@ void CALLBACK OnD3D11FrameRender( ID3D11Device* pd3dDevice, ID3D11DeviceContext*
 		// apply the tmp vars
 		V(g_gameEffect.worldEV->SetMatrix((float*) &tmp_worldEV));
 	   
-		/*
-		// A 05
-		V(g_gameEffect.worldEV->SetMatrix( ( float* )&g_terrainWorld ));
-		V(g_gameEffect.worldViewProjectionEV->SetMatrix( ( float* )&worldViewProj ));
-		*/
-		V(g_gameEffect.lightDirEV->SetFloatVector((float*)&g_lightDir));
-
-		// get the inverse transposed matrix for g_terrainWorld
-		V(g_gameEffect.worldNormalsMatrix->SetMatrix((float*) &XMMatrixTranspose(XMMatrixInverse(nullptr, g_terrainWorld))));
-
-		// Set the effect variable g_gameEffect.cameraPosWorldEV to the camera position in world 
-		// space. For this you can use the value from g_camera.GetEyePt()
-		V(g_gameEffect.cameraPosWorldEV->SetFloatVector((float*)&g_camera.GetEyePt()));
-
 		// Set input layout
 		//pd3dImmediateContext->IASetInputLayout( g_terrainVertexLayout );
 
-		// ************************* End A06 *********************************
-		V(g_gameEffect.worldViewProjectionEV->SetMatrix( ( float* )&worldViewProj ));
-
-
-		g_terrain.render(pd3dImmediateContext, g_gameEffect.pass0);
-    
 		V(g_gameEffect.worldViewProjectionEV->SetMatrix((float*)&tmp_worldViewProjectionEV));
 
 		//Now call the ->render() method for the mesh
 		parser.g_Meshes[cockpitObject.Name]->render(pd3dImmediateContext, g_gameEffect.meshPass1, g_gameEffect.diffuseEV, g_gameEffect.specularEV, g_gameEffect.glowEV);
 	}
-
+	
 	//Create the transformation matrices for the cockpit mesh and set the corresponding effect variables of g_gameEffect: 
 	for (auto groundObject : parser.groundObjects) {
 
@@ -812,34 +800,12 @@ void CALLBACK OnD3D11FrameRender( ID3D11Device* pd3dDevice, ID3D11DeviceContext*
 		// apply the tmp vars
 		V(g_gameEffect.worldEV->SetMatrix((float*)&tmp_worldEV));
 
-		/*
-		// A 05
-		V(g_gameEffect.worldEV->SetMatrix( ( float* )&g_terrainWorld ));
-		V(g_gameEffect.worldViewProjectionEV->SetMatrix( ( float* )&worldViewProj ));
-		*/
-		V(g_gameEffect.lightDirEV->SetFloatVector((float*)&g_lightDir));
-
-		// get the inverse transposed matrix for g_terrainWorld
-		V(g_gameEffect.worldNormalsMatrix->SetMatrix((float*)&XMMatrixTranspose(XMMatrixInverse(nullptr, g_terrainWorld))));
-
-		// Set the effect variable g_gameEffect.cameraPosWorldEV to the camera position in world 
-		// space. For this you can use the value from g_camera.GetEyePt()
-		V(g_gameEffect.cameraPosWorldEV->SetFloatVector((float*)&g_camera.GetEyePt()));
-
-		// Set input layout
-		//pd3dImmediateContext->IASetInputLayout( g_terrainVertexLayout );
-
-		// ************************* End A06 *********************************
-		V(g_gameEffect.worldViewProjectionEV->SetMatrix((float*)&worldViewProj));
-
-
-		g_terrain.render(pd3dImmediateContext, g_gameEffect.pass0);
-
 		V(g_gameEffect.worldViewProjectionEV->SetMatrix((float*)&tmp_worldViewProjectionEV));
 
 		//Now call the ->render() method for the mesh
 		parser.g_Meshes[groundObject.Name]->render(pd3dImmediateContext, g_gameEffect.meshPass1, g_gameEffect.diffuseEV, g_gameEffect.specularEV, g_gameEffect.glowEV);
 	}
+	
 
 	for (auto enemy : Ememy::g_EnemyInstances) {
 
@@ -856,15 +822,18 @@ void CALLBACK OnD3D11FrameRender( ID3D11Device* pd3dDevice, ID3D11DeviceContext*
 			enemy.type.RotY * XM_PI / 180,
 			enemy.type.RotZ * XM_PI / 180);
 
+		DirectX::XMFLOAT3 test;
+		DirectX::XMStoreFloat3(&test, enemy.vel);
+		float d = atan2(test.x, test.z);
+
 		// set translation matrix as given in the config
 		// https://msdn.microsoft.com/en-us/library/windows/desktop/microsoft.directx_sdk.matrix.xmmatrixtranslation%28v=vs.85%29.aspx
 		mTrans = XMMatrixTranslation(enemy.type.TransX, enemy.type.TransY, enemy.type.TransZ);
 
-		mAnim = XMMatrixTranslationFromVector(enemy.pos);
 		// set the scale matrix
 		mScale = XMMatrixScaling(enemy.type.Scale, enemy.type.Scale, enemy.type.Scale);
 
-		mAnim = XMMatrixTranslationFromVector(enemy.pos);
+		mAnim = XMMatrixRotationY(d) * XMMatrixTranslationFromVector(enemy.pos);
 		// apply transformation as given in the config
 		tmp_worldEV = mRot * mTrans * mScale * mAnim;
 		tmp_worldViewProjectionEV = mAnim * tmp_worldEV * g_camera.GetViewMatrix() * g_camera.GetProjMatrix();
@@ -872,31 +841,14 @@ void CALLBACK OnD3D11FrameRender( ID3D11Device* pd3dDevice, ID3D11DeviceContext*
 		// apply the tmp vars
 		V(g_gameEffect.worldEV->SetMatrix((float*)&tmp_worldEV));
 
-		V(g_gameEffect.lightDirEV->SetFloatVector((float*)&g_lightDir));
-
-		// get the inverse transposed matrix for g_terrainWorld
-		V(g_gameEffect.worldNormalsMatrix->SetMatrix((float*)&XMMatrixTranspose(XMMatrixInverse(nullptr, g_terrainWorld))));
-
-		// Set the effect variable g_gameEffect.cameraPosWorldEV to the camera position in world 
-		// space. For this you can use the value from g_camera.GetEyePt()
-		V(g_gameEffect.cameraPosWorldEV->SetFloatVector((float*)&g_camera.GetEyePt()));
-
-		// Set input layout
-		//pd3dImmediateContext->IASetInputLayout( g_terrainVertexLayout );
-
-		// ************************* End A06 *********************************
-		V(g_gameEffect.worldViewProjectionEV->SetMatrix((float*)&worldViewProj));
-
-
-		g_terrain.render(pd3dImmediateContext, g_gameEffect.pass0);
+		//V(g_gameEffect.worldViewProjectionEV->SetMatrix((float*)&worldViewProj));
 
 		V(g_gameEffect.worldViewProjectionEV->SetMatrix((float*)&tmp_worldViewProjectionEV));
 
 		//Now call the ->render() method for the mesh
-		//Mesh fehlt
 		parser.g_Meshes[enemy.type.Mesh]->render(pd3dImmediateContext, g_gameEffect.meshPass1, g_gameEffect.diffuseEV, g_gameEffect.specularEV, g_gameEffect.glowEV);
 	}
-
+	
     DXUT_BeginPerfEvent( DXUT_PERFEVENTCOLOR, L"HUD / Stats" );
     V(g_hud.OnRender( fElapsedTime ));
     V(g_sampleUI.OnRender( fElapsedTime ));
