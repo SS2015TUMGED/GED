@@ -54,6 +54,7 @@ public:
 		float TransY;
 		float TransZ;
 		int SpawnRate;
+		bool Spawn;
 	};
 
 	static std::string height;

@@ -140,6 +140,7 @@ void ConfigParser::load(std::string str){
 					>> enemy.RotX >> enemy.RotY >> enemy.RotZ
 					>> enemy.TransX >> enemy.TransY >> enemy.TransZ
 					>> enemy.SpawnRate;
+				enemy.Spawn = false;
 				enemys[enemy.Name] = enemy;
 			}
 			else {

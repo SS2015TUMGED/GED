@@ -73,7 +73,7 @@ Terrain									g_terrain;
 GameEffect								g_gameEffect; // CPU part of Shader
 
 //Assignment 08: Enemy Handling
-float								g_SpawnTimer = 1.0;
+float								g_SpawnTimer = 6.0f;
 std::default_random_engine Ememy::rng;
 
 //-------------------------------------------------------------------------------------
@@ -641,20 +641,22 @@ void CALLBACK OnFrameMove(double fTime, float fElapsedTime, void* pUserContext)
 	//Enemy handling
 	g_SpawnTimer += fElapsedTime;
 
-	//for (const auto& kv : parser.g_Meshes) {
-	//	kv.second->create(pd3dDevice);
-	//}
-
-
 	for (auto enemy : parser.enemys)
 	{
 		//check if it is time to spawn a new enemy
-		if ((int) g_SpawnTimer % enemy.second.SpawnRate == 0)
+		if ((int)g_SpawnTimer % (int) ((enemy.second).SpawnRate) == 0)
 		{
-			cout << g_SpawnTimer << endl;
 			//spawning new enemy
-			Ememy::spawn(enemy.second, parser.getTerrainWidth());
-			g_SpawnTimer = 1;
+			if (enemy.second.Spawn == false){
+				Ememy::spawn(enemy.second, parser.getTerrainWidth());
+				parser.enemys[enemy.first].Spawn = true;
+				std::cout << Ememy::g_EnemyInstances.size() << endl;
+			}
+	
+		}
+		else{
+			if (enemy.second.Spawn == true)
+				parser.enemys[enemy.first].Spawn = false;
 		}
 	}
 	//deletes enemys from list
@@ -858,12 +860,13 @@ void CALLBACK OnD3D11FrameRender( ID3D11Device* pd3dDevice, ID3D11DeviceContext*
 		// https://msdn.microsoft.com/en-us/library/windows/desktop/microsoft.directx_sdk.matrix.xmmatrixtranslation%28v=vs.85%29.aspx
 		mTrans = XMMatrixTranslation(enemy.type.TransX, enemy.type.TransY, enemy.type.TransZ);
 
+		mAnim = XMMatrixTranslationFromVector(enemy.pos);
 		// set the scale matrix
 		mScale = XMMatrixScaling(enemy.type.Scale, enemy.type.Scale, enemy.type.Scale);
 
 		mAnim = XMMatrixTranslationFromVector(enemy.pos);
 		// apply transformation as given in the config
-		tmp_worldEV = mRot * mTrans * mScale;
+		tmp_worldEV = mRot * mTrans * mScale * mAnim;
 		tmp_worldViewProjectionEV = mAnim * tmp_worldEV * g_camera.GetViewMatrix() * g_camera.GetProjMatrix();
 
 		// apply the tmp vars
