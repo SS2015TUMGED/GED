@@ -73,7 +73,7 @@ Terrain									g_terrain;
 GameEffect								g_gameEffect; // CPU part of Shader
 
 //Assignment 08: Enemy Handling
-float								g_SpawnTimer = 0.0;
+float								g_SpawnTimer = 1.0;
 std::default_random_engine Ememy::rng;
 
 //-------------------------------------------------------------------------------------
@@ -649,19 +649,24 @@ void CALLBACK OnFrameMove(double fTime, float fElapsedTime, void* pUserContext)
 	for (auto enemy : parser.enemys)
 	{
 		//check if it is time to spawn a new enemy
-		if (fmod(g_SpawnTimer, enemy.second.SpawnRate) == 0.0)
+		if ((int) g_SpawnTimer % enemy.second.SpawnRate == 0)
 		{
+			cout << g_SpawnTimer << endl;
 			//spawning new enemy
 			Ememy::spawn(enemy.second, parser.getTerrainWidth());
+			g_SpawnTimer = 1;
 		}
 	}
 	//deletes enemys from list
 	Ememy::g_EnemyInstances.remove_if(out_of_map);
-	for (auto enemy : Ememy::g_EnemyInstances)
+
+	//iterate over all list elements
+	for (auto it = Ememy::g_EnemyInstances.begin(); it != Ememy::g_EnemyInstances.end(); it++)
 	{
-		enemy.pos = enemy.pos + (enemy.vel*fElapsedTime);
+		//you have to use a reference ("int&") in order to affect "value" in list
+		it->pos = it->pos + fElapsedTime * it->vel;
+		//do something with value...
 	}
-	
 }
 
 
@@ -711,7 +716,7 @@ void CALLBACK OnD3D11FrameRender( ID3D11Device* pd3dDevice, ID3D11DeviceContext*
 	XMMATRIX worldViewProj = g_terrainWorld * view * proj;
 	
 	// vars for the transformation
-	XMMATRIX mTrans, mScale, mRot;
+	XMMATRIX mTrans, mScale, mRot, mAnim;
 
 	// tmp vars for the transfomation matrices
 	XMMATRIX tmp_worldEV, tmp_worldViewProjectionEV;
@@ -856,9 +861,10 @@ void CALLBACK OnD3D11FrameRender( ID3D11Device* pd3dDevice, ID3D11DeviceContext*
 		// set the scale matrix
 		mScale = XMMatrixScaling(enemy.type.Scale, enemy.type.Scale, enemy.type.Scale);
 
+		mAnim = XMMatrixTranslationFromVector(enemy.pos);
 		// apply transformation as given in the config
 		tmp_worldEV = mRot * mTrans * mScale;
-		tmp_worldViewProjectionEV = tmp_worldEV * g_camera.GetViewMatrix() * g_camera.GetProjMatrix();
+		tmp_worldViewProjectionEV = mAnim * tmp_worldEV * g_camera.GetViewMatrix() * g_camera.GetProjMatrix();
 
 		// apply the tmp vars
 		V(g_gameEffect.worldEV->SetMatrix((float*)&tmp_worldEV));
