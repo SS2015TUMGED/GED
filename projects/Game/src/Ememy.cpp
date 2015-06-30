@@ -39,13 +39,17 @@ void Ememy::spawn(ConfigParser::EnemyType enemy, float width)
 	vel.x = (width / 16) * std::sin(random_value2) - pos.x;
 	vel.y = random_height - pos.y;
 	vel.z = (width / 16) * std::cos(random_value) - pos.z;
+
+	vel.x /= enemy.Speed;
+	vel.y /= enemy.Speed;
+	vel.z /= enemy.Speed;
 	//load vector into the instance
 	instance.vel = DirectX::XMLoadFloat3(&vel);
 	DirectX::XMVector3Normalize(instance.vel);
 	//Normalized Vector * Speed
-	DirectX::XMVectorSetByIndex(instance.vel, DirectX::XMVectorGetByIndex(instance.vel,0)*enemy.Speed, 0);
-	DirectX::XMVectorSetByIndex(instance.vel, DirectX::XMVectorGetByIndex(instance.vel, 1)*enemy.Speed,1);
-	DirectX::XMVectorSetByIndex(instance.vel, DirectX::XMVectorGetByIndex(instance.vel, 2)*enemy.Speed, 2);
+	//DirectX::XMVectorSetByIndex(instance.vel, DirectX::XMVectorGetByIndex(instance.vel, 0) / enemy.Speed, 0);
+	//DirectX::XMVectorSetByIndex(instance.vel, DirectX::XMVectorGetByIndex(instance.vel, 1) / enemy.Speed, 1);
+	//DirectX::XMVectorSetByIndex(instance.vel, DirectX::XMVectorGetByIndex(instance.vel, 2) / enemy.Speed, 2);
 	g_EnemyInstances.push_back(instance);
 }
 

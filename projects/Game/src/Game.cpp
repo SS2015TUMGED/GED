@@ -608,7 +608,7 @@ void CALLBACK OnGUIEvent( UINT nEvent, int nControlID, CDXUTControl* pControl, v
 
 //checks if a enemy is out of the map
 bool out_of_map(Ememy::EnemyInstance &e) {
-	return (DirectX::XMVectorGetByIndex(DirectX::XMVector3Length(e.pos), 0) > parser.getTerrainWidth() + 10);
+	return (DirectX::XMVectorGetByIndex(DirectX::XMVector3Length(e.pos), 0) > parser.getTerrainWidth() + 100);
 }
 //--------------------------------------------------------------------------------------
 // Handle updates to the scene.  This is called regardless of which D3D API is used
@@ -803,7 +803,7 @@ void CALLBACK OnD3D11FrameRender( ID3D11Device* pd3dDevice, ID3D11DeviceContext*
 		V(g_gameEffect.worldViewProjectionEV->SetMatrix((float*)&tmp_worldViewProjectionEV));
 
 		//Now call the ->render() method for the mesh
-		parser.g_Meshes[groundObject.Name]->render(pd3dImmediateContext, g_gameEffect.meshPass1, g_gameEffect.diffuseEV, g_gameEffect.specularEV, g_gameEffect.glowEV);
+		//parser.g_Meshes[groundObject.Name]->render(pd3dImmediateContext, g_gameEffect.meshPass1, g_gameEffect.diffuseEV, g_gameEffect.specularEV, g_gameEffect.glowEV);
 	}
 	
 
@@ -836,7 +836,7 @@ void CALLBACK OnD3D11FrameRender( ID3D11Device* pd3dDevice, ID3D11DeviceContext*
 		mAnim = XMMatrixRotationY(d) * XMMatrixTranslationFromVector(enemy.pos);
 		// apply transformation as given in the config
 		tmp_worldEV = mRot * mScale * mTrans;
-		tmp_worldViewProjectionEV = mAnim * tmp_worldEV * g_camera.GetViewMatrix() * g_camera.GetProjMatrix();
+		tmp_worldViewProjectionEV = tmp_worldEV * mAnim * g_camera.GetViewMatrix() * g_camera.GetProjMatrix();
 
 		// apply the tmp vars
 		V(g_gameEffect.worldEV->SetMatrix((float*)&tmp_worldEV));
