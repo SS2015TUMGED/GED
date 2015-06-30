@@ -835,7 +835,7 @@ void CALLBACK OnD3D11FrameRender( ID3D11Device* pd3dDevice, ID3D11DeviceContext*
 
 		mAnim = XMMatrixRotationY(d) * XMMatrixTranslationFromVector(enemy.pos);
 		// apply transformation as given in the config
-		tmp_worldEV = mRot * mTrans * mScale * mAnim;
+		tmp_worldEV = mRot * mScale * mTrans;
 		tmp_worldViewProjectionEV = mAnim * tmp_worldEV * g_camera.GetViewMatrix() * g_camera.GetProjMatrix();
 
 		// apply the tmp vars
