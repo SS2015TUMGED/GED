@@ -65,7 +65,7 @@ public:
 	static std::vector<CockpitObject> cockpitObjects;
 	static std::vector<GroundObject> groundObjects;
 	//contains all Enemys
-	static std::map<std::string, EnemyType*> enemys;
+	static std::map<std::string, EnemyType> enemys;
 
 	// getters
 	float getSpinning();

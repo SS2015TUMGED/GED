@@ -641,13 +641,18 @@ void CALLBACK OnFrameMove(double fTime, float fElapsedTime, void* pUserContext)
 	//Enemy handling
 	g_SpawnTimer += fElapsedTime;
 
+	//for (const auto& kv : parser.g_Meshes) {
+	//	kv.second->create(pd3dDevice);
+	//}
+
+
 	for (auto enemy : parser.enemys)
 	{
 		//check if it is time to spawn a new enemy
-		if (fmod(g_SpawnTimer, (*enemy.second).SpawnRate) == 0.0)
+		if (fmod(g_SpawnTimer, enemy.second.SpawnRate) == 0.0)
 		{
 			//spawning new enemy
-			Ememy::spawn(*enemy.second, parser.getTerrainWidth());
+			Ememy::spawn(enemy.second, parser.getTerrainWidth());
 		}
 	}
 	//deletes enemys from list

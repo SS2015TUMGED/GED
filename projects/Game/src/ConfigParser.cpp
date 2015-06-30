@@ -15,7 +15,7 @@ std::map<std::string, Mesh*> ConfigParser::g_Meshes;
 // contains all Cockpit- and GroundObjects
 std::vector<ConfigParser::CockpitObject> ConfigParser::cockpitObjects;
 std::vector<ConfigParser::GroundObject> ConfigParser::groundObjects;
-std::map<std::string, ConfigParser::EnemyType*> ConfigParser::enemys;
+std::map<std::string, ConfigParser::EnemyType> ConfigParser::enemys;
 
 ConfigParser::ConfigParser()
 {
@@ -140,7 +140,7 @@ void ConfigParser::load(std::string str){
 					>> enemy.RotX >> enemy.RotY >> enemy.RotZ
 					>> enemy.TransX >> enemy.TransY >> enemy.TransZ
 					>> enemy.SpawnRate;
-				enemys[enemy.Name] = &enemy;
+				enemys[enemy.Name] = enemy;
 			}
 			else {
 				if (!word.empty()) {
