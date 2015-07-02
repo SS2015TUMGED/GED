@@ -39,6 +39,13 @@ public:
 	// Render the given sprites. They must already be sorted into back-to-front order.
 	void renderSprites(ID3D11DeviceContext* context, const std::vector<SpriteVertex>& sprites, const CFirstPersonCamera& camera);
 
+	// Global variable
+	ID3DX11EffectMatrixVariable*			g_ViewProjection;
+	ID3DX11EffectVectorVariable*			camRightVec;
+	ID3DX11EffectVectorVariable*			camUpVec;
+	ID3DX11EffectShaderResourceVariable*	sprTex1;
+	ID3DX11EffectShaderResourceVariable*	sprTex2;
+
 private:
 	std::vector<std::wstring> m_textureFilenames;
 

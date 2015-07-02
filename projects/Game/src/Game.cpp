@@ -243,8 +243,8 @@ void InitApp()
     g_sampleUI.AddCheckBox( IDC_TOGGLESPIN, L"Toggle Spinning", 0, iY += 24, 125, 22, g_terrainSpinning );   
 
 	vector<wstring> sprites;
-	sprites.push_back(L"resources\particle\parTrailGatlingDiffuse.DDS");
-	sprites.push_back(L"resources\particle\parTrailPlasmaDiffuse.DDS");
+	sprites.push_back(L"..\\..\\Debug\\resources\\particle\\parTrailGatlingDiffuse.DDS");
+	sprites.push_back(L"..\\..\\Debug\\resources\\particle\\parTrailPlasmaDiffuse.DDS");
 
 	g_SpriteRenderer = new SpriteRenderer(sprites);
 
@@ -355,8 +355,8 @@ HRESULT CALLBACK OnD3D11CreateDevice( ID3D11Device* pd3dDevice,
 	// depending on your heightfield (Hint: move  the camera initialization 
 	// code to after the position where the heightfield is read; also the terrainHeight read from game.cfg might help). 
 
-	XMVECTOR vEye = XMVectorSet(0.0f, 130.0f, 1.0f, 0.0f);   // Camera eye is here
-    XMVECTOR vAt = XMVectorSet(0.0f, 0.0f, 0.0f, 1.0f);               // ... facing at this position
+	XMVECTOR vEye = XMVectorSet(0.0f, 130.0f, 0.0f, 0.0f);   // Camera eye is here
+	XMVECTOR vAt = XMVectorSet(0.0f, 100.0f, -100.0f, 1.0f);               // ... facing at this position
     g_camera.SetViewParams(vEye, vAt); // http://msdn.microsoft.com/en-us/library/windows/desktop/bb206342%28v=vs.85%29.aspx
 	g_camera.SetScalers(g_cameraRotateScaler, g_cameraMoveScaler);
 
@@ -877,11 +877,44 @@ void CALLBACK OnD3D11FrameRender( ID3D11Device* pd3dDevice, ID3D11DeviceContext*
 	SpriteVertex sv;
 	sv.position.x = 0;
 	sv.position.y = 100;
-	sv.position.z = 0;
-	sv.radius = 100;
+	sv.position.z = -50;
+	sv.radius = 10;
 	sv.textureIndex = 0;
 
 	proj2Rend.push_back(sv);
+
+	SpriteVertex sv2;
+	sv2.position.x = 0;
+	sv2.position.y = 150;
+	sv2.position.z = -100;
+	sv2.radius = 10;
+	sv2.textureIndex = 1;
+	proj2Rend.push_back(sv2);
+
+	SpriteVertex sv3;
+	sv3.position.x = 0;
+	sv3.position.y = 150;
+	sv3.position.z = -400;
+	sv3.radius = 5;
+	sv3.textureIndex = 0;
+	proj2Rend.push_back(sv3);
+
+	SpriteVertex sv4;
+	sv4.position.x = 0;
+	sv4.position.y = 150;
+	sv4.position.z = -110;
+	sv4.radius = 3;
+	sv4.textureIndex = 1;
+	proj2Rend.push_back(sv4);
+
+	SpriteVertex sv5;
+	sv5.position.x = 0;
+	sv5.position.y = 150;
+	sv5.position.z = -60;
+	sv5.radius = 1;
+	sv5.textureIndex = 0;
+	proj2Rend.push_back(sv5);
+
 
 	g_SpriteRenderer->renderSprites(pd3dImmediateContext, proj2Rend, g_camera);
 

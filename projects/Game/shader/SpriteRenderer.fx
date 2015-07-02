@@ -1,3 +1,10 @@
+matrix g_ViewProjection;
+float4 g_CamRVec;
+float4 g_CamUVec;
+
+Texture2DArray g_SprTex1;
+Texture2DArray g_SprTex2;
+
 //--------------------------------------------------------------------------------------
 // Rasterizer states
 //--------------------------------------------------------------------------------------
@@ -23,6 +30,24 @@ RasterizerState rsLineAA {
 };
 
 //--------------------------------------------------------------------------------------
+// Samplers
+//--------------------------------------------------------------------------------------
+
+SamplerState samAnisotropic
+{
+	Filter = ANISOTROPIC;
+	AddressU = Wrap;
+	AddressV = Wrap;
+};
+
+SamplerState samLinearClamp
+{
+	Filter = MIN_MAG_MIP_LINEAR;
+	AddressU = Clamp;
+	AddressV = Clamp;
+};
+
+//--------------------------------------------------------------------------------------
 // DepthStates
 //--------------------------------------------------------------------------------------
 DepthStencilState EnableDepth
@@ -32,10 +57,13 @@ DepthStencilState EnableDepth
 	DepthFunc = LESS_EQUAL;
 };
 
-BlendState NoBlending
+BlendState BSBlendOver
 {
-	AlphaToCoverageEnable = FALSE;
-	BlendEnable[0] = FALSE;
+	BlendEnable[0] = TRUE;
+	SrcBlend[0] = SRC_ALPHA;
+	SrcBlendAlpha[0] = ONE;
+	DestBlend[0] = INV_SRC_ALPHA;
+	DestBlendAlpha[0] = INV_SRC_ALPHA;
 };
 
 //--------------------------------------------------------------------------------------
@@ -50,13 +78,54 @@ struct SpriteVertex
 	//float alpha : ALPHA;
 };
 
+struct PSVertex
+{
+	float4 pos : SV_POSITION;
+	float  rad : RADIUS;
+	int    ind : INDEX;
+	float3 tex : TEXCOORD;
+	//float alpha : ALPHA;
+};
+
 // Dummy methods
-void DummyVS(SpriteVertex input, out float4 pos : SV_Position) {
-	pos = float4(0, 0, 0.5, 1);
+void DummyVS(inout SpriteVertex input) {
+	//pos = float4(0, 0, 0.5, 1);
 }
 
-float4 DummyPS(float4 pos : SV_Position) : SV_Target0{
-	return float4(1, 1, 0, 1);
+[maxvertexcount(4)]
+void SpriteGS(point SpriteVertex vertex[1], inout TriangleStream<PSVertex> stream) {
+	PSVertex temp = (PSVertex)0;
+	temp.pos = mul(float4(vertex[0].pos, 1.0f) - (g_CamRVec * vertex[0].rad)
+		+ (g_CamUVec* vertex[0].rad), g_ViewProjection);
+	temp.tex = float3(0.0f, 0.0f, 1.0f);
+	temp.ind = vertex[0].ind;
+	//temp.alpha = vertex[0].alpha;
+	stream.Append(temp);
+
+	temp.pos = mul(float4(vertex[0].pos, 1.0f) - (g_CamRVec * vertex[0].rad)
+		- (g_CamUVec* vertex[0].rad), g_ViewProjection);
+	temp.tex = float3(0.0f, 1.0f, 1.0f);
+	stream.Append(temp);
+
+	temp.pos = mul(float4(vertex[0].pos, 1.0f) + (g_CamRVec * vertex[0].rad)
+		+ (g_CamUVec* vertex[0].rad), g_ViewProjection);
+	temp.tex = float3(1.0f, 0.0f, 1.0f);
+	stream.Append(temp);
+
+	temp.pos = mul(float4(vertex[0].pos, 1.0f) + (g_CamRVec * vertex[0].rad)
+		- (g_CamUVec* vertex[0].rad), g_ViewProjection);
+	temp.tex = float3(1.0f, 1.0f, 1.0f);
+	stream.Append(temp);
+}
+
+
+float4 DummyPS(in PSVertex input) : SV_Target0{
+	float4 matDiffuse;
+	if (input.ind == 0)
+		matDiffuse = g_SprTex1.Sample(samAnisotropic, input.tex);
+	else
+		matDiffuse = g_SprTex2.Sample(samAnisotropic, input.tex);
+	return matDiffuse;
 }
 
 //--------------------------------------------------------------------------------------
@@ -67,11 +136,11 @@ technique11 sRender
     pass P0
     {
 		SetVertexShader(CompileShader(vs_4_0, DummyVS()));
-        SetGeometryShader(NULL);
+        SetGeometryShader(CompileShader(gs_4_0, SpriteGS()));
         SetPixelShader(CompileShader(ps_4_0, DummyPS()));
         
         SetRasterizerState(rsCullNone);
         SetDepthStencilState(EnableDepth, 0);
-        SetBlendState(NoBlending, float4(0.0f, 0.0f, 0.0f, 0.0f), 0xFFFFFFFF);
+        SetBlendState(BSBlendOver, float4(0.0f, 0.0f, 0.0f, 0.0f), 0xFFFFFFFF);
     }
 }

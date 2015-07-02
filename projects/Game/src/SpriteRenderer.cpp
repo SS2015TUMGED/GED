@@ -8,7 +8,17 @@
 #include "DXUT.h"
 #include "d3dx11effect.h"
 #include "SDKmisc.h"
+#include <DDSTextureLoader.h>
 
+
+// Convenience macros for safe effect variable retrieval
+#define SAFE_GET_PASS(Technique, name, var)   {assert(Technique!=NULL); var = Technique->GetPassByName( name );						assert(var->IsValid());}
+#define SAFE_GET_TECHNIQUE(effect, name, var) {assert(effect!=NULL); var = effect->GetTechniqueByName( name );						assert(var->IsValid());}
+#define SAFE_GET_SCALAR(effect, name, var)    {assert(effect!=NULL); var = effect->GetVariableByName( name )->AsScalar();			assert(var->IsValid());}
+#define SAFE_GET_VECTOR(effect, name, var)    {assert(effect!=NULL); var = effect->GetVariableByName( name )->AsVector();			assert(var->IsValid());}
+#define SAFE_GET_MATRIX(effect, name, var)    {assert(effect!=NULL); var = effect->GetVariableByName( name )->AsMatrix();			assert(var->IsValid());}
+#define SAFE_GET_SAMPLER(effect, name, var)   {assert(effect!=NULL); var = effect->GetVariableByName( name )->AsSampler();			assert(var->IsValid());}
+#define SAFE_GET_RESOURCE(effect, name, var)  {assert(effect!=NULL); var = effect->GetVariableByName( name )->AsShaderResource();	assert(var->IsValid());}
 
 SpriteRenderer::SpriteRenderer(const std::vector<std::wstring>& textureFilenames)
 	: m_textureFilenames(textureFilenames)
@@ -84,11 +94,11 @@ HRESULT SpriteRenderer::create(ID3D11Device* pDevice) {
 	V_RETURN(pDevice->CreateInputLayout(layout, numElements, passDesc.pIAInputSignature,
 		passDesc.IAInputSignatureSize, &m_pInputLayout));
 
-	/*m_spriteSRV.resize(m_textureFilenames.size());
+	m_spriteSRV.resize(m_textureFilenames.size());
 	for (int i = 0; i < m_textureFilenames.size(); i++)
 	{
 		V(DirectX::CreateDDSTextureFromFile(pDevice, m_textureFilenames[i].c_str(), nullptr, &m_spriteSRV[i]));
-	}*/
+	}
 
 	return S_OK;
 }
@@ -97,8 +107,8 @@ HRESULT SpriteRenderer::create(ID3D11Device* pDevice) {
 void SpriteRenderer::destroy() {
 	SAFE_RELEASE(m_pVertexBuffer);
 	SAFE_RELEASE(m_pInputLayout);
-	//for (int i = 0; i < m_spriteSRV.size(); i++)
-	//	SAFE_RELEASE(m_spriteSRV[i]);
+	for (int i = 0; i < m_spriteSRV.size(); i++)
+		SAFE_RELEASE(m_spriteSRV[i]);
 }
 
 // Render the given sprites. They must already be sorted into back-to-front order.
@@ -119,25 +129,25 @@ void SpriteRenderer::renderSprites(ID3D11DeviceContext* context, const std::vect
 	context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_POINTLIST);
 
 	// Load variables to shader
-	/*SAFE_GET_MATRIX(m_pEffect, "g_ViewProjection", viewProjection);
+	SAFE_GET_MATRIX(m_pEffect, "g_ViewProjection", g_ViewProjection);
 	SAFE_GET_VECTOR(m_pEffect, "g_CamRVec", camRightVec);
 	SAFE_GET_VECTOR(m_pEffect, "g_CamUVec", camUpVec);
 	SAFE_GET_RESOURCE(m_pEffect, "g_SprTex1", sprTex1);
 	SAFE_GET_RESOURCE(m_pEffect, "g_SprTex2", sprTex2);
-	SAFE_GET_RESOURCE(m_pEffect, "g_SprTex3", sprTex3);
+	//SAFE_GET_RESOURCE(m_pEffect, "g_SprTex3", sprTex3);
 
 	// Set view and projection transformations to get sprites to the right positions in world space
 	DirectX::XMMATRIX viewProj = camera.GetViewMatrix() * camera.GetProjMatrix();
-	V(viewProjection->SetMatrix((float*)&viewProj));
-
+	V(g_ViewProjection->SetMatrix((float*)&viewProj));
+	
 	// Set Textures
 	V(sprTex1->SetResource(m_spriteSRV[0]));
 	V(sprTex2->SetResource(m_spriteSRV[1]));
-	V(sprTex3->SetResource(m_spriteSRV[2]));
-
+	//V(sprTex3->SetResource(m_spriteSRV[2]));
+	
 	// Get camera's right and up vector
 	V(camRightVec->SetFloatVector((float*)&camera.GetWorldRight()));
-	V(camUpVec->SetFloatVector((float*)&camera.GetWorldUp()));*/
+	V(camUpVec->SetFloatVector((float*)&camera.GetWorldUp()));
 
 	// Apply the pass from the effect
 	V(m_pEffect->GetTechniqueByName("sRender")->GetPassByName("P0")->Apply(0, context));
