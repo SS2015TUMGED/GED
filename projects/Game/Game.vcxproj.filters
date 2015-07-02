@@ -50,6 +50,9 @@
     <ClInclude Include="src\Ememy.h">
       <Filter>Header</Filter>
     </ClInclude>
+    <ClInclude Include="src\SpriteRenderer.h">
+      <Filter>Header</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Game.cpp">
@@ -76,9 +79,15 @@
     <ClCompile Include="src\Ememy.cpp">
       <Filter>Source</Filter>
     </ClCompile>
+    <ClCompile Include="src\SpriteRenderer.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="shader\game.fx">
+      <Filter>Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="shader\SpriteRenderer.fx">
       <Filter>Shader</Filter>
     </FxCompile>
   </ItemGroup>

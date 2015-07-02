@@ -26,6 +26,7 @@
 #include "ConfigParser.h"
 #include "Mesh.h"
 #include "CustomData.h"
+#include "SpriteRenderer.h"
 
 #include "debug.h"
 #include <map>
@@ -80,6 +81,7 @@ std::default_random_engine Ememy::rng;
 // Our Killer Variables
 // ------------------------------------------------------------------------------------
 ConfigParser parser;
+SpriteRenderer* g_SpriteRenderer;
 //Mesh*        g_cockpitMesh = nullptr;
 
 //--------------------------------------------------------------------------------------
@@ -240,12 +242,11 @@ void InitApp()
     iY += 24;
     g_sampleUI.AddCheckBox( IDC_TOGGLESPIN, L"Toggle Spinning", 0, iY += 24, 125, 22, g_terrainSpinning );   
 
+	vector<wstring> sprites;
+	sprites.push_back(L"resources\particle\parTrailGatlingDiffuse.DDS");
+	sprites.push_back(L"resources\particle\parTrailPlasmaDiffuse.DDS");
 
-	// ************************************* Assignment 06 ****************************************************
-	// create new mesh
-	//g_cockpitMesh = parser.g_Meshes["Cockpit"];
-
-
+	g_SpriteRenderer = new SpriteRenderer(sprites);
 
 }
 
@@ -263,6 +264,8 @@ void DeinitApp(){
 	//	parser.enemys.erase(iterator);
 	//}
 	parser.enemys.clear();
+
+	SAFE_DELETE(g_SpriteRenderer);
 }
 
 
@@ -500,6 +503,8 @@ HRESULT ReloadShader(ID3D11Device* pd3dDevice)
     ReleaseShader();
 	V_RETURN(g_gameEffect.create(pd3dDevice));
 
+	g_SpriteRenderer->reloadShader(pd3dDevice);
+
     return S_OK;
 }
 
@@ -508,6 +513,7 @@ HRESULT ReloadShader(ID3D11Device* pd3dDevice)
 //--------------------------------------------------------------------------------------
 void ReleaseShader()
 {
+	g_SpriteRenderer->releaseShader();
 	g_gameEffect.destroy();
 }
 

@@ -1,0 +1,107 @@
+#include "SpriteRenderer.h"
+#include <iostream>
+#include <fstream>
+#include <sstream>
+
+#include <vector>
+
+#include "DXUT.h"
+#include "d3dx11effect.h"
+#include "SDKmisc.h"
+
+
+SpriteRenderer::SpriteRenderer(const std::vector<std::wstring>& textureFilenames)
+	: m_textureFilenames(textureFilenames)
+	, m_pEffect(nullptr)
+	, m_spriteSRV(0)
+	, m_spriteCountMax(0.0f)
+	, m_pVertexBuffer(nullptr)
+	, m_pInputLayout(nullptr) {
+
+}
+
+// Destructor does nothing. Destroy and ReleaseShader must be called first!
+SpriteRenderer::~SpriteRenderer() {
+
+}
+
+// Load/reload the effect. Must be called once before create!
+HRESULT SpriteRenderer::reloadShader(ID3D11Device* pDevice) {
+	HRESULT hr;
+	WCHAR path[MAX_PATH];
+
+	using namespace std;
+
+	// Find and load the rendering effect
+	V_RETURN(DXUTFindDXSDKMediaFileCch(path, MAX_PATH, L"shader\\spriteRenderer.fxo"));
+	ifstream is(path, std::ios_base::binary);
+	is.seekg(0, std::ios_base::end);
+	streampos pos = is.tellg();
+	is.seekg(0, std::ios_base::beg);
+	vector<char> effectBuffer((unsigned int)pos);
+	is.read(&effectBuffer[0], pos);
+	is.close();
+	V_RETURN(D3DX11CreateEffectFromMemory((const void*)&effectBuffer[0], effectBuffer.size(), 0, pDevice, &m_pEffect));
+	assert(m_pEffect->IsValid());
+	return S_OK;
+}
+
+// Release the effect again.
+void SpriteRenderer::releaseShader() {
+	SAFE_RELEASE(m_pEffect);
+}
+
+// Create all required D3D resources (textures, buffers, ...).
+// reloadShader must be called first!
+HRESULT SpriteRenderer::create(ID3D11Device* pDevice) {
+	HRESULT hr;
+
+	D3D11_BUFFER_DESC bd;
+	bd.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+	bd.ByteWidth = 1024 * sizeof(SpriteVertex);
+	bd.CPUAccessFlags = 0;
+	bd.MiscFlags = 0;
+	bd.Usage = D3D11_USAGE_DEFAULT;
+
+	V(pDevice->CreateBuffer(&bd, nullptr, &m_pVertexBuffer));
+
+	const D3D11_INPUT_ELEMENT_DESC layout[] =
+	{
+		{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+		{ "RADIUS", 0, DXGI_FORMAT_R32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+		{ "INDEX", 0, DXGI_FORMAT_R32_UINT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+		//{ "STATE", 0, DXGI_FORMAT_R32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+		//{ "ALPHA", 0, DXGI_FORMAT_R32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+	};
+
+	UINT numElements = sizeof(layout) / sizeof(layout[0]);
+
+	// Create the input layout
+	D3DX11_PASS_DESC passDesc;
+
+	V_RETURN(m_pEffect->GetTechniqueByName("sRender")->GetPassByName("P0")->GetDesc(&passDesc));
+
+	V_RETURN(pDevice->CreateInputLayout(layout, numElements, passDesc.pIAInputSignature,
+		passDesc.IAInputSignatureSize, &m_pInputLayout));
+
+	/*m_spriteSRV.resize(m_textureFilenames.size());
+	for (int i = 0; i < m_textureFilenames.size(); i++)
+	{
+		V(DirectX::CreateDDSTextureFromFile(pDevice, m_textureFilenames[i].c_str(), nullptr, &m_spriteSRV[i]));
+	}*/
+
+	return S_OK;
+}
+
+// Release D3D resources again.
+void SpriteRenderer::destroy() {
+	SAFE_RELEASE(m_pVertexBuffer);
+	SAFE_RELEASE(m_pInputLayout);
+	//for (int i = 0; i < m_spriteSRV.size(); i++)
+	//	SAFE_RELEASE(m_spriteSRV[i]);
+}
+
+// Render the given sprites. They must already be sorted into back-to-front order.
+void SpriteRenderer::renderSprites(ID3D11DeviceContext* context, const std::vector<SpriteVertex>& sprites, const CFirstPersonCamera& camera) {
+
+}
