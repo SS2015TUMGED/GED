@@ -104,4 +104,44 @@ void SpriteRenderer::destroy() {
 // Render the given sprites. They must already be sorted into back-to-front order.
 void SpriteRenderer::renderSprites(ID3D11DeviceContext* context, const std::vector<SpriteVertex>& sprites, const CFirstPersonCamera& camera) {
 
+	HRESULT hr;
+
+	D3D11_BOX box;
+	box.left = 0; box.right = sprites.size() * sizeof(SpriteVertex);
+	box.top = 0; box.bottom = 1; box.front = 0; box.back = 1;
+	context->UpdateSubresource(m_pVertexBuffer, 0, &box, sprites.data(), 0, 0);
+
+	// Bind the vertex buffer to the input assembler stage 
+	unsigned int strides[] = { sizeof(SpriteVertex), }, offsets[] = { 0, };
+	context->IASetVertexBuffers(0, 1, &m_pVertexBuffer, strides, offsets);
+	// Set the Input Layout
+	context->IASetInputLayout(m_pInputLayout);
+	context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_POINTLIST);
+
+	// Load variables to shader
+	/*SAFE_GET_MATRIX(m_pEffect, "g_ViewProjection", viewProjection);
+	SAFE_GET_VECTOR(m_pEffect, "g_CamRVec", camRightVec);
+	SAFE_GET_VECTOR(m_pEffect, "g_CamUVec", camUpVec);
+	SAFE_GET_RESOURCE(m_pEffect, "g_SprTex1", sprTex1);
+	SAFE_GET_RESOURCE(m_pEffect, "g_SprTex2", sprTex2);
+	SAFE_GET_RESOURCE(m_pEffect, "g_SprTex3", sprTex3);
+
+	// Set view and projection transformations to get sprites to the right positions in world space
+	DirectX::XMMATRIX viewProj = camera.GetViewMatrix() * camera.GetProjMatrix();
+	V(viewProjection->SetMatrix((float*)&viewProj));
+
+	// Set Textures
+	V(sprTex1->SetResource(m_spriteSRV[0]));
+	V(sprTex2->SetResource(m_spriteSRV[1]));
+	V(sprTex3->SetResource(m_spriteSRV[2]));
+
+	// Get camera's right and up vector
+	V(camRightVec->SetFloatVector((float*)&camera.GetWorldRight()));
+	V(camUpVec->SetFloatVector((float*)&camera.GetWorldUp()));*/
+
+	// Apply the pass from the effect
+	V(m_pEffect->GetTechniqueByName("sRender")->GetPassByName("P0")->Apply(0, context));
+
+	// Draw
+	context->Draw(sprites.size(), 0);
 }

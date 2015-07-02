@@ -404,6 +404,9 @@ HRESULT CALLBACK OnD3D11CreateDevice( ID3D11Device* pd3dDevice,
 		it->second->create(pd3dDevice);
 	}*/
 
+	// Create SpriteRenderer
+	g_SpriteRenderer->create(pd3dDevice);
+
     return S_OK;
 }
 
@@ -434,6 +437,8 @@ void CALLBACK OnD3D11DestroyDevice( void* pUserContext )
 	for (const auto& kv : parser.g_Meshes) {
 		kv.second->destroy();
 	}
+
+	g_SpriteRenderer->destroy();
 }
 
 //--------------------------------------------------------------------------------------
@@ -854,7 +859,32 @@ void CALLBACK OnD3D11FrameRender( ID3D11Device* pd3dDevice, ID3D11DeviceContext*
 		//Now call the ->render() method for the mesh
 		parser.g_Meshes[enemy.type.Mesh]->render(pd3dImmediateContext, g_gameEffect.meshPass1, g_gameEffect.diffuseEV, g_gameEffect.specularEV, g_gameEffect.glowEV);
 	}
-	
+
+	// i have no idea if this shit works...
+	// Sort projectiles according to the distance between projectile and camera
+	//auto comp = [](SpriteVertex projA, SpriteVertex projB) -> bool {return projA.camDist > projB.camDist; };
+	XMVECTOR cam = XMVector4Normalize(g_camera.GetWorldAhead());
+	XMFLOAT3 camNor;
+	XMStoreFloat3(&camNor, cam);
+
+	std::vector<SpriteVertex> proj2Rend;
+	/*for (auto it = g_projectiles.begin(); it != g_projectiles.end(); proj2Rend.push_back(it->sprite), ++it);
+	for (auto it = g_explos.begin(); it != g_explos.end(); proj2Rend.push_back(it->sprite), ++it);
+
+	for (int i = 0; i < proj2Rend.size(); i++)
+		proj2Rend[i].camDist = dot(proj2Rend[i].position, camNor);
+	std::sort(proj2Rend.begin(), proj2Rend.end(), comp);*/
+	SpriteVertex sv;
+	sv.position.x = 0;
+	sv.position.y = 100;
+	sv.position.z = 0;
+	sv.radius = 100;
+	sv.textureIndex = 0;
+
+	proj2Rend.push_back(sv);
+
+	g_SpriteRenderer->renderSprites(pd3dImmediateContext, proj2Rend, g_camera);
+
     DXUT_BeginPerfEvent( DXUT_PERFEVENTCOLOR, L"HUD / Stats" );
     V(g_hud.OnRender( fElapsedTime ));
     V(g_sampleUI.OnRender( fElapsedTime ));
