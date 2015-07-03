@@ -619,7 +619,7 @@ void CALLBACK OnGUIEvent( UINT nEvent, int nControlID, CDXUTControl* pControl, v
 
 //checks if a enemy is out of the map
 bool out_of_map(Ememy::EnemyInstance &e) {
-	return (DirectX::XMVectorGetByIndex(DirectX::XMVector3Length(e.pos), 0) > parser.getTerrainWidth() + 100);
+	return (DirectX::XMVectorGetByIndex(DirectX::XMVector3Length(XMLoadFloat3(&e.pos)),0) > parser.getTerrainWidth() + 100);
 }
 //--------------------------------------------------------------------------------------
 // Handle updates to the scene.  This is called regardless of which D3D API is used
@@ -674,7 +674,13 @@ void CALLBACK OnFrameMove(double fTime, float fElapsedTime, void* pUserContext)
 	//iterate over all list elements
 	for (auto it = Ememy::g_EnemyInstances.begin(); it != Ememy::g_EnemyInstances.end(); it++)
 	{
-		it->pos = it->pos + fElapsedTime * it->vel;
+		float x = it->vel.x * fElapsedTime;
+		float y = it->vel.y * fElapsedTime;
+		float z = it->vel.z * fElapsedTime;
+		it->pos.x += it->vel.x;
+		it->pos.y += it->vel.y;
+		it->pos.z += it->vel.z
+			;
 	}
 }
 
@@ -833,8 +839,8 @@ void CALLBACK OnD3D11FrameRender( ID3D11Device* pd3dDevice, ID3D11DeviceContext*
 			enemy.type.RotY * XM_PI / 180,
 			enemy.type.RotZ * XM_PI / 180);
 
-		DirectX::XMFLOAT3 test;
-		DirectX::XMStoreFloat3(&test, enemy.vel);
+		DirectX::XMFLOAT3 test =enemy.vel;
+		//DirectX::XMStoreFloat3(&test, enemy.vel);
 		float d = atan2(test.x, test.z);
 
 		// set translation matrix as given in the config
@@ -844,7 +850,7 @@ void CALLBACK OnD3D11FrameRender( ID3D11Device* pd3dDevice, ID3D11DeviceContext*
 		// set the scale matrix
 		mScale = XMMatrixScaling(enemy.type.Scale, enemy.type.Scale, enemy.type.Scale);
 
-		mAnim = XMMatrixRotationY(d) * XMMatrixTranslationFromVector(enemy.pos);
+		mAnim = XMMatrixRotationY(d) * XMMatrixTranslationFromVector(XMLoadFloat3(&enemy.pos));
 		// apply transformation as given in the config
 		tmp_worldEV = mRot * mScale * mTrans;
 		tmp_worldViewProjectionEV = tmp_worldEV * mAnim * g_camera.GetViewMatrix() * g_camera.GetProjMatrix();

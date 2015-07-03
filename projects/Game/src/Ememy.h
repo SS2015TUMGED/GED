@@ -12,8 +12,8 @@ public:
 	~Ememy();
 
 	struct EnemyInstance{
-		DirectX::XMVECTOR pos; //position p in world space
-		DirectX::XMVECTOR vel; //velocity v in world space
+		DirectX::XMFLOAT3 pos; //position p in world space
+		DirectX::XMFLOAT3 vel; //velocity v in world space
 		int hitpoints;
 		std::string name;
 		ConfigParser::EnemyType type;

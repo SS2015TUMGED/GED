@@ -17,7 +17,7 @@ std::list<Ememy::EnemyInstance> Ememy::g_EnemyInstances;
 void Ememy::spawn(ConfigParser::EnemyType enemy, float width)
 {
 	//initiating instance variables
-	Ememy::EnemyInstance instance;
+	EnemyInstance instance;
 	instance.hitpoints = enemy.Hitpoints;
 	instance.name = enemy.Name;
 	instance.type = enemy;
@@ -31,7 +31,7 @@ void Ememy::spawn(ConfigParser::EnemyType enemy, float width)
 	pos.y = random_height;
 	pos.z = width * std::cos(random_value);
 	//load position to the instance
-	instance.pos = DirectX::XMLoadFloat3(&pos); 
+	instance.pos = pos;
 
 	//calculate and initiate direction vector
 	float random_value2 = Ememy::normalDisRandom(0.0f, M_PI * 2.0f);
@@ -39,17 +39,16 @@ void Ememy::spawn(ConfigParser::EnemyType enemy, float width)
 	vel.x = (width / 16) * std::sin(random_value2) - pos.x;
 	vel.y = random_height - pos.y;
 	vel.z = (width / 16) * std::cos(random_value) - pos.z;
-
-	vel.x /= enemy.Speed;
-	vel.y /= enemy.Speed;
-	vel.z /= enemy.Speed;
+	DirectX::XMStoreFloat3(&vel,DirectX::XMVector3Normalize(XMLoadFloat3(&vel)));
+	vel.x *= (enemy.Speed/50.0f);
+	vel.y *= (enemy.Speed / 50.0f);
+	vel.z *= (enemy.Speed / 50.0f);
 	//load vector into the instance
-	instance.vel = DirectX::XMLoadFloat3(&vel);
-	DirectX::XMVector3Normalize(instance.vel);
+	instance.vel = vel;
 	//Normalized Vector * Speed
 	//DirectX::XMVectorSetByIndex(instance.vel, DirectX::XMVectorGetByIndex(instance.vel, 0) / enemy.Speed, 0);
 	//DirectX::XMVectorSetByIndex(instance.vel, DirectX::XMVectorGetByIndex(instance.vel, 1) / enemy.Speed, 1);
-	//DirectX::XMVectorSetByIndex(instance.vel, DirectX::XMVectorGetByIndex(instance.vel, 2) / enemy.Speed, 2);
+	//DirectX::XMVectorSetByIndex(instance.vel, DirectX::XMVectorGetByIndex(instance.vel, 2) / enemy.Speed, 2);*/
 	g_EnemyInstances.push_back(instance);
 }
 
