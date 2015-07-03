@@ -875,7 +875,7 @@ void CALLBACK OnD3D11FrameRender( ID3D11Device* pd3dDevice, ID3D11DeviceContext*
 		proj2Rend[i].camDist = dot(proj2Rend[i].position, camNor);
 	std::sort(proj2Rend.begin(), proj2Rend.end(), comp);*/
 	SpriteVertex sv;
-	sv.position.x = 0;
+	sv.position.x = 20;
 	sv.position.y = 100;
 	sv.position.z = -50;
 	sv.radius = 10;
@@ -884,9 +884,9 @@ void CALLBACK OnD3D11FrameRender( ID3D11Device* pd3dDevice, ID3D11DeviceContext*
 	proj2Rend.push_back(sv);
 
 	SpriteVertex sv2;
-	sv2.position.x = 0;
-	sv2.position.y = 150;
-	sv2.position.z = -100;
+	sv2.position.x = -50;
+	sv2.position.y = 130;
+	sv2.position.z = -200;
 	sv2.radius = 10;
 	sv2.textureIndex = 1;
 	proj2Rend.push_back(sv2);
@@ -900,18 +900,18 @@ void CALLBACK OnD3D11FrameRender( ID3D11Device* pd3dDevice, ID3D11DeviceContext*
 	proj2Rend.push_back(sv3);
 
 	SpriteVertex sv4;
-	sv4.position.x = 0;
-	sv4.position.y = 150;
+	sv4.position.x = 60;
+	sv4.position.y = 120;
 	sv4.position.z = -110;
 	sv4.radius = 3;
 	sv4.textureIndex = 1;
 	proj2Rend.push_back(sv4);
 
 	SpriteVertex sv5;
-	sv5.position.x = 0;
-	sv5.position.y = 150;
-	sv5.position.z = -60;
-	sv5.radius = 1;
+	sv5.position.x = -60;
+	sv5.position.y = 90;
+	sv5.position.z = -300;
+	sv5.radius = 20;
 	sv5.textureIndex = 0;
 	proj2Rend.push_back(sv5);
 
