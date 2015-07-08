@@ -143,6 +143,22 @@ void ConfigParser::load(std::string str){
 				enemy.Spawn = false;
 				enemys[enemy.Name] = enemy;
 			}
+
+			else if (word.compare("GatlingGun") == 0)
+			{
+				Gatling.type = word;
+				ifs >> Gatling.pos.x >> Gatling.pos.y >> Gatling .pos.z >> Gatling.speed >> Gatling.grav
+					>> Gatling.cd >> Gatling.dmg >> Gatling.spriteInd >> Gatling.spriteRad;
+			}
+			else if (word.compare("PlasmaGun") == 0)
+			{
+				Plasma.type = word;
+				ifs >> Plasma.pos.x >> Plasma.pos.y >> Plasma.pos.z >> Plasma.speed >> Plasma.grav
+					>> Plasma.cd >> Plasma.dmg >> Plasma.spriteInd >> Plasma.spriteRad;
+			}
+
+
+
 			else {
 				if (!word.empty()) {
 					cout << "Error: unknown Parameter!" << endl;

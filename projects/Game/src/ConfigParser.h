@@ -82,6 +82,16 @@ public:
 	ConfigParser();
 	~ConfigParser();
 
+	// struct for guns
+	struct Gun
+	{
+		std::string type;
+		DirectX::XMFLOAT3 pos;
+		float speed, grav, cd, dmg, spriteRad;
+		UINT spriteInd;
+	};
+
+	Gun Gatling, Plasma;
 
 private:
 
