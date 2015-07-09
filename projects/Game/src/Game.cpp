@@ -120,8 +120,12 @@ void RenderText();
 // our added functions
 void DeinitApp();
 
-
-
+//Assignment 10
+std::vector<SpriteVertex> proj2Render;
+bool GReadyForFire = false;
+bool PReadyForFire = false;
+int GFireTimer;
+int PFireTimer;
 
 void ReleaseShader();
 HRESULT ReloadShader(ID3D11Device* pd3dDevice);
@@ -681,12 +685,70 @@ void CALLBACK OnFrameMove(double fTime, float fElapsedTime, void* pUserContext)
 		it->pos.z += it->vel.z;
 	}
 
-	//Assignment 10
-	// bind keys for projectiles
+	
+	//Assignment10
 
+	//Move Projectiles
 
+	for (auto proj : proj2Render){
+		proj.position.x *= proj.velocity.x;
+		proj.position.y *= proj.velocity.y;
+		proj.position.z *= proj.velocity.z;
+	}
 
+	//Shooting pew Pew pew
+	DirectX::XMVECTOR cam_dir = g_camera.GetLookAtPt();
+	DirectX::XMFLOAT3 cam_dir_;
+	DirectX::XMStoreFloat3(&cam_dir_, cam_dir);
 
+	//Gatling
+	if (DXUTIsMouseButtonDown(MOUSE_LEFT_BUTTON)) {
+		
+		if (GReadyForFire)
+		{
+			SpriteVertex sv;
+
+			sv.velocity.x = cam_dir_.x - parser.Gatling.pos.x;
+			sv.velocity.y = cam_dir_.y - parser.Gatling.pos.y;
+			sv.velocity.z = cam_dir_.z - parser.Gatling.pos.z;
+
+			sv.position = parser.Gatling.pos;
+			sv.radius = parser.Gatling.spriteRad;
+			sv.textureIndex = parser.Gatling.spriteInd;
+			proj2Render.push_back(sv);
+			PReadyForFire = false;
+		}
+	}
+
+	//Plasma
+	if (DXUTIsMouseButtonDown(MOUSE_RIGHT_BUTTON)) {
+		
+		if (PReadyForFire)
+		{
+			
+			SpriteVertex sv2;
+
+			sv2.velocity.x = cam_dir_.x - parser.Plasma.pos.x;
+			sv2.velocity.y = cam_dir_.y - parser.Plasma.pos.y;
+			sv2.velocity.z = cam_dir_.z - parser.Plasma.pos.z;
+
+			sv2.position = parser.Plasma.pos;
+			sv2.radius = parser.Plasma.spriteRad;
+			sv2.textureIndex = parser.Plasma.spriteInd;
+			proj2Render.push_back(sv2);
+			PReadyForFire = false;
+		}
+	}
+
+	//setting fire timer
+	GFireTimer -= fElapsedTime;
+	GReadyForFire = (GFireTimer <= 0) ? (true) : GReadyForFire;
+	GFireTimer = (GFireTimer <= 0) ? (parser.Gatling.cd) : (GFireTimer);
+	
+	PFireTimer -= fElapsedTime;
+	PReadyForFire = (PFireTimer <= 0) ? (true) : PReadyForFire;
+	PFireTimer = (PFireTimer <= 0) ? (parser.Plasma.cd) : (PFireTimer);
+	
 }
 
 
@@ -878,28 +940,8 @@ void CALLBACK OnD3D11FrameRender( ID3D11Device* pd3dDevice, ID3D11DeviceContext*
 	XMFLOAT3 camNor;
 	XMStoreFloat3(&camNor, cam);
 
-	std::vector<SpriteVertex> proj2Rend;
-	//for (auto it = g_projectiles.begin(); it != g_projectiles.end(); proj2Rend.push_back(it->sprite), ++it);
-	//for (auto it = g_explos.begin(); it != g_explos.end(); proj2Rend.push_back(it->sprite), ++it);
-
-	//for (int i = 0; i < proj2Rend.size(); i++) {
-	//}
-
-
-	SpriteVertex sv;
-	sv.position = parser.Gatling.pos;
-	sv.radius = parser.Gatling.spriteRad;
-	sv.textureIndex = parser.Gatling.spriteInd;
-
-	proj2Rend.push_back(sv);
-
-	SpriteVertex sv2;
-	sv2.position = parser.Plasma.pos;
-	sv2.radius = parser.Plasma.spriteRad;
-	sv2.textureIndex = parser.Plasma.spriteInd;
-	proj2Rend.push_back(sv2);
-
-	g_SpriteRenderer->renderSprites(pd3dImmediateContext, proj2Rend, g_camera);
+	//assignment 10
+	g_SpriteRenderer->renderSprites(pd3dImmediateContext, proj2Render, g_camera);
 
     DXUT_BeginPerfEvent( DXUT_PERFEVENTCOLOR, L"HUD / Stats" );
     V(g_hud.OnRender( fElapsedTime ));
