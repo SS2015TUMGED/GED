@@ -690,9 +690,9 @@ void CALLBACK OnFrameMove(double fTime, float fElapsedTime, void* pUserContext)
 	//Move Projectiles
 	for (auto it = proj2Render.begin(); it != proj2Render.end(); it++)
 	{
-		it->position.x += it->velocity.x / 10000 * fElapsedTime;
-		it->position.y += it->velocity.y / 10000 * fElapsedTime;
-		it->position.z += it->velocity.z / 10000 * fElapsedTime;
+		it->position.x += it->velocity.x / 100 * fElapsedTime;
+		it->position.y += it->velocity.y / 100 * fElapsedTime;
+		it->position.z += it->velocity.z / 100 * fElapsedTime;
 	}
 	
 	//Shooting pew Pew pew
@@ -701,19 +701,16 @@ void CALLBACK OnFrameMove(double fTime, float fElapsedTime, void* pUserContext)
 	DirectX::XMStoreFloat3(&cam_dir_, cam_dir);
 
 	//Gatling
-	if (DXUTIsMouseButtonDown(MOUSE_LEFT_BUTTON)) {
+	if (g_camera.IsMouseLButtonDown()) {
 		
 		if (GReadyForFire)
 		{
 			SpriteVertex sv;
 
 			DirectX::XMStoreFloat3(&(sv.position), g_camera.GetEyePt());
-			sv.velocity.x = cam_dir_.x - sv.position.x;
-			sv.velocity.x *= parser.Gatling.speed;
-			sv.velocity.y = cam_dir_.y - sv.position.y;
-			sv.velocity.y *= parser.Gatling.speed;
-			sv.velocity.z = cam_dir_.z - sv.position.z;
-			sv.velocity.z *= parser.Gatling.speed;
+			sv.velocity.x = cam_dir_.x * parser.Gatling.speed;
+			sv.velocity.y = cam_dir_.y * parser.Gatling.speed;
+			sv.velocity.z = cam_dir_.z * parser.Gatling.speed;
 
 			
 			sv.radius = parser.Gatling.spriteRad / 10000;
@@ -724,38 +721,37 @@ void CALLBACK OnFrameMove(double fTime, float fElapsedTime, void* pUserContext)
 	}
 
 	//Plasma
-	if (DXUTIsMouseButtonDown(MOUSE_RIGHT_BUTTON)) {
+	if (g_camera.sMouseRButtonDown()) {
 		
 		if (PReadyForFire)
 		{
 			
-			SpriteVertex sv2;
+			SpriteVertex sv;
 
-			DirectX::XMStoreFloat3(&(sv2.position), g_camera.GetEyePt());
+			DirectX::XMStoreFloat3(&(sv.position), g_camera.GetEyePt());
 
-			sv2.velocity.x = cam_dir_.x - sv2.position.x;
-			sv2.velocity.x *= parser.Plasma.speed;
-			sv2.velocity.y = cam_dir_.y - sv2.position.y;
-			sv2.velocity.y *= parser.Plasma.speed;
-			sv2.velocity.z = cam_dir_.z - sv2.position.z;
-			sv2.velocity.z *= parser.Plasma.speed;
+			sv.velocity.x = cam_dir_.x * parser.Plasma.speed;
+			sv.velocity.y = cam_dir_.y * parser.Plasma.speed;
+			sv.velocity.z = cam_dir_.z * parser.Plasma.speed;
 
-			sv2.radius = parser.Plasma.spriteRad;
-			sv2.textureIndex = parser.Plasma.spriteInd;
-			proj2Render.push_back(sv2);
+			sv.radius = parser.Plasma.spriteRad;
+			sv.textureIndex = parser.Plasma.spriteInd;
+			proj2Render.push_back(sv);
 			PReadyForFire = false;
 		}
 	}
 
 	//setting fire timer
 	GFireTimer -= fElapsedTime;
-	GReadyForFire = (GFireTimer <= 0) ? (true) : GReadyForFire;
-	GFireTimer = (GFireTimer <= 0) ? (parser.Gatling.cd) : (GFireTimer);
-	
+	if (GFireTimer <= 0.0) {
+		GReadyForFire = true;
+		GFireTimer =  parser.Gatling.cd;
+	}	
 	PFireTimer -= fElapsedTime;
-	PReadyForFire = (PFireTimer <= 0) ? (true) : PReadyForFire;
-	PFireTimer = (PFireTimer <= 0) ? (parser.Plasma.cd) : (PFireTimer);
-	
+	if (PFireTimer <= 0.0) {
+		PReadyForFire = true;
+		PFireTimer = parser.Plasma.cd;
+	}
 }
 
 
