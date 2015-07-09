@@ -17,6 +17,7 @@ struct SpriteVertex
 	DirectX::XMFLOAT3 velocity;		// Velocity vector of the Sprite
 	float grav;
 	float dmg;
+	float camDist;
 };
 
 class SpriteRenderer

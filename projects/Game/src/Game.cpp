@@ -130,6 +130,8 @@ float PFireTimer;
 void ReleaseShader();
 HRESULT ReloadShader(ID3D11Device* pd3dDevice);
 
+float dot(XMFLOAT3 V1, XMFLOAT3 V2);
+
 //--------------------------------------------------------------------------------------
 // Entry point to the program. Initializes everything and goes into a message processing 
 // loop. Idle time is used to render the scene.
@@ -246,11 +248,7 @@ void InitApp()
     iY += 24;
     g_sampleUI.AddCheckBox( IDC_TOGGLESPIN, L"Toggle Spinning", 0, iY += 24, 125, 22, g_terrainSpinning );   
 
-	vector<wstring> sprites;
-	sprites.push_back(L"..\\..\\Debug\\resources\\particle\\parTrailGatlingDiffuse.DDS");
-	sprites.push_back(L"..\\..\\Debug\\resources\\particle\\parTrailPlasmaDiffuse.DDS");
-
-	g_SpriteRenderer = new SpriteRenderer(sprites);
+	g_SpriteRenderer = new SpriteRenderer(parser.sprites);
 
 }
 
@@ -690,17 +688,19 @@ void CALLBACK OnFrameMove(double fTime, float fElapsedTime, void* pUserContext)
 	Ememy::g_EnemyInstances.remove_if(out_of_map);
 
 	//Move Projectiles
-	for (auto it = proj2Render.begin(); it != proj2Render.end(); it++)
+	for (auto it = proj2Render.begin(); it != proj2Render.end();)
 	{
 		it->position.x += it->velocity.x / 100 * fElapsedTime;
 		it->position.y += it->velocity.y / 100 * fElapsedTime;
 		it->position.z += it->velocity.z / 100 * fElapsedTime;
 		bool b = (out_of_map2(it->position));
-		if (b)
-		{
+		if (b) {
 			auto it_remove = it;
 			it++;
 			proj2Render.erase(it_remove);
+		}
+		else {
+			it++;
 		}
 	}
 
@@ -712,23 +712,23 @@ void CALLBACK OnFrameMove(double fTime, float fElapsedTime, void* pUserContext)
 		it->pos.z += it->vel.z * fElapsedTime;
 
 
-		for (auto itP = proj2Render.begin(); itP != proj2Render.end(); itP++)
+		/*for (auto itP = proj2Render.begin(); itP != proj2Render.end();)
 		{
 
-			float distance = sqrt((&itP->position.x - &it->pos.x) * (&itP->position.x - &it->pos.x) +
-				(&itP->position.y - &it->pos.y) * (&itP->position.y - &it->pos.y) +
-				(&itP->position.z - &it->pos.z) * (&itP->position.z - &it->pos.z));
+			float distance = sqrt(dot(itP->position, it->pos));
 
 			// Hit
 			if (distance <= itP->radius + it->type.Size)
 			{
 				cout << "hit:" << distance << endl;
 				auto it_remove = itP;
-				++it;
+				++itP;
 				proj2Render.erase(it_remove);
 				break;
+			} else {
+				itP++;
 			}
-		}
+		}*/
 
 	}
 
@@ -978,6 +978,19 @@ void CALLBACK OnD3D11FrameRender( ID3D11Device* pd3dDevice, ID3D11DeviceContext*
 		parser.g_Meshes[enemy.type.Mesh]->render(pd3dImmediateContext, g_gameEffect.meshPass1, g_gameEffect.diffuseEV, g_gameEffect.specularEV, g_gameEffect.glowEV);
 	}
 
+
+
+	// Sort projectiles according to the distance between projectile and camera
+	auto comp = [](SpriteVertex projA, SpriteVertex projB) -> bool {return projA.camDist > projB.camDist; };
+	XMVECTOR cam = XMVector4Normalize(g_camera.GetWorldAhead());
+	XMFLOAT3 camNor;
+	XMStoreFloat3(&camNor, cam);
+
+	for (int i = 0; i < proj2Render.size(); i++) {
+		proj2Render[i].camDist = dot(proj2Render[i].position, camNor);
+	}
+	std::sort(proj2Render.begin(), proj2Render.end(), comp);
+
 	// Sprite Renderer
 	g_SpriteRenderer->renderSprites(pd3dImmediateContext, proj2Render, g_camera);
 
@@ -994,4 +1007,9 @@ void CALLBACK OnD3D11FrameRender( ID3D11Device* pd3dDevice, ID3D11DeviceContext*
         OutputDebugString( L"\n" );
         dwTimefirst = GetTickCount();
     }
+}
+
+float dot(XMFLOAT3 V1, XMFLOAT3 V2)
+{
+	return (V1.x * V2.x) + (V1.y * V2.y) + (V1.z * V2.z);
 }
