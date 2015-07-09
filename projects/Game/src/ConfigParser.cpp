@@ -16,6 +16,7 @@ std::map<std::string, Mesh*> ConfigParser::g_Meshes;
 std::vector<ConfigParser::CockpitObject> ConfigParser::cockpitObjects;
 std::vector<ConfigParser::GroundObject> ConfigParser::groundObjects;
 std::map<std::string, ConfigParser::EnemyType> ConfigParser::enemys;
+std::vector<std::wstring> ConfigParser::sprites;
 
 ConfigParser::ConfigParser()
 {
@@ -143,17 +144,25 @@ void ConfigParser::load(std::string str){
 				enemy.Spawn = false;
 				enemys[enemy.Name] = enemy;
 			}
-
+			else if (word.compare("Sprite") == 0)
+			{
+				string sprite;
+				iss >> sprite;
+				if (sprite != "-") {
+					sprite = dir + sprite;
+				}
+				sprites.push_back(wstring(sprite.begin(),sprite.end()));
+			}
 			else if (word.compare("GatlingGun") == 0)
 			{
 				Gatling.type = word;
-				ifs >> Gatling.pos.x >> Gatling.pos.y >> Gatling .pos.z >> Gatling.speed >> Gatling.grav
+				iss >> Gatling.pos.x >> Gatling.pos.y >> Gatling .pos.z >> Gatling.speed >> Gatling.grav
 					>> Gatling.cd >> Gatling.dmg >> Gatling.spriteInd >> Gatling.spriteRad;
 			}
 			else if (word.compare("PlasmaGun") == 0)
 			{
 				Plasma.type = word;
-				ifs >> Plasma.pos.x >> Plasma.pos.y >> Plasma.pos.z >> Plasma.speed >> Plasma.grav
+				iss >> Plasma.pos.x >> Plasma.pos.y >> Plasma.pos.z >> Plasma.speed >> Plasma.grav
 					>> Plasma.cd >> Plasma.dmg >> Plasma.spriteInd >> Plasma.spriteRad;
 			}
 

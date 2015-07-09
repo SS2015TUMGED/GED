@@ -242,11 +242,7 @@ void InitApp()
     iY += 24;
     g_sampleUI.AddCheckBox( IDC_TOGGLESPIN, L"Toggle Spinning", 0, iY += 24, 125, 22, g_terrainSpinning );   
 
-	vector<wstring> sprites;
-	sprites.push_back(L"..\\..\\Debug\\resources\\particle\\parTrailGatlingDiffuse.DDS");
-	sprites.push_back(L"..\\..\\Debug\\resources\\particle\\parTrailPlasmaDiffuse.DDS");
-
-	g_SpriteRenderer = new SpriteRenderer(sprites);
+	g_SpriteRenderer = new SpriteRenderer(parser.sprites);
 
 }
 

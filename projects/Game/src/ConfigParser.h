@@ -67,6 +67,7 @@ public:
 	static std::vector<GroundObject> groundObjects;
 	//contains all Enemys
 	static std::map<std::string, EnemyType> enemys;
+	static std::vector<std::wstring> sprites;
 
 	// getters
 	float getSpinning();
