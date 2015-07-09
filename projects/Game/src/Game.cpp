@@ -691,7 +691,7 @@ void CALLBACK OnFrameMove(double fTime, float fElapsedTime, void* pUserContext)
 	for (auto it = proj2Render.begin(); it != proj2Render.end();)
 	{
 		it->position.x += it->velocity.x / 100 * fElapsedTime;
-		it->position.y += it->velocity.y / 100 * fElapsedTime;
+		it->position.y += (it->velocity.y - it->grav * fElapsedTime) / 100 * fElapsedTime;
 		it->position.z += it->velocity.z / 100 * fElapsedTime;
 		bool b = (out_of_map2(it->position));
 		if (b) {
@@ -748,6 +748,9 @@ void CALLBACK OnFrameMove(double fTime, float fElapsedTime, void* pUserContext)
 			SpriteVertex sv;
 
 			DirectX::XMStoreFloat3(&(sv.position), g_camera.GetEyePt());
+			sv.position.x += parser.Gatling.position.x;
+			sv.position.y += parser.Gatling.position.y;
+			sv.position.z += parser.Gatling.position.z;
 			sv.velocity.x = cam_dir_.x * parser.Gatling.speed;
 			sv.velocity.y = cam_dir_.y * parser.Gatling.speed;
 			sv.velocity.z = cam_dir_.z * parser.Gatling.speed;
@@ -770,6 +773,9 @@ void CALLBACK OnFrameMove(double fTime, float fElapsedTime, void* pUserContext)
 			SpriteVertex sv;
 
 			DirectX::XMStoreFloat3(&(sv.position), g_camera.GetEyePt());
+			sv.position.x += parser.Plasma.position.x;
+			sv.position.y += parser.Plasma.position.y;
+			sv.position.z += parser.Plasma.position.z;
 			sv.velocity.x = cam_dir_.x * parser.Plasma.speed;
 			sv.velocity.y = cam_dir_.y * parser.Plasma.speed;
 			sv.velocity.z = cam_dir_.z * parser.Plasma.speed;
