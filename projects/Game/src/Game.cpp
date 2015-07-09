@@ -124,8 +124,8 @@ void DeinitApp();
 std::vector<SpriteVertex> proj2Render;
 bool GReadyForFire = false;
 bool PReadyForFire = false;
-int GFireTimer;
-int PFireTimer;
+float GFireTimer;
+float PFireTimer;
 
 void ReleaseShader();
 HRESULT ReloadShader(ID3D11Device* pd3dDevice);
@@ -624,6 +624,10 @@ void CALLBACK OnGUIEvent( UINT nEvent, int nControlID, CDXUTControl* pControl, v
 bool out_of_map(Ememy::EnemyInstance &e) {
 	return (DirectX::XMVectorGetByIndex(DirectX::XMVector3Length(XMLoadFloat3(&e.pos)),0) > parser.getTerrainWidth() + 100);
 }
+
+bool out_of_map2(DirectX::XMFLOAT3 pos) {
+	return (DirectX::XMVectorGetByIndex(DirectX::XMVector3Length(XMLoadFloat3(&pos)), 0) > parser.getTerrainWidth() + 100);
+}
 //--------------------------------------------------------------------------------------
 // Handle updates to the scene.  This is called regardless of which D3D API is used
 //--------------------------------------------------------------------------------------
@@ -693,6 +697,7 @@ void CALLBACK OnFrameMove(double fTime, float fElapsedTime, void* pUserContext)
 		it->position.x += it->velocity.x / 100 * fElapsedTime;
 		it->position.y += it->velocity.y / 100 * fElapsedTime;
 		it->position.z += it->velocity.z / 100 * fElapsedTime;
+		//if (out_of_map2(it->position)) delete(&it);
 	}
 	
 	//Shooting pew Pew pew
@@ -701,7 +706,8 @@ void CALLBACK OnFrameMove(double fTime, float fElapsedTime, void* pUserContext)
 	DirectX::XMStoreFloat3(&cam_dir_, cam_dir);
 
 	//Gatling
-	if (g_camera.IsMouseLButtonDown()) {
+	/**
+	if (DXUTIsMouseButtonDown(MOUSE_LEFT_BUTTON)) {
 		
 		if (GReadyForFire)
 		{
@@ -716,12 +722,12 @@ void CALLBACK OnFrameMove(double fTime, float fElapsedTime, void* pUserContext)
 			sv.radius = parser.Gatling.spriteRad / 10000;
 			sv.textureIndex = parser.Gatling.spriteInd;
 			proj2Render.push_back(sv);
-			PReadyForFire = false;
+			GReadyForFire = false;
 		}
 	}
-
+	*/
 	//Plasma
-	if (g_camera.sMouseRButtonDown()) {
+	if (DXUTIsMouseButtonDown(MOUSE_LEFT_BUTTON)) {
 		
 		if (PReadyForFire)
 		{
@@ -748,10 +754,8 @@ void CALLBACK OnFrameMove(double fTime, float fElapsedTime, void* pUserContext)
 		GFireTimer =  parser.Gatling.cd;
 	}	
 	PFireTimer -= fElapsedTime;
-	if (PFireTimer <= 0.0) {
-		PReadyForFire = true;
-		PFireTimer = parser.Plasma.cd;
-	}
+	PReadyForFire = (PFireTimer <= 0) ? (true) : PReadyForFire;
+	PFireTimer = (PFireTimer <= 0) ? (parser.Plasma.cd) : (PFireTimer);
 }
 
 
