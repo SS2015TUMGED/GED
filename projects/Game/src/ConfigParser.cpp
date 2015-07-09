@@ -17,6 +17,8 @@ std::vector<ConfigParser::CockpitObject> ConfigParser::cockpitObjects;
 std::vector<ConfigParser::GroundObject> ConfigParser::groundObjects;
 std::map<std::string, ConfigParser::EnemyType> ConfigParser::enemys;
 std::vector<std::wstring> ConfigParser::sprites;
+ConfigParser::Gun ConfigParser::Gatling;
+ConfigParser::Gun ConfigParser::Plasma;
 
 ConfigParser::ConfigParser()
 {
