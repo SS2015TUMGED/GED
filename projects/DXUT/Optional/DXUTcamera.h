@@ -281,7 +281,7 @@ public:
     virtual void FrameMove( _In_ float fElapsedTime ) override;
 
     // Functions to change behavior
-    void SetRotateButtons( _In_ bool bLeft, _In_ bool bMiddle, _In_ bool bRight, _In_ bool bRotateWithoutButtonDown = false );
+    void SetRotateButtons( _In_ bool bLeft, _In_ bool bMiddle, _In_ bool bRight, _In_ bool bRotateWithoutButtonDown = true );
 
     // Functions to get state
     DirectX::XMMATRIX GetWorldMatrix() const { return DirectX::XMLoadFloat4x4( &m_mCameraWorld ); }
@@ -295,7 +295,7 @@ protected:
     DirectX::XMFLOAT4X4 m_mCameraWorld; // World matrix of the camera (inverse of the view matrix)
 
     int m_nActiveButtonMask;            // Mask to determine which button to enable for rotation
-    bool m_bRotateWithoutButtonDown;
+	bool m_bRotateWithoutButtonDown;
 };
 
 

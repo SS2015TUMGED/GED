@@ -583,7 +583,10 @@ void CALLBACK OnKeyboard( UINT nChar, bool bKeyDown, bool bAltDown, void* pUserC
 	{ 
 		g_camera.SetEnablePositionMovement(true);
 
-		} 
+	}
+
+
+	// gatling key 
 
 }
 
@@ -675,9 +678,15 @@ void CALLBACK OnFrameMove(double fTime, float fElapsedTime, void* pUserContext)
 		float z = it->vel.z * fElapsedTime;
 		it->pos.x += it->vel.x;
 		it->pos.y += it->vel.y;
-		it->pos.z += it->vel.z
-			;
+		it->pos.z += it->vel.z;
 	}
+
+	//Assignment 10
+	// bind keys for projectiles
+
+
+
+
 }
 
 
