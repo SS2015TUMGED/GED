@@ -870,53 +870,25 @@ void CALLBACK OnD3D11FrameRender( ID3D11Device* pd3dDevice, ID3D11DeviceContext*
 	XMStoreFloat3(&camNor, cam);
 
 	std::vector<SpriteVertex> proj2Rend;
-	/*for (auto it = g_projectiles.begin(); it != g_projectiles.end(); proj2Rend.push_back(it->sprite), ++it);
-	for (auto it = g_explos.begin(); it != g_explos.end(); proj2Rend.push_back(it->sprite), ++it);
+	//for (auto it = g_projectiles.begin(); it != g_projectiles.end(); proj2Rend.push_back(it->sprite), ++it);
+	//for (auto it = g_explos.begin(); it != g_explos.end(); proj2Rend.push_back(it->sprite), ++it);
 
-	for (int i = 0; i < proj2Rend.size(); i++)
-		proj2Rend[i].camDist = dot(proj2Rend[i].position, camNor);
-	std::sort(proj2Rend.begin(), proj2Rend.end(), comp);*/
+	//for (int i = 0; i < proj2Rend.size(); i++) {
+	//}
+
+
 	SpriteVertex sv;
-	sv.position.x = 20;
-	sv.position.y = 100;
-	sv.position.z = -50;
-	sv.radius = 10;
-	sv.textureIndex = 0;
+	sv.position = parser.Gatling.pos;
+	sv.radius = parser.Gatling.spriteRad;
+	sv.textureIndex = parser.Gatling.spriteInd;
 
 	proj2Rend.push_back(sv);
 
 	SpriteVertex sv2;
-	sv2.position.x = -50;
-	sv2.position.y = 130;
-	sv2.position.z = -200;
-	sv2.radius = 10;
-	sv2.textureIndex = 1;
+	sv2.position = parser.Plasma.pos;
+	sv2.radius = parser.Plasma.spriteRad;
+	sv2.textureIndex = parser.Plasma.spriteInd;
 	proj2Rend.push_back(sv2);
-
-	SpriteVertex sv3;
-	sv3.position.x = 0;
-	sv3.position.y = 150;
-	sv3.position.z = -400;
-	sv3.radius = 5;
-	sv3.textureIndex = 0;
-	proj2Rend.push_back(sv3);
-
-	SpriteVertex sv4;
-	sv4.position.x = 60;
-	sv4.position.y = 120;
-	sv4.position.z = -110;
-	sv4.radius = 3;
-	sv4.textureIndex = 1;
-	proj2Rend.push_back(sv4);
-
-	SpriteVertex sv5;
-	sv5.position.x = -60;
-	sv5.position.y = 90;
-	sv5.position.z = -300;
-	sv5.radius = 20;
-	sv5.textureIndex = 0;
-	proj2Rend.push_back(sv5);
-
 
 	g_SpriteRenderer->renderSprites(pd3dImmediateContext, proj2Rend, g_camera);
 

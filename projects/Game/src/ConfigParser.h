@@ -92,7 +92,7 @@ public:
 		UINT spriteInd;
 	};
 
-	Gun Gatling, Plasma;
+	static Gun Gatling, Plasma;
 
 private:
 

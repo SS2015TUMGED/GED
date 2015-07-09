@@ -165,9 +165,6 @@ void ConfigParser::load(std::string str){
 				iss >> Plasma.pos.x >> Plasma.pos.y >> Plasma.pos.z >> Plasma.speed >> Plasma.grav
 					>> Plasma.cd >> Plasma.dmg >> Plasma.spriteInd >> Plasma.spriteRad;
 			}
-
-
-
 			else {
 				if (!word.empty()) {
 					cout << "Error: unknown Parameter!" << endl;
