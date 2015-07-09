@@ -94,28 +94,30 @@ void DummyVS(inout SpriteVertex input) {
 
 [maxvertexcount(4)]
 void SpriteGS(point SpriteVertex vertex[1], inout TriangleStream<PSVertex> stream) {
+	
 	PSVertex temp = (PSVertex)0;
-	temp.pos = mul(float4(vertex[0].pos, 1.0f) - (g_CamRVec * vertex[0].rad)
-		+ (g_CamUVec* vertex[0].rad), g_ViewProjection);
+	temp.pos = mul(float4(vertex[0].pos, 1.0f) - (g_CamRVec * vertex[0].rad / vertex[0].rad)
+		+ (g_CamUVec* vertex[0].rad / vertex[0].rad), g_ViewProjection);
 	temp.tex = float3(0.0f, 0.0f, 1.0f);
 	temp.ind = vertex[0].ind;
 	//temp.alpha = vertex[0].alpha;
 	stream.Append(temp);
 
-	temp.pos = mul(float4(vertex[0].pos, 1.0f) - (g_CamRVec * vertex[0].rad)
-		- (g_CamUVec* vertex[0].rad), g_ViewProjection);
+	temp.pos = mul(float4(vertex[0].pos, 1.0f) - (g_CamRVec * vertex[0].rad / vertex[0].rad)
+		- (g_CamUVec* vertex[0].rad / vertex[0].rad), g_ViewProjection);
 	temp.tex = float3(0.0f, 1.0f, 1.0f);
 	stream.Append(temp);
 
-	temp.pos = mul(float4(vertex[0].pos, 1.0f) + (g_CamRVec * vertex[0].rad)
-		+ (g_CamUVec* vertex[0].rad), g_ViewProjection);
+	temp.pos = mul(float4(vertex[0].pos, 1.0f) + (g_CamRVec * vertex[0].rad / vertex[0].rad)
+		+ (g_CamUVec* vertex[0].rad / vertex[0].rad), g_ViewProjection);
 	temp.tex = float3(1.0f, 0.0f, 1.0f);
 	stream.Append(temp);
 
-	temp.pos = mul(float4(vertex[0].pos, 1.0f) + (g_CamRVec * vertex[0].rad)
-		- (g_CamUVec* vertex[0].rad), g_ViewProjection);
+	temp.pos = mul(float4(vertex[0].pos, 1.0f) + (g_CamRVec * vertex[0].rad / vertex[0].rad)
+		- (g_CamUVec* vertex[0].rad / vertex[0].rad), g_ViewProjection);
 	temp.tex = float3(1.0f, 1.0f, 1.0f);
 	stream.Append(temp);
+	
 }
 
 
