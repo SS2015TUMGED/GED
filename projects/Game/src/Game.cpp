@@ -626,7 +626,14 @@ bool out_of_map(Ememy::EnemyInstance &e) {
 }
 
 bool out_of_map2(DirectX::XMFLOAT3 pos) {
-	return (DirectX::XMVectorGetByIndex(DirectX::XMVector3Length(XMLoadFloat3(&pos)), 0) > parser.getTerrainWidth() + 100);
+	return !(
+		pos.x < parser.getTerrainWidth() &&
+		pos.y < parser.getTerrainHeight() &&
+		pos.z < parser.getTerrainWidth() &&
+		pos.x > 1-parser.getTerrainWidth() &&
+		pos.y > 1-parser.getTerrainHeight() &&
+		pos.z > 1-parser.getTerrainWidth()
+		);
 }
 //--------------------------------------------------------------------------------------
 // Handle updates to the scene.  This is called regardless of which D3D API is used
@@ -697,7 +704,11 @@ void CALLBACK OnFrameMove(double fTime, float fElapsedTime, void* pUserContext)
 		it->position.x += it->velocity.x / 100 * fElapsedTime;
 		it->position.y += it->velocity.y / 100 * fElapsedTime;
 		it->position.z += it->velocity.z / 100 * fElapsedTime;
-		//if (out_of_map2(it->position)) delete(&it);
+		bool b = (out_of_map2(it->position));
+		if (b)
+		{
+			proj2Render.erase(it);
+		}
 	}
 	
 	//Shooting pew Pew pew
@@ -706,7 +717,7 @@ void CALLBACK OnFrameMove(double fTime, float fElapsedTime, void* pUserContext)
 	DirectX::XMStoreFloat3(&cam_dir_, cam_dir);
 
 	//Gatling
-	/**
+	
 	if (DXUTIsMouseButtonDown(MOUSE_LEFT_BUTTON)) {
 		
 		if (GReadyForFire)
@@ -725,9 +736,9 @@ void CALLBACK OnFrameMove(double fTime, float fElapsedTime, void* pUserContext)
 			GReadyForFire = false;
 		}
 	}
-	*/
+	
 	//Plasma
-	if (DXUTIsMouseButtonDown(MOUSE_LEFT_BUTTON)) {
+	if (g_camera.sMouseRButtonDown()) {
 		
 		if (PReadyForFire)
 		{

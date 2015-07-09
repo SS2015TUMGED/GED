@@ -125,8 +125,10 @@ float4 DummyPS(in PSVertex input) : SV_Target0{
 	float4 matDiffuse;
 	if (input.ind == 0)
 		matDiffuse = g_SprTex1.Sample(samAnisotropic, input.tex);
-	else
+	else if (input.ind == 1)
 		matDiffuse = g_SprTex2.Sample(samAnisotropic, input.tex);
+	else
+		matDiffuse = g_SprTex1.Sample(samAnisotropic, input.tex);
 	return matDiffuse;
 }
 
