@@ -4,6 +4,7 @@
 #include <sstream>
 
 #include <vector>
+#include <list>
 
 #include "DXUT.h"
 #include "d3dx11effect.h"

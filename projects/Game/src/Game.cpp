@@ -121,11 +121,11 @@ void RenderText();
 void DeinitApp();
 
 //Assignment 10
-std::vector<SpriteVertex> proj2Render;
+std::list<SpriteVertex> proj2Render;
 bool GReadyForFire = false;
 bool PReadyForFire = false;
-float GFireTimer;
-float PFireTimer;
+float GFireTimer = 0.0;
+float PFireTimer = 0.0;
 
 void ReleaseShader();
 HRESULT ReloadShader(ID3D11Device* pd3dDevice);
@@ -695,6 +695,7 @@ void CALLBACK OnFrameMove(double fTime, float fElapsedTime, void* pUserContext)
 		it->position.z += it->velocity.z / 100 * fElapsedTime;
 		bool b = (out_of_map2(it->position));
 		if (b) {
+			cout << "deleted" << endl;
 			auto it_remove = it;
 			it++;
 			proj2Render.erase(it_remove);
@@ -978,21 +979,24 @@ void CALLBACK OnD3D11FrameRender( ID3D11Device* pd3dDevice, ID3D11DeviceContext*
 		parser.g_Meshes[enemy.type.Mesh]->render(pd3dImmediateContext, g_gameEffect.meshPass1, g_gameEffect.diffuseEV, g_gameEffect.specularEV, g_gameEffect.glowEV);
 	}
 
-
-
+	// Sprite Renderer
 	// Sort projectiles according to the distance between projectile and camera
 	auto comp = [](SpriteVertex projA, SpriteVertex projB) -> bool {return projA.camDist > projB.camDist; };
 	XMVECTOR cam = XMVector4Normalize(g_camera.GetWorldAhead());
 	XMFLOAT3 camNor;
 	XMStoreFloat3(&camNor, cam);
 
-	for (int i = 0; i < proj2Render.size(); i++) {
-		proj2Render[i].camDist = dot(proj2Render[i].position, camNor);
+	std::vector<SpriteVertex> proj2Rend;
+	for (auto it = proj2Render.begin(); it != proj2Render.end(); ++it) {
+		proj2Rend.push_back(*it);
 	}
-	std::sort(proj2Render.begin(), proj2Render.end(), comp);
+	for (int i = 0; i < proj2Rend.size(); i++) {
+		proj2Rend[i].camDist = dot(proj2Rend[i].position, camNor);
+	}
 
-	// Sprite Renderer
-	g_SpriteRenderer->renderSprites(pd3dImmediateContext, proj2Render, g_camera);
+	std::sort(proj2Rend.begin(), proj2Rend.end(), comp);
+
+	g_SpriteRenderer->renderSprites(pd3dImmediateContext, proj2Rend, g_camera);
 
     DXUT_BeginPerfEvent( DXUT_PERFEVENTCOLOR, L"HUD / Stats" );
     V(g_hud.OnRender( fElapsedTime ));

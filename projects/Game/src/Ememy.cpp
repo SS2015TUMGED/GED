@@ -40,9 +40,9 @@ void Ememy::spawn(ConfigParser::EnemyType enemy, float width)
 	vel.y = random_height - pos.y;
 	vel.z = (width / 16) * std::cos(random_value) - pos.z;
 	DirectX::XMStoreFloat3(&vel,DirectX::XMVector3Normalize(XMLoadFloat3(&vel)));
-	vel.x *= (enemy.Speed/50.0f);
-	vel.y *= (enemy.Speed / 50.0f);
-	vel.z *= (enemy.Speed / 50.0f);
+	vel.x *= enemy.Speed;
+	vel.y *= enemy.Speed;
+	vel.z *= enemy.Speed;
 	//load vector into the instance
 	instance.vel = vel;
 	//Normalized Vector * Speed
