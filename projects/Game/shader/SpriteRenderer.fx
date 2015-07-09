@@ -2,8 +2,8 @@ matrix g_ViewProjection;
 float4 g_CamRVec;
 float4 g_CamUVec;
 
-Texture2DArray g_SprTex1;
-Texture2DArray g_SprTex2;
+Texture2DArray g_SprTexGatling;
+Texture2DArray g_SprTexPlasma;
 
 //--------------------------------------------------------------------------------------
 // Rasterizer states
@@ -96,25 +96,25 @@ void DummyVS(inout SpriteVertex input) {
 void SpriteGS(point SpriteVertex vertex[1], inout TriangleStream<PSVertex> stream) {
 	
 	PSVertex temp = (PSVertex)0;
-	temp.pos = mul(float4(vertex[0].pos, 1.0f) - (g_CamRVec * vertex[0].rad / vertex[0].rad)
-		+ (g_CamUVec* vertex[0].rad / vertex[0].rad), g_ViewProjection);
+	temp.pos = mul(float4(vertex[0].pos, 1.0f) - (g_CamRVec * vertex[0].rad)
+		+ (g_CamUVec* vertex[0].rad), g_ViewProjection);
 	temp.tex = float3(0.0f, 0.0f, 1.0f);
 	temp.ind = vertex[0].ind;
 	//temp.alpha = vertex[0].alpha;
 	stream.Append(temp);
 
-	temp.pos = mul(float4(vertex[0].pos, 1.0f) - (g_CamRVec * vertex[0].rad / vertex[0].rad)
-		- (g_CamUVec* vertex[0].rad / vertex[0].rad), g_ViewProjection);
+	temp.pos = mul(float4(vertex[0].pos, 1.0f) - (g_CamRVec * vertex[0].rad)
+		- (g_CamUVec* vertex[0].rad), g_ViewProjection);
 	temp.tex = float3(0.0f, 1.0f, 1.0f);
 	stream.Append(temp);
 
-	temp.pos = mul(float4(vertex[0].pos, 1.0f) + (g_CamRVec * vertex[0].rad / vertex[0].rad)
-		+ (g_CamUVec* vertex[0].rad / vertex[0].rad), g_ViewProjection);
+	temp.pos = mul(float4(vertex[0].pos, 1.0f) + (g_CamRVec * vertex[0].rad)
+		+ (g_CamUVec* vertex[0].rad), g_ViewProjection);
 	temp.tex = float3(1.0f, 0.0f, 1.0f);
 	stream.Append(temp);
 
-	temp.pos = mul(float4(vertex[0].pos, 1.0f) + (g_CamRVec * vertex[0].rad / vertex[0].rad)
-		- (g_CamUVec* vertex[0].rad / vertex[0].rad), g_ViewProjection);
+	temp.pos = mul(float4(vertex[0].pos, 1.0f) + (g_CamRVec * vertex[0].rad)
+		- (g_CamUVec* vertex[0].rad), g_ViewProjection);
 	temp.tex = float3(1.0f, 1.0f, 1.0f);
 	stream.Append(temp);
 	
@@ -123,12 +123,12 @@ void SpriteGS(point SpriteVertex vertex[1], inout TriangleStream<PSVertex> strea
 
 float4 DummyPS(in PSVertex input) : SV_Target0{
 	float4 matDiffuse;
-	if (input.ind == 0)
-		matDiffuse = g_SprTex1.Sample(samAnisotropic, input.tex);
-	else if (input.ind == 1)
-		matDiffuse = g_SprTex2.Sample(samAnisotropic, input.tex);
-	else
-		matDiffuse = g_SprTex1.Sample(samAnisotropic, input.tex);
+	if (input.ind == 0) {
+		matDiffuse = g_SprTexGatling.Sample(samAnisotropic, input.tex);
+	}
+	else if (input.ind == 1) {
+		matDiffuse = g_SprTexPlasma.Sample(samAnisotropic, input.tex);
+	}
 	return matDiffuse;
 }
 

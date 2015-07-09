@@ -98,8 +98,8 @@ HRESULT SpriteRenderer::create(ID3D11Device* pDevice) {
 	for (int i = 0; i < m_textureFilenames.size(); i++)
 	{
 		V(DirectX::CreateDDSTextureFromFile(pDevice, m_textureFilenames[i].c_str(), nullptr, &m_spriteSRV[i]));
+		std::cout << m_textureFilenames[i].c_str() << std::endl;
 	}
-
 	return S_OK;
 }
 
@@ -115,6 +115,10 @@ void SpriteRenderer::destroy() {
 void SpriteRenderer::renderSprites(ID3D11DeviceContext* context, const std::vector<SpriteVertex>& sprites, const CFirstPersonCamera& camera) {
 
 	HRESULT hr;
+
+	if (sprites.size() > 1) {
+		std::cout;
+	}
 
 	D3D11_BOX box;
 	box.left = 0; box.right = sprites.size() * sizeof(SpriteVertex);
@@ -132,8 +136,8 @@ void SpriteRenderer::renderSprites(ID3D11DeviceContext* context, const std::vect
 	SAFE_GET_MATRIX(m_pEffect, "g_ViewProjection", g_ViewProjection);
 	SAFE_GET_VECTOR(m_pEffect, "g_CamRVec", camRightVec);
 	SAFE_GET_VECTOR(m_pEffect, "g_CamUVec", camUpVec);
-	SAFE_GET_RESOURCE(m_pEffect, "g_SprTex1", sprTex1);
-	SAFE_GET_RESOURCE(m_pEffect, "g_SprTex2", sprTex2);
+	SAFE_GET_RESOURCE(m_pEffect, "g_SprTexGatling", sprTexGatling);
+	SAFE_GET_RESOURCE(m_pEffect, "g_SprTexPlasma", sprTexPlasma);
 	//SAFE_GET_RESOURCE(m_pEffect, "g_SprTex3", sprTex3);
 
 	// Set view and projection transformations to get sprites to the right positions in world space
@@ -141,8 +145,8 @@ void SpriteRenderer::renderSprites(ID3D11DeviceContext* context, const std::vect
 	V(g_ViewProjection->SetMatrix((float*)&viewProj));
 	
 	// Set Textures
-	V(sprTex1->SetResource(m_spriteSRV[0]));
-	V(sprTex2->SetResource(m_spriteSRV[1]));
+	V(sprTexGatling->SetResource(m_spriteSRV[0]));
+	V(sprTexPlasma->SetResource(m_spriteSRV[1]));
 	//V(sprTex3->SetResource(m_spriteSRV[2]));
 	
 	// Get camera's right and up vector

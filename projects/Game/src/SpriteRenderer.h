@@ -12,9 +12,11 @@
 struct SpriteVertex
 {
 	DirectX::XMFLOAT3 position;     // world-space position (sprite center)
-	DirectX::XMFLOAT3 velocity;		//Velocity vector of the Sprite
 	float radius;                   // world-space radius (= half side length of the sprite quad)
-	int textureIndex;               // which texture to use (out of SpriteRenderer::m_spriteSRV)
+	UINT index;               // which texture to use (out of SpriteRenderer::m_spriteSRV)
+	DirectX::XMFLOAT3 velocity;		// Velocity vector of the Sprite
+	float grav;
+	float dmg;
 };
 
 class SpriteRenderer
@@ -44,8 +46,8 @@ public:
 	ID3DX11EffectMatrixVariable*			g_ViewProjection;
 	ID3DX11EffectVectorVariable*			camRightVec;
 	ID3DX11EffectVectorVariable*			camUpVec;
-	ID3DX11EffectShaderResourceVariable*	sprTex1;
-	ID3DX11EffectShaderResourceVariable*	sprTex2;
+	ID3DX11EffectShaderResourceVariable*	sprTexGatling;
+	ID3DX11EffectShaderResourceVariable*	sprTexPlasma;
 
 private:
 	std::vector<std::wstring> m_textureFilenames;

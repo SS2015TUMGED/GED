@@ -83,13 +83,17 @@ public:
 	ConfigParser();
 	~ConfigParser();
 
-	// struct for guns
 	struct Gun
 	{
 		std::string type;
-		DirectX::XMFLOAT3 pos;
-		float speed, grav, cd, dmg, spriteRad;
-		UINT spriteInd;
+		DirectX::XMFLOAT3 position;     // world-space position (sprite center)
+		DirectX::XMFLOAT3 velocity;		//Velocity vector of the Sprite
+		float radius;                   // world-space radius (= half side length of the sprite quad)
+		float speed;
+		float grav;
+		float cd;
+		float dmg;
+		int textureIndex;               // which texture to use (out of SpriteRenderer::m_spriteSRV)
 	};
 
 	static Gun Gatling, Plasma;

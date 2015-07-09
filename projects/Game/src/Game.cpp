@@ -246,7 +246,11 @@ void InitApp()
     iY += 24;
     g_sampleUI.AddCheckBox( IDC_TOGGLESPIN, L"Toggle Spinning", 0, iY += 24, 125, 22, g_terrainSpinning );   
 
-	g_SpriteRenderer = new SpriteRenderer(parser.sprites);
+	vector<wstring> sprites;
+	sprites.push_back(L"..\\..\\Debug\\resources\\particle\\parTrailGatlingDiffuse.DDS");
+	sprites.push_back(L"..\\..\\Debug\\resources\\particle\\parTrailPlasmaDiffuse.DDS");
+
+	g_SpriteRenderer = new SpriteRenderer(sprites);
 
 }
 
@@ -685,19 +689,6 @@ void CALLBACK OnFrameMove(double fTime, float fElapsedTime, void* pUserContext)
 	//deletes enemys from list
 	Ememy::g_EnemyInstances.remove_if(out_of_map);
 
-	//iterate over all list elements
-	for (auto it = Ememy::g_EnemyInstances.begin(); it != Ememy::g_EnemyInstances.end(); it++)
-	{
-		float x = it->vel.x * fElapsedTime;
-		float y = it->vel.y * fElapsedTime;
-		float z = it->vel.z * fElapsedTime;
-		it->pos.x += it->vel.x;
-		it->pos.y += it->vel.y;
-		it->pos.z += it->vel.z;
-	}
-
-	
-	//Assignment10
 	//Move Projectiles
 	for (auto it = proj2Render.begin(); it != proj2Render.end(); it++)
 	{
@@ -707,9 +698,40 @@ void CALLBACK OnFrameMove(double fTime, float fElapsedTime, void* pUserContext)
 		bool b = (out_of_map2(it->position));
 		if (b)
 		{
-			proj2Render.erase(it);
+			auto it_remove = it;
+			it++;
+			proj2Render.erase(it_remove);
 		}
 	}
+
+	//iterate over all list elements
+	for (auto it = Ememy::g_EnemyInstances.begin(); it != Ememy::g_EnemyInstances.end(); it++)
+	{
+		it->pos.x += it->vel.x * fElapsedTime;
+		it->pos.y += it->vel.y * fElapsedTime;
+		it->pos.z += it->vel.z * fElapsedTime;
+
+
+		for (auto itP = proj2Render.begin(); itP != proj2Render.end(); itP++)
+		{
+
+			float distance = sqrt((&itP->position.x - &it->pos.x) * (&itP->position.x - &it->pos.x) +
+				(&itP->position.y - &it->pos.y) * (&itP->position.y - &it->pos.y) +
+				(&itP->position.z - &it->pos.z) * (&itP->position.z - &it->pos.z));
+
+			// Hit
+			if (distance <= itP->radius + it->type.Size)
+			{
+				cout << "hit:" << distance << endl;
+				auto it_remove = itP;
+				++it;
+				proj2Render.erase(it_remove);
+				break;
+			}
+		}
+
+	}
+
 	
 	//Shooting pew Pew pew
 	DirectX::XMVECTOR cam_dir = g_camera.GetWorldAhead();
@@ -717,8 +739,8 @@ void CALLBACK OnFrameMove(double fTime, float fElapsedTime, void* pUserContext)
 	DirectX::XMStoreFloat3(&cam_dir_, cam_dir);
 
 	//Gatling
-	
-	if (DXUTIsMouseButtonDown(MOUSE_LEFT_BUTTON)) {
+
+	if (g_camera.IsMouseLButtonDown()) {
 		
 		if (GReadyForFire)
 		{
@@ -728,15 +750,16 @@ void CALLBACK OnFrameMove(double fTime, float fElapsedTime, void* pUserContext)
 			sv.velocity.x = cam_dir_.x * parser.Gatling.speed;
 			sv.velocity.y = cam_dir_.y * parser.Gatling.speed;
 			sv.velocity.z = cam_dir_.z * parser.Gatling.speed;
+			sv.radius = parser.Gatling.radius;
+			sv.index = parser.Gatling.textureIndex;
+			sv.dmg = parser.Gatling.dmg;
+			sv.grav = parser.Gatling.grav;
 
-			
-			sv.radius = parser.Gatling.spriteRad / 10000;
-			sv.textureIndex = parser.Gatling.spriteInd;
 			proj2Render.push_back(sv);
 			GReadyForFire = false;
 		}
 	}
-	
+
 	//Plasma
 	if (g_camera.sMouseRButtonDown()) {
 		
@@ -746,17 +769,19 @@ void CALLBACK OnFrameMove(double fTime, float fElapsedTime, void* pUserContext)
 			SpriteVertex sv;
 
 			DirectX::XMStoreFloat3(&(sv.position), g_camera.GetEyePt());
-
 			sv.velocity.x = cam_dir_.x * parser.Plasma.speed;
 			sv.velocity.y = cam_dir_.y * parser.Plasma.speed;
 			sv.velocity.z = cam_dir_.z * parser.Plasma.speed;
+			sv.radius = parser.Plasma.radius;
+			sv.index = parser.Plasma.textureIndex;
+			sv.dmg = parser.Plasma.dmg;
+			sv.grav = parser.Plasma.grav;
 
-			sv.radius = parser.Plasma.spriteRad;
-			sv.textureIndex = parser.Plasma.spriteInd;
 			proj2Render.push_back(sv);
 			PReadyForFire = false;
 		}
 	}
+
 
 	//setting fire timer
 	GFireTimer -= fElapsedTime;
@@ -765,8 +790,10 @@ void CALLBACK OnFrameMove(double fTime, float fElapsedTime, void* pUserContext)
 		GFireTimer =  parser.Gatling.cd;
 	}	
 	PFireTimer -= fElapsedTime;
-	PReadyForFire = (PFireTimer <= 0) ? (true) : PReadyForFire;
-	PFireTimer = (PFireTimer <= 0) ? (parser.Plasma.cd) : (PFireTimer);
+	if (PFireTimer <= 0.0) {
+		PReadyForFire = true;
+		PFireTimer = parser.Plasma.cd;
+	}
 }
 
 
@@ -951,14 +978,7 @@ void CALLBACK OnD3D11FrameRender( ID3D11Device* pd3dDevice, ID3D11DeviceContext*
 		parser.g_Meshes[enemy.type.Mesh]->render(pd3dImmediateContext, g_gameEffect.meshPass1, g_gameEffect.diffuseEV, g_gameEffect.specularEV, g_gameEffect.glowEV);
 	}
 
-	// i have no idea if this shit works...
-	// Sort projectiles according to the distance between projectile and camera
-	//auto comp = [](SpriteVertex projA, SpriteVertex projB) -> bool {return projA.camDist > projB.camDist; };
-	XMVECTOR cam = XMVector4Normalize(g_camera.GetWorldAhead());
-	XMFLOAT3 camNor;
-	XMStoreFloat3(&camNor, cam);
-
-	//assignment 10
+	// Sprite Renderer
 	g_SpriteRenderer->renderSprites(pd3dImmediateContext, proj2Render, g_camera);
 
     DXUT_BeginPerfEvent( DXUT_PERFEVENTCOLOR, L"HUD / Stats" );

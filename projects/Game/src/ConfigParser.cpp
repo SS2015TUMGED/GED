@@ -158,14 +158,14 @@ void ConfigParser::load(std::string str){
 			else if (word.compare("GatlingGun") == 0)
 			{
 				Gatling.type = word;
-				iss >> Gatling.pos.x >> Gatling.pos.y >> Gatling .pos.z >> Gatling.speed >> Gatling.grav
-					>> Gatling.cd >> Gatling.dmg >> Gatling.spriteInd >> Gatling.spriteRad;
+				iss >> Gatling.position.x >> Gatling.position.y >> Gatling.position.z >> Gatling.speed >> Gatling.grav
+					>> Gatling.cd >> Gatling.dmg >> Gatling.textureIndex >> Gatling.radius;
 			}
 			else if (word.compare("PlasmaGun") == 0)
 			{
 				Plasma.type = word;
-				iss >> Plasma.pos.x >> Plasma.pos.y >> Plasma.pos.z >> Plasma.speed >> Plasma.grav
-					>> Plasma.cd >> Plasma.dmg >> Plasma.spriteInd >> Plasma.spriteRad;
+				iss >> Plasma.position.x >> Plasma.position.y >> Plasma.position.z >> Plasma.speed >> Plasma.grav
+					>> Plasma.cd >> Plasma.dmg >> Plasma.textureIndex >> Plasma.radius;
 			}
 			else {
 				if (!word.empty()) {
