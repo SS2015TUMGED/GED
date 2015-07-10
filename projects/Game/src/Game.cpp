@@ -637,6 +637,12 @@ bool out_of_map2(DirectX::XMFLOAT3 pos) {
 		pos.z > 1-parser.getTerrainWidth()
 		);
 }
+
+XMFLOAT3 operator - (XMFLOAT3 V1, XMFLOAT3 V2)
+{
+	return XMFLOAT3(V1.x - V2.x, V1.y - V2.y, V1.z - V2.z);
+}
+
 //--------------------------------------------------------------------------------------
 // Handle updates to the scene.  This is called regardless of which D3D API is used
 //--------------------------------------------------------------------------------------
@@ -690,9 +696,9 @@ void CALLBACK OnFrameMove(double fTime, float fElapsedTime, void* pUserContext)
 	//Move Projectiles
 	for (auto it = proj2Render.begin(); it != proj2Render.end();)
 	{
-		it->position.x += it->velocity.x / 100 * fElapsedTime;
-		it->position.y += (it->velocity.y - it->grav * fElapsedTime) / 100 * fElapsedTime;
-		it->position.z += it->velocity.z / 100 * fElapsedTime;
+		it->position.x += it->velocity.x * fElapsedTime;
+		it->position.y += (it->velocity.y - it->grav * fElapsedTime) * fElapsedTime;
+		it->position.z += it->velocity.z * fElapsedTime;
 		bool b = (out_of_map2(it->position));
 		if (b) {
 			cout << "deleted" << endl;
@@ -706,31 +712,39 @@ void CALLBACK OnFrameMove(double fTime, float fElapsedTime, void* pUserContext)
 	}
 
 	//iterate over all list elements
-	for (auto it = Ememy::g_EnemyInstances.begin(); it != Ememy::g_EnemyInstances.end(); it++)
+	for (auto it = Ememy::g_EnemyInstances.begin(); it != Ememy::g_EnemyInstances.end();)
 	{
 		it->pos.x += it->vel.x * fElapsedTime;
 		it->pos.y += it->vel.y * fElapsedTime;
 		it->pos.z += it->vel.z * fElapsedTime;
 
 
-		/*for (auto itP = proj2Render.begin(); itP != proj2Render.end();)
+		for (auto itP = proj2Render.begin(); itP != proj2Render.end();)
 		{
 
-			float distance = sqrt(dot(itP->position, it->pos));
+			float distance = dot(itP->position - it->pos, itP->position - it->pos);
 
 			// Hit
-			if (distance <= itP->radius + it->type.Size)
+			if (distance <= pow(itP->radius + it->type.Size, 2.0f))
 			{
-				cout << "hit:" << distance << endl;
+				it->hitpoints -= itP->dmg;
+			cout << "hit:" << distance << endl;
 				auto it_remove = itP;
 				++itP;
 				proj2Render.erase(it_remove);
-				break;
 			} else {
 				itP++;
 			}
-		}*/
+		}
 
+		if (it->hitpoints <= 0.0f) {
+			auto it_remove = it;
+			++it;
+			Ememy::g_EnemyInstances.erase(it_remove);
+		}
+		else {
+			it++;
+		}
 	}
 
 	
@@ -747,10 +761,24 @@ void CALLBACK OnFrameMove(double fTime, float fElapsedTime, void* pUserContext)
 		{
 			SpriteVertex sv;
 
+			/*XMVECTOR tempPos = XMLoadFloat3(&parser.Gatling.position);
+			tempPos = XMVector4Transform(tempPos, g_camera.GetWorldMatrix());
+			XMFLOAT3 resPos;
+			XMStoreFloat3(&(sv.position), tempPos);*/
+
+			//XMVECTOR tempPos = XMLoadFloat3(g_camera.GetWorldAhead());
+			//tempPos = XMVector4Transform(tempPos, );
+			//XMFLOAT3 resPos;
+			//XMStoreFloat3(&(sv.position), g_camera.GetWorldAhead());
+			//sv.position.x += parser.Gatling.position.x;
+			//sv.position.y += parser.Gatling.position.y;
+			//sv.position.z += parser.Gatling.position.z;
+
 			DirectX::XMStoreFloat3(&(sv.position), g_camera.GetEyePt());
-			sv.position.x += parser.Gatling.position.x;
-			sv.position.y += parser.Gatling.position.y;
-			sv.position.z += parser.Gatling.position.z;
+			//sv.position.x += parser.Gatling.position.x / cam_dir_.x;
+			//sv.position.y += parser.Gatling.position.y;
+			//sv.position.z += parser.Gatling.position.z;
+			
 			sv.velocity.x = cam_dir_.x * parser.Gatling.speed;
 			sv.velocity.y = cam_dir_.y * parser.Gatling.speed;
 			sv.velocity.z = cam_dir_.z * parser.Gatling.speed;
@@ -773,9 +801,9 @@ void CALLBACK OnFrameMove(double fTime, float fElapsedTime, void* pUserContext)
 			SpriteVertex sv;
 
 			DirectX::XMStoreFloat3(&(sv.position), g_camera.GetEyePt());
-			sv.position.x += parser.Plasma.position.x;
-			sv.position.y += parser.Plasma.position.y;
-			sv.position.z += parser.Plasma.position.z;
+			//sv.position.x += parser.Plasma.position.x;
+			//sv.position.y += parser.Plasma.position.y;
+			//sv.position.z += parser.Plasma.position.z;
 			sv.velocity.x = cam_dir_.x * parser.Plasma.speed;
 			sv.velocity.y = cam_dir_.y * parser.Plasma.speed;
 			sv.velocity.z = cam_dir_.z * parser.Plasma.speed;
