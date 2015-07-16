@@ -84,6 +84,10 @@ ConfigParser parser;
 SpriteRenderer* g_SpriteRenderer;
 //Mesh*        g_cockpitMesh = nullptr;
 
+// Explosions
+std::list<Explosion>					g_explos;
+
+
 //--------------------------------------------------------------------------------------
 // UI control IDs
 //--------------------------------------------------------------------------------------
@@ -189,8 +193,8 @@ int _tmain(int argc, _TCHAR* argv[])
 
     InitApp();
     DXUTInit( true, true, NULL ); // Parse the command line, show msgboxes on error, no extra command line params
-    DXUTSetCursorSettings( true, true );
-    DXUTCreateWindow( L"TODO: Insert Title Here" ); // You may change the title
+    DXUTSetCursorSettings( false, true);
+    DXUTCreateWindow( L"Sexy Hexy Super Game" ); // You may change the title
 
     DXUTCreateDevice( D3D_FEATURE_LEVEL_10_0, true, 1280, 720 );
 
@@ -261,11 +265,36 @@ void DeinitApp(){
 		SAFE_DELETE(iterator->second);
 	}
 	parser.g_Meshes.clear();
+
+	//iterate over all list elements
+	for (auto it = Ememy::g_EnemyInstances.begin(); it != Ememy::g_EnemyInstances.end();)
+	{
+		auto it_remove = it;
+		++it;
+		Ememy::g_EnemyInstances.erase(it_remove);
+	}
 	Ememy::g_EnemyInstances.clear();
+
+	for (auto itP = proj2Render.begin(); itP != proj2Render.end();)
+	{
+		auto it_remove = itP;
+		++itP;
+		proj2Render.erase(it_remove);
+	}
+	proj2Render.clear();
 	//for (auto iterator = parser.enemys.begin(); iterator != parser.enemys.end(); iterator++) {
 	//	parser.enemys.erase(iterator);
 	//}
 	parser.enemys.clear();
+
+	for (auto it = g_explos.begin(); it != g_explos.end();)
+	{
+		auto it_remove = it;
+		++it;
+		g_explos.erase(it_remove);
+	}
+	g_explos.clear();
+
 
 	SAFE_DELETE(g_SpriteRenderer);
 }
@@ -701,7 +730,6 @@ void CALLBACK OnFrameMove(double fTime, float fElapsedTime, void* pUserContext)
 		it->position.z += it->velocity.z * fElapsedTime;
 		bool b = (out_of_map2(it->position));
 		if (b) {
-			cout << "deleted" << endl;
 			auto it_remove = it;
 			it++;
 			proj2Render.erase(it_remove);
@@ -728,7 +756,6 @@ void CALLBACK OnFrameMove(double fTime, float fElapsedTime, void* pUserContext)
 			if (distance <= pow(itP->radius + it->type.Size, 2.0f))
 			{
 				it->hitpoints -= itP->dmg;
-			cout << "hit:" << distance << endl;
 				auto it_remove = itP;
 				++itP;
 				proj2Render.erase(it_remove);
@@ -738,6 +765,7 @@ void CALLBACK OnFrameMove(double fTime, float fElapsedTime, void* pUserContext)
 		}
 
 		if (it->hitpoints <= 0.0f) {
+			g_explos.push_back(Explosion(SpriteVertex(it->pos, 20.0f, 2)));
 			auto it_remove = it;
 			++it;
 			Ememy::g_EnemyInstances.erase(it_remove);
@@ -814,6 +842,23 @@ void CALLBACK OnFrameMove(double fTime, float fElapsedTime, void* pUserContext)
 
 			proj2Render.push_back(sv);
 			PReadyForFire = false;
+		}
+	}
+
+	// Update Explosions
+	for (auto it = g_explos.begin(); it != g_explos.end();)
+	{
+		it->timePassed += fElapsedTime / it->duration;
+		it->sprite.t = it->timePassed;
+		if (it->timePassed > 1.0f)
+		{
+			cout << it->sprite.position.x << " - " << it->sprite.position.y << " - " << it->sprite.position.z << endl;
+			auto it_remove = it;
+			++it;
+			g_explos.erase(it_remove);
+		}
+		else {
+			++it;
 		}
 	}
 
@@ -1023,6 +1068,9 @@ void CALLBACK OnD3D11FrameRender( ID3D11Device* pd3dDevice, ID3D11DeviceContext*
 	std::vector<SpriteVertex> proj2Rend;
 	for (auto it = proj2Render.begin(); it != proj2Render.end(); ++it) {
 		proj2Rend.push_back(*it);
+	}
+	for (auto it = g_explos.begin(); it != g_explos.end(); ++it) {
+		proj2Rend.push_back(it->sprite);
 	}
 	for (int i = 0; i < proj2Rend.size(); i++) {
 		proj2Rend[i].camDist = dot(proj2Rend[i].position, camNor);

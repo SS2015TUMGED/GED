@@ -4,6 +4,7 @@ float4 g_CamUVec;
 
 Texture2DArray g_SprTexGatling;
 Texture2DArray g_SprTexPlasma;
+Texture2DArray g_SprTexBoom;
 
 //--------------------------------------------------------------------------------------
 // Rasterizer states
@@ -74,8 +75,8 @@ struct SpriteVertex
 	float3 pos : POSITION;     // world-space position (sprite center)
 	float  rad : RADIUS;       // world-space radius (= half side length of the sprite quad)
 	int    ind : INDEX;        // which texture to use (out of SpriteRenderer::m_spriteSRV)
-	//float  t : STATE;
-	//float alpha : ALPHA;
+	float  t : STATE;
+	float  alpha : ALPHA;
 };
 
 struct PSVertex
@@ -84,7 +85,7 @@ struct PSVertex
 	float  rad : RADIUS;
 	int    ind : INDEX;
 	float3 tex : TEXCOORD;
-	//float alpha : ALPHA;
+	float  alpha : ALPHA;
 };
 
 // Dummy methods
@@ -98,24 +99,24 @@ void SpriteGS(point SpriteVertex vertex[1], inout TriangleStream<PSVertex> strea
 	PSVertex temp = (PSVertex)0;
 	temp.pos = mul(float4(vertex[0].pos, 1.0f) - (g_CamRVec * vertex[0].rad)
 		+ (g_CamUVec* vertex[0].rad), g_ViewProjection);
-	temp.tex = float3(0.0f, 0.0f, 1.0f);
+	temp.tex = float3(0.0f, 0.0f, vertex[0].t);
 	temp.ind = vertex[0].ind;
-	//temp.alpha = vertex[0].alpha;
+	temp.alpha = vertex[0].alpha;
 	stream.Append(temp);
 
 	temp.pos = mul(float4(vertex[0].pos, 1.0f) - (g_CamRVec * vertex[0].rad)
 		- (g_CamUVec* vertex[0].rad), g_ViewProjection);
-	temp.tex = float3(0.0f, 1.0f, 1.0f);
+	temp.tex = float3(0.0f, 1.0f, vertex[0].t);
 	stream.Append(temp);
 
 	temp.pos = mul(float4(vertex[0].pos, 1.0f) + (g_CamRVec * vertex[0].rad)
 		+ (g_CamUVec* vertex[0].rad), g_ViewProjection);
-	temp.tex = float3(1.0f, 0.0f, 1.0f);
+	temp.tex = float3(1.0f, 0.0f, vertex[0].t);
 	stream.Append(temp);
 
 	temp.pos = mul(float4(vertex[0].pos, 1.0f) + (g_CamRVec * vertex[0].rad)
 		- (g_CamUVec* vertex[0].rad), g_ViewProjection);
-	temp.tex = float3(1.0f, 1.0f, 1.0f);
+	temp.tex = float3(1.0f, 1.0f, vertex[0].t);
 	stream.Append(temp);
 	
 }
@@ -128,6 +129,9 @@ float4 DummyPS(in PSVertex input) : SV_Target0{
 	}
 	else if (input.ind == 1) {
 		matDiffuse = g_SprTexPlasma.Sample(samAnisotropic, input.tex);
+	}
+	else if (input.ind == 2) {
+		matDiffuse = g_SprTexBoom.Sample(samAnisotropic, input.tex);
 	}
 	return matDiffuse;
 }

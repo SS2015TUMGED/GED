@@ -81,8 +81,8 @@ HRESULT SpriteRenderer::create(ID3D11Device* pDevice) {
 		{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 },
 		{ "RADIUS", 0, DXGI_FORMAT_R32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 },
 		{ "INDEX", 0, DXGI_FORMAT_R32_UINT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-		//{ "STATE", 0, DXGI_FORMAT_R32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-		//{ "ALPHA", 0, DXGI_FORMAT_R32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+		{ "STATE", 0, DXGI_FORMAT_R32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+		{ "ALPHA", 0, DXGI_FORMAT_R32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 },
 	};
 
 	UINT numElements = sizeof(layout) / sizeof(layout[0]);
@@ -139,7 +139,7 @@ void SpriteRenderer::renderSprites(ID3D11DeviceContext* context, const std::vect
 	SAFE_GET_VECTOR(m_pEffect, "g_CamUVec", camUpVec);
 	SAFE_GET_RESOURCE(m_pEffect, "g_SprTexGatling", sprTexGatling);
 	SAFE_GET_RESOURCE(m_pEffect, "g_SprTexPlasma", sprTexPlasma);
-	//SAFE_GET_RESOURCE(m_pEffect, "g_SprTex3", sprTex3);
+	SAFE_GET_RESOURCE(m_pEffect, "g_SprTexBoom", sprTexBoom);
 
 	// Set view and projection transformations to get sprites to the right positions in world space
 	DirectX::XMMATRIX viewProj = camera.GetViewMatrix() * camera.GetProjMatrix();
@@ -148,7 +148,7 @@ void SpriteRenderer::renderSprites(ID3D11DeviceContext* context, const std::vect
 	// Set Textures
 	V(sprTexGatling->SetResource(m_spriteSRV[0]));
 	V(sprTexPlasma->SetResource(m_spriteSRV[1]));
-	//V(sprTex3->SetResource(m_spriteSRV[2]));
+	V(sprTexBoom->SetResource(m_spriteSRV[2]));
 	
 	// Get camera's right and up vector
 	V(camRightVec->SetFloatVector((float*)&camera.GetWorldRight()));

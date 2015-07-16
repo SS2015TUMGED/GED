@@ -90,6 +90,9 @@ mkdir "$(OutDir)resources\particle"
 
 "$(OutDir)texconv" -o "$(OutDir)resources\particle" -srgbi -f BC3_UNORM_SRGB "$(SolutionDir)..\..\external\art\05-Sprites\simple\parTrailGatlingDiffuse.png"  
 "$(OutDir)texconv" -o "$(OutDir)resources\particle" -srgbi -f BC3_UNORM_SRGB "$(SolutionDir)..\..\external\art\05-Sprites\simple\parTrailPlasmaDiffuse.png"  
+
+call "$(SolutionDir)..\..\external\Tools\bin\dirassembler.bat" "$(OutDir)texassemble.exe" "$(SolutionDir)..\..\external\art\05-Sprites\explosion_b" "$(OutDir)resources\explosion_b.dds"
+"$(OutDir)texconv" -o "$(OutDir)resources" -f BC3_UNORM_SRGB "$(OutDir)resources\explosion_b.dds"
 </NMakeBuildCommandLine>
     <NMakeCleanCommandLine>echo "Deleting old resources..."
 del /Q "$(IntDir)*"
@@ -150,6 +153,9 @@ mkdir "$(OutDir)resources\particle"
 
 "$(OutDir)texconv" -o "$(OutDir)resources\particle" -srgbi -f BC3_UNORM_SRGB "$(SolutionDir)..\..\external\art\05-Sprites\simple\parTrailGatlingDiffuse.png"  
 "$(OutDir)texconv" -o "$(OutDir)resources\particle" -srgbi -f BC3_UNORM_SRGB "$(SolutionDir)..\..\external\art\05-Sprites\simple\parTrailPlasmaDiffuse.png"  
+
+call "$(SolutionDir)..\..\external\Tools\bin\dirassembler.bat" "$(OutDir)texassemble.exe" "$(SolutionDir)..\..\external\art\05-Sprites\explosion_b" "$(OutDir)resources\explosion_b.dds"
+"$(OutDir)texconv" -o "$(OutDir)resources" -f BC3_UNORM_SRGB "$(OutDir)resources\explosion_b.dds"
 </NMakeBuildCommandLine>
     <NMakeCleanCommandLine>echo "Deleting old resources..."
 del /Q "$(IntDir)*"

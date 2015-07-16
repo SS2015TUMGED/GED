@@ -174,9 +174,6 @@ exit 1</Command>
     <None Include="game.cfg" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\DirectXTex\DirectXTex\DirectXTex_Desktop_2012.vcxproj">
-      <Project>{371b9fa9-4c90-4ac6-a123-aced756d6c77}</Project>
-    </ProjectReference>
     <ProjectReference Include="..\DXUT\Core\DXUT_2012.vcxproj">
       <Project>{85344b7f-5aa0-4e12-a065-d1333d11f6ca}</Project>
     </ProjectReference>
